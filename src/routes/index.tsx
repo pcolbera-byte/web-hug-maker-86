@@ -1,24 +1,51 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect, useState } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const MoedimApp = lazy(() => import("../components/MoedimApp.jsx"));
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Moedim — Calendário Bíblico Hebraico" },
+      {
+        name: "description",
+        content:
+          "Moedim: calendário bíblico hebraico com festas, parashot, Shabat, Rosh Chodesh, conversor de datas e versículo do dia.",
+      },
+      { property: "og:title", content: "Moedim — Calendário Bíblico Hebraico" },
+      {
+        property: "og:description",
+        content:
+          "Encontros marcados pelo Eterno. Festas, parashot, Shabat, Rosh Chodesh e mais.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "#060f2a",
+          color: "#d4af37",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "sans-serif",
+        }}
+      >
+        Carregando Moedim…
+      </div>
+    );
+  }
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <Suspense fallback={null}>
+      <MoedimApp />
+    </Suspense>
   );
 }
