@@ -760,84 +760,98 @@ function getUpcomingFeasts(daysAhead = 60) {
 
 const DARK_THEME = {
   // Backgrounds
-  bg:           "#0A1B45",       // Jerusalem night sky
-  bgDeep:       "#060F2A",       // deepest layer
-  bgCard:       "rgba(22,39,84,0.75)",
-  bgCardHover:  "rgba(26,46,98,0.90)",
-  bgGlass:      "rgba(10,27,69,0.60)",
-  bgSection:    "rgba(15,30,72,0.85)",
-  // Gold palette — Davidic royalty
-  gold:         "#D4AF37",       // classic gold
-  goldLight:    "#F2D16B",       // soft gold
-  goldPale:     "#FBF0C4",       // pearl gold
+  bg:           "#0B1225",       // deep midnight slate
+  bgDeep:       "#060A1A",       // deepest layer
+  bgCard:       "rgba(20,29,56,0.78)",
+  bgCardHover:  "rgba(26,37,72,0.92)",
+  bgGlass:      "rgba(11,18,37,0.60)",
+  bgSection:    "rgba(15,24,50,0.85)",
+  // Gold palette — Davidic royalty (kept for identity)
+  gold:         "#D4AF37",
+  goldLight:    "#F2D16B",
+  goldPale:     "#FBF0C4",
   goldBg:       "rgba(212,175,55,0.10)",
   goldBorder:   "rgba(212,175,55,0.22)",
   goldGlow:     "rgba(212,175,55,0.35)",
+  // Modern CTA accents
+  emerald:      "#10B981",
+  emeraldLight: "#34D399",
+  emeraldGlow:  "rgba(16,185,129,0.32)",
+  orange:       "#F97316",
+  orangeLight:  "#FB923C",
+  orangeGlow:   "rgba(249,115,22,0.30)",
   // Text
-  text:         "#F8F6F0",       // white pearl
-  textSub:      "rgba(248,246,240,0.75)",
-  textMuted:    "rgba(248,246,240,0.45)",
-  textFaint:    "rgba(248,246,240,0.25)",
+  text:         "#F8F6F0",
+  textSub:      "rgba(248,246,240,0.78)",
+  textMuted:    "rgba(248,246,240,0.52)",
+  textFaint:    "rgba(248,246,240,0.30)",
   // Accents
   blue:         "#162754",
   blueMid:      "#1E3570",
   blueLight:    "rgba(99,131,255,0.15)",
-  accent:       "#4A90D9",       // sapphire
+  accent:       "#4A90D9",
   // Semantic
-  spring:       "rgba(74,222,128,0.12)",
-  fall:         "rgba(251,146,60,0.12)",
-  other:        "rgba(167,139,250,0.12)",
-  shabat:       "rgba(212,175,55,0.07)",
+  spring:       "rgba(74,222,128,0.14)",
+  fall:         "rgba(251,146,60,0.14)",
+  other:        "rgba(167,139,250,0.14)",
+  shabat:       "rgba(212,175,55,0.08)",
   today:        "#D4AF37",
   // Nav
-  navBg:        "rgba(6,15,42,0.97)",
+  navBg:        "rgba(6,10,26,0.97)",
   navBorder:    "rgba(212,175,55,0.15)",
-  inputBg:      "rgba(6,15,42,0.70)",
-  cardAlt:      "rgba(22,39,84,0.50)",
+  inputBg:      "rgba(6,10,26,0.70)",
+  cardAlt:      "rgba(20,29,56,0.55)",
   divider:      "rgba(212,175,55,0.12)",
   isDark:       true,
 };
 
 const LIGHT_THEME = {
-  bg:           "#F4EFE6",       // aged parchment
-  bgDeep:       "#EAE2D4",
-  bgCard:       "rgba(255,253,248,0.92)",
+  bg:           "#F6F7FB",       // cool light gray
+  bgDeep:       "#EBEEF5",
+  bgCard:       "rgba(255,255,255,0.96)",
   bgCardHover:  "rgba(255,255,255,1.0)",
-  bgGlass:      "rgba(244,239,230,0.80)",
-  bgSection:    "rgba(255,253,248,0.95)",
-  gold:         "#B8960C",
-  goldLight:    "#9A7A08",
+  bgGlass:      "rgba(246,247,251,0.85)",
+  bgSection:    "rgba(255,255,255,0.96)",
+  gold:         "#B8860B",
+  goldLight:    "#8B6508",
   goldPale:     "#5C4800",
-  goldBg:       "rgba(184,150,12,0.09)",
-  goldBorder:   "rgba(184,150,12,0.28)",
-  goldGlow:     "rgba(184,150,12,0.25)",
-  text:         "#1A1205",
-  textSub:      "rgba(26,18,5,0.72)",
-  textMuted:    "rgba(26,18,5,0.48)",
-  textFaint:    "rgba(26,18,5,0.25)",
-  blue:         "#162754",
-  blueMid:      "#1E3570",
-  blueLight:    "rgba(22,39,84,0.08)",
-  accent:       "#1A4FA0",
+  goldBg:       "rgba(184,134,11,0.09)",
+  goldBorder:   "rgba(184,134,11,0.24)",
+  goldGlow:     "rgba(184,134,11,0.20)",
+  emerald:      "#059669",
+  emeraldLight: "#10B981",
+  emeraldGlow:  "rgba(5,150,105,0.22)",
+  orange:       "#EA580C",
+  orangeLight:  "#F97316",
+  orangeGlow:   "rgba(234,88,12,0.20)",
+  text:         "#0F172A",
+  textSub:      "rgba(15,23,42,0.75)",
+  textMuted:    "rgba(15,23,42,0.55)",
+  textFaint:    "rgba(15,23,42,0.30)",
+  blue:         "#1E3A8A",
+  blueMid:      "#1D4ED8",
+  blueLight:    "rgba(30,58,138,0.08)",
+  accent:       "#2563EB",
   spring:       "rgba(22,163,74,0.10)",
-  fall:         "rgba(194,65,12,0.10)",
+  fall:         "rgba(234,88,12,0.10)",
   other:        "rgba(109,40,217,0.09)",
-  shabat:       "rgba(184,150,12,0.07)",
-  today:        "#B8960C",
-  navBg:        "rgba(244,239,230,0.97)",
-  navBorder:    "rgba(184,150,12,0.18)",
-  inputBg:      "rgba(255,253,248,0.90)",
-  cardAlt:      "rgba(234,226,212,0.70)",
-  divider:      "rgba(184,150,12,0.14)",
+  shabat:       "rgba(184,134,11,0.07)",
+  today:        "#B8860B",
+  navBg:        "rgba(255,255,255,0.96)",
+  navBorder:    "rgba(15,23,42,0.08)",
+  inputBg:      "rgba(255,255,255,0.95)",
+  cardAlt:      "rgba(235,238,245,0.75)",
+  divider:      "rgba(15,23,42,0.08)",
   isDark:       false,
 };
+
 
 let S = { ...DARK_THEME };
 
 function buildCSS(theme) {
   const isDark = theme.isDark;
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -845,11 +859,12 @@ function buildCSS(theme) {
     body {
       background: ${theme.bg};
       color: ${theme.text};
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       transition: background 0.4s ease, color 0.4s ease;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      line-height: 1.55;
     }
 
     /* Scrollbar */
@@ -859,8 +874,10 @@ function buildCSS(theme) {
 
     /* Font classes */
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
+    .jakarta   { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; letter-spacing: -0.01em; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
+
 
     /* Animations */
     @keyframes fadeUp {
@@ -1038,18 +1055,19 @@ function PageTitle({ icon, title, heb, sub }) {
           </div>
         </div>
       )}
-      <h1 className="cinzel" style={{
-        fontSize: 22, fontWeight: 700, letterSpacing: "0.05em",
-        color: S.goldLight, marginBottom: heb ? 4 : 0,
-        textShadow: `0 0 30px ${S.goldGlow}`,
+      <h1 className="jakarta" style={{
+        fontSize: 30, fontWeight: 800, letterSpacing: "-0.025em",
+        color: S.isDark ? S.goldLight : S.text, marginBottom: heb ? 6 : 4,
+        lineHeight: 1.15,
       }}>{title}</h1>
       {heb && (
-        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 4 }}>{heb}</div>
+        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 6 }}>{heb}</div>
       )}
-      {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5, maxWidth: 400, margin: "0 auto" }}>{sub}</p>}
+      {sub && <p style={{ color: S.textMuted, fontSize: 14, lineHeight: 1.6, maxWidth: 460, margin: "0 auto" }}>{sub}</p>}
     </div>
   );
 }
+
 
 // Glass card
 function GlassCard({ children, style = {}, onClick, noPad }) {
@@ -1061,12 +1079,12 @@ function GlassCard({ children, style = {}, onClick, noPad }) {
         background: S.bgCard,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: `1px solid ${S.goldBorder}`,
-        borderRadius: 20,
-        padding: noPad ? 0 : 20,
+        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`,
+        borderRadius: 24,
+        padding: noPad ? 0 : 24,
         boxShadow: S.isDark
-          ? "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
-          : "0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+          ? "0 10px 30px -12px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)"
+          : "0 10px 30px -14px rgba(15,23,42,0.18), 0 2px 6px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.9)",
         overflow: "hidden",
         ...style,
       }}
@@ -1080,13 +1098,16 @@ function StatTile({ label, value, sub, color, icon }) {
   return (
     <div style={{
       background: S.bgGlass, border: `1px solid ${S.divider}`,
-      borderRadius: 16, padding: "14px 16px", textAlign: "center",
+      borderRadius: 18, padding: "18px 18px", textAlign: "center",
+      boxShadow: S.isDark
+        ? "0 4px 14px rgba(0,0,0,0.25)"
+        : "0 4px 14px rgba(15,23,42,0.06)",
     }}>
-      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
-        <Icon name={icon} size={18} color={c} />
+      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+        <Icon name={icon} size={20} color={c} />
       </div>}
-      <div className="cinzel" style={{ fontSize: 28, fontWeight: 700, color: c, lineHeight: 1 }}>{value}</div>
-      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 500, marginTop: 4 }}>{label}</div>
+      <div className="jakarta" style={{ fontSize: 28, fontWeight: 800, color: c, lineHeight: 1, letterSpacing: "-0.02em" }}>{value}</div>
+      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 600, marginTop: 6, letterSpacing: "0.01em" }}>{label}</div>
       {sub && <div style={{ color: S.textMuted, fontSize: 11, marginTop: 2 }}>{sub}</div>}
     </div>
   );
@@ -1102,13 +1123,13 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
       placeholder={placeholder}
       style={{
         width: "100%", background: S.inputBg,
-        border: `1px solid ${S.goldBorder}`, borderRadius: 12,
-        padding: "12px 16px", color: S.text, fontSize: 14,
-        outline: "none", fontFamily: "'Inter', sans-serif",
+        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`, borderRadius: 14,
+        padding: "13px 16px", color: S.text, fontSize: 14,
+        outline: "none", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
-      onFocus={e => { e.target.style.borderColor = S.gold; e.target.style.boxShadow = `0 0 0 3px ${S.goldBorder}`; }}
-      onBlur={e  => { e.target.style.borderColor = S.goldBorder; e.target.style.boxShadow = "none"; }}
+      onFocus={e => { e.target.style.borderColor = S.emerald; e.target.style.boxShadow = `0 0 0 3px ${S.emeraldGlow}`; }}
+      onBlur={e  => { e.target.style.borderColor = S.isDark ? S.goldBorder : S.divider; e.target.style.boxShadow = "none"; }}
     />
   );
 }
@@ -1117,38 +1138,51 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
 function PButton({ children, onClick, disabled, variant = "primary", icon, fullWidth }) {
   const styles = {
     primary: {
+      background: `linear-gradient(135deg, ${S.emerald} 0%, ${S.emeraldLight} 100%)`,
+      color: "#FFFFFF", border: "none",
+      boxShadow: `0 8px 24px -6px ${S.emeraldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+    },
+    accent: {
+      background: `linear-gradient(135deg, ${S.orange} 0%, ${S.orangeLight} 100%)`,
+      color: "#FFFFFF", border: "none",
+      boxShadow: `0 8px 24px -6px ${S.orangeGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+    },
+    gold: {
       background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
       color: "#0A1B45", border: "none",
-      boxShadow: `0 4px 20px ${S.goldGlow}`,
+      boxShadow: `0 8px 24px -6px ${S.goldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
     },
     ghost: {
-      background: S.goldBg, color: S.goldLight,
+      background: S.goldBg, color: S.isDark ? S.goldLight : S.goldLight,
       border: `1px solid ${S.goldBorder}`,
       boxShadow: "none",
     },
     danger: {
-      background: "rgba(239,68,68,0.12)", color: "#f87171",
+      background: "rgba(239,68,68,0.12)", color: "#ef4444",
       border: "1px solid rgba(239,68,68,0.3)",
       boxShadow: "none",
     },
   };
+  const iconColor = variant === "primary" || variant === "accent" ? "#FFFFFF"
+                  : variant === "gold" ? "#0A1B45"
+                  : variant === "danger" ? "#ef4444" : S.goldLight;
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       style={{
         ...styles[variant],
-        borderRadius: 12, padding: "11px 22px",
-        fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
+        borderRadius: 14, padding: "12px 24px",
+        fontSize: 13.5, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all 0.2s ease", opacity: disabled ? 0.6 : 1,
-        fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
+        fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", letterSpacing: "0.01em",
         width: fullWidth ? "100%" : "auto",
       }}
-      onMouseEnter={e => { if (!disabled) e.currentTarget.style.transform = "translateY(-1px)"; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = "none"; }}
+      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.filter = "brightness(1.05)"; } }}
+      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.filter = "none"; }}
     >
-      {icon && <Icon name={icon} size={15} color={variant === "primary" ? "#0A1B45" : S.goldLight} strokeWidth={2} />}
+      {icon && <Icon name={icon} size={15} color={iconColor} strokeWidth={2.2} />}
       {children}
     </button>
   );
@@ -1156,11 +1190,12 @@ function PButton({ children, onClick, disabled, variant = "primary", icon, fullW
 
 function SectionTitle({ children, sub }) {
   return (
-    <div style={{ textAlign: "center", marginBottom: 28 }}>
-      <h2 className="cinzel" style={{ fontSize: 22, fontWeight: 700, color: S.goldLight,
-        marginBottom: 6, letterSpacing: "0.04em", textShadow: `0 0 24px ${S.goldGlow}` }}>
+    <div style={{ textAlign: "center", marginBottom: 32 }}>
+      <h2 className="jakarta" style={{ fontSize: 26, fontWeight: 800, color: S.isDark ? S.goldLight : S.text,
+        marginBottom: 8, letterSpacing: "-0.02em" }}>
         {children}
       </h2>
+
       {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5 }}>{sub}</p>}
     </div>
   );
