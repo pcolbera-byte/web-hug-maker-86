@@ -1055,18 +1055,19 @@ function PageTitle({ icon, title, heb, sub }) {
           </div>
         </div>
       )}
-      <h1 className="cinzel" style={{
-        fontSize: 22, fontWeight: 700, letterSpacing: "0.05em",
-        color: S.goldLight, marginBottom: heb ? 4 : 0,
-        textShadow: `0 0 30px ${S.goldGlow}`,
+      <h1 className="jakarta" style={{
+        fontSize: 30, fontWeight: 800, letterSpacing: "-0.025em",
+        color: S.isDark ? S.goldLight : S.text, marginBottom: heb ? 6 : 4,
+        lineHeight: 1.15,
       }}>{title}</h1>
       {heb && (
-        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 4 }}>{heb}</div>
+        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 6 }}>{heb}</div>
       )}
-      {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5, maxWidth: 400, margin: "0 auto" }}>{sub}</p>}
+      {sub && <p style={{ color: S.textMuted, fontSize: 14, lineHeight: 1.6, maxWidth: 460, margin: "0 auto" }}>{sub}</p>}
     </div>
   );
 }
+
 
 // Glass card
 function GlassCard({ children, style = {}, onClick, noPad }) {
