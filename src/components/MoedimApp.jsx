@@ -1078,12 +1078,12 @@ function GlassCard({ children, style = {}, onClick, noPad }) {
         background: S.bgCard,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: `1px solid ${S.goldBorder}`,
-        borderRadius: 20,
-        padding: noPad ? 0 : 20,
+        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`,
+        borderRadius: 24,
+        padding: noPad ? 0 : 24,
         boxShadow: S.isDark
-          ? "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
-          : "0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+          ? "0 10px 30px -12px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)"
+          : "0 10px 30px -14px rgba(15,23,42,0.18), 0 2px 6px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.9)",
         overflow: "hidden",
         ...style,
       }}
@@ -1097,13 +1097,16 @@ function StatTile({ label, value, sub, color, icon }) {
   return (
     <div style={{
       background: S.bgGlass, border: `1px solid ${S.divider}`,
-      borderRadius: 16, padding: "14px 16px", textAlign: "center",
+      borderRadius: 18, padding: "18px 18px", textAlign: "center",
+      boxShadow: S.isDark
+        ? "0 4px 14px rgba(0,0,0,0.25)"
+        : "0 4px 14px rgba(15,23,42,0.06)",
     }}>
-      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
-        <Icon name={icon} size={18} color={c} />
+      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+        <Icon name={icon} size={20} color={c} />
       </div>}
-      <div className="cinzel" style={{ fontSize: 28, fontWeight: 700, color: c, lineHeight: 1 }}>{value}</div>
-      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 500, marginTop: 4 }}>{label}</div>
+      <div className="jakarta" style={{ fontSize: 28, fontWeight: 800, color: c, lineHeight: 1, letterSpacing: "-0.02em" }}>{value}</div>
+      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 600, marginTop: 6, letterSpacing: "0.01em" }}>{label}</div>
       {sub && <div style={{ color: S.textMuted, fontSize: 11, marginTop: 2 }}>{sub}</div>}
     </div>
   );
@@ -1119,13 +1122,13 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
       placeholder={placeholder}
       style={{
         width: "100%", background: S.inputBg,
-        border: `1px solid ${S.goldBorder}`, borderRadius: 12,
-        padding: "12px 16px", color: S.text, fontSize: 14,
-        outline: "none", fontFamily: "'Inter', sans-serif",
+        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`, borderRadius: 14,
+        padding: "13px 16px", color: S.text, fontSize: 14,
+        outline: "none", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
-      onFocus={e => { e.target.style.borderColor = S.gold; e.target.style.boxShadow = `0 0 0 3px ${S.goldBorder}`; }}
-      onBlur={e  => { e.target.style.borderColor = S.goldBorder; e.target.style.boxShadow = "none"; }}
+      onFocus={e => { e.target.style.borderColor = S.emerald; e.target.style.boxShadow = `0 0 0 3px ${S.emeraldGlow}`; }}
+      onBlur={e  => { e.target.style.borderColor = S.isDark ? S.goldBorder : S.divider; e.target.style.boxShadow = "none"; }}
     />
   );
 }
@@ -1134,38 +1137,51 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
 function PButton({ children, onClick, disabled, variant = "primary", icon, fullWidth }) {
   const styles = {
     primary: {
+      background: `linear-gradient(135deg, ${S.emerald} 0%, ${S.emeraldLight} 100%)`,
+      color: "#FFFFFF", border: "none",
+      boxShadow: `0 8px 24px -6px ${S.emeraldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+    },
+    accent: {
+      background: `linear-gradient(135deg, ${S.orange} 0%, ${S.orangeLight} 100%)`,
+      color: "#FFFFFF", border: "none",
+      boxShadow: `0 8px 24px -6px ${S.orangeGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+    },
+    gold: {
       background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
       color: "#0A1B45", border: "none",
-      boxShadow: `0 4px 20px ${S.goldGlow}`,
+      boxShadow: `0 8px 24px -6px ${S.goldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
     },
     ghost: {
-      background: S.goldBg, color: S.goldLight,
+      background: S.goldBg, color: S.isDark ? S.goldLight : S.goldLight,
       border: `1px solid ${S.goldBorder}`,
       boxShadow: "none",
     },
     danger: {
-      background: "rgba(239,68,68,0.12)", color: "#f87171",
+      background: "rgba(239,68,68,0.12)", color: "#ef4444",
       border: "1px solid rgba(239,68,68,0.3)",
       boxShadow: "none",
     },
   };
+  const iconColor = variant === "primary" || variant === "accent" ? "#FFFFFF"
+                  : variant === "gold" ? "#0A1B45"
+                  : variant === "danger" ? "#ef4444" : S.goldLight;
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       style={{
         ...styles[variant],
-        borderRadius: 12, padding: "11px 22px",
-        fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
+        borderRadius: 14, padding: "12px 24px",
+        fontSize: 13.5, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all 0.2s ease", opacity: disabled ? 0.6 : 1,
-        fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
+        fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", letterSpacing: "0.01em",
         width: fullWidth ? "100%" : "auto",
       }}
-      onMouseEnter={e => { if (!disabled) e.currentTarget.style.transform = "translateY(-1px)"; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = "none"; }}
+      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.filter = "brightness(1.05)"; } }}
+      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.filter = "none"; }}
     >
-      {icon && <Icon name={icon} size={15} color={variant === "primary" ? "#0A1B45" : S.goldLight} strokeWidth={2} />}
+      {icon && <Icon name={icon} size={15} color={iconColor} strokeWidth={2.2} />}
       {children}
     </button>
   );
@@ -1173,11 +1189,12 @@ function PButton({ children, onClick, disabled, variant = "primary", icon, fullW
 
 function SectionTitle({ children, sub }) {
   return (
-    <div style={{ textAlign: "center", marginBottom: 28 }}>
-      <h2 className="cinzel" style={{ fontSize: 22, fontWeight: 700, color: S.goldLight,
-        marginBottom: 6, letterSpacing: "0.04em", textShadow: `0 0 24px ${S.goldGlow}` }}>
+    <div style={{ textAlign: "center", marginBottom: 32 }}>
+      <h2 className="jakarta" style={{ fontSize: 26, fontWeight: 800, color: S.isDark ? S.goldLight : S.text,
+        marginBottom: 8, letterSpacing: "-0.02em" }}>
         {children}
       </h2>
+
       {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5 }}>{sub}</p>}
     </div>
   );
