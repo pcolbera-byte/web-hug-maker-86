@@ -806,42 +806,42 @@ const DARK_THEME = {
 };
 
 const LIGHT_THEME = {
-  bg:           "#F6F7FB",       // cool light gray
-  bgDeep:       "#EBEEF5",
-  bgCard:       "rgba(255,255,255,0.96)",
+  bg:           "#F8F4ED",       // warm parchment cream
+  bgDeep:       "#EDE6D8",       // deeper parchment
+  bgCard:       "rgba(255,252,247,0.98)",
   bgCardHover:  "rgba(255,255,255,1.0)",
-  bgGlass:      "rgba(246,247,251,0.85)",
-  bgSection:    "rgba(255,255,255,0.96)",
-  gold:         "#B8860B",
-  goldLight:    "#8B6508",
-  goldPale:     "#5C4800",
-  goldBg:       "rgba(184,134,11,0.09)",
-  goldBorder:   "rgba(184,134,11,0.24)",
-  goldGlow:     "rgba(184,134,11,0.20)",
-  emerald:      "#059669",
-  emeraldLight: "#10B981",
-  emeraldGlow:  "rgba(5,150,105,0.22)",
-  orange:       "#EA580C",
-  orangeLight:  "#F97316",
-  orangeGlow:   "rgba(234,88,12,0.20)",
-  text:         "#0F172A",
-  textSub:      "rgba(15,23,42,0.75)",
-  textMuted:    "rgba(15,23,42,0.55)",
-  textFaint:    "rgba(15,23,42,0.30)",
-  blue:         "#1E3A8A",
-  blueMid:      "#1D4ED8",
-  blueLight:    "rgba(30,58,138,0.08)",
-  accent:       "#2563EB",
-  spring:       "rgba(22,163,74,0.10)",
-  fall:         "rgba(234,88,12,0.10)",
-  other:        "rgba(109,40,217,0.09)",
-  shabat:       "rgba(184,134,11,0.07)",
-  today:        "#B8860B",
-  navBg:        "rgba(255,255,255,0.96)",
-  navBorder:    "rgba(15,23,42,0.08)",
-  inputBg:      "rgba(255,255,255,0.95)",
-  cardAlt:      "rgba(235,238,245,0.75)",
-  divider:      "rgba(15,23,42,0.08)",
+  bgGlass:      "rgba(248,244,237,0.88)",
+  bgSection:    "rgba(255,250,243,0.96)",
+  gold:         "#C9A227",       // rich gold
+  goldLight:    "#E8C96A",
+  goldPale:     "#F8E9B8",
+  goldBg:       "rgba(201,162,39,0.10)",
+  goldBorder:   "rgba(201,162,39,0.24)",
+  goldGlow:     "rgba(201,162,39,0.22)",
+  emerald:      "#0D9488",       // elegant teal-emerald
+  emeraldLight: "#14B8A6",
+  emeraldGlow:  "rgba(13,148,136,0.20)",
+  orange:       "#D97706",       // warm amber
+  orangeLight:  "#F59E0B",
+  orangeGlow:   "rgba(217,119,6,0.20)",
+  text:         "#1E293B",       // deep navy slate
+  textSub:      "rgba(30,41,59,0.78)",
+  textMuted:    "rgba(30,41,59,0.55)",
+  textFaint:    "rgba(30,41,59,0.30)",
+  blue:         "#1E3A5F",       // deep navy blue
+  blueMid:      "#2E6FA8",
+  blueLight:    "rgba(30,58,95,0.08)",
+  accent:       "#2E6FA8",
+  spring:       "rgba(13,148,136,0.10)",
+  fall:         "rgba(217,119,6,0.10)",
+  other:        "rgba(124,58,237,0.09)",
+  shabat:       "rgba(201,162,39,0.07)",
+  today:        "#C9A227",
+  navBg:        "rgba(255,252,247,0.97)",
+  navBorder:    "rgba(201,162,39,0.12)",
+  inputBg:      "rgba(255,252,247,0.98)",
+  cardAlt:      "rgba(237,230,216,0.75)",
+  divider:      "rgba(30,41,59,0.08)",
   isDark:       false,
 };
 
@@ -1273,6 +1273,7 @@ const T = {
   nav_verse:      { pt:"Versículo",    en:"Verse",      es:"Versículo",   fr:"Verset",      de:"Vers",        he:"פָּסוּק",        ru:"Стих" },
   nav_learn:      { pt:"Aprender",     en:"Learn",      es:"Aprender",    fr:"Apprendre",   de:"Lernen",      he:"לִלְמֹד",       ru:"Учиться" },
   nav_settings:   { pt:"Config.",      en:"Settings",   es:"Config.",     fr:"Paramètres",  de:"Einstellungen",he:"הגדרות",       ru:"Настройки" },
+  nav_more:       { pt:"Mais",         en:"More",       es:"Más",         fr:"Plus",        de:"Mehr",        he:"עוד",          ru:"Ещё" },
   // ── Geral ──────────────────────────────────────────
   today:          { pt:"Hoje",         en:"Today",      es:"Hoy",         fr:"Aujourd'hui", de:"Heute",       he:"הַיּוֹם",        ru:"Сегодня" },
   next:           { pt:"Próximo",      en:"Next",       es:"Próximo",     fr:"Prochain",    de:"Nächste",     he:"הַבָּא",         ru:"Следующий" },
@@ -1375,7 +1376,7 @@ const TABS = [
 ];
 
 function Navigation({ active, setActive, lang, setLang }) {
-  const t = useT(lang);
+  const tx = useT(lang);
   const [menuOpen, setMenuOpen] = useState(false);
   const visibleTabs = TABS.slice(0, 5);   // bottom nav shows first 5
   const moreTabs    = TABS.slice(5);       // rest in "More" menu
@@ -1408,10 +1409,11 @@ function Navigation({ active, setActive, lang, setLang }) {
           </div>
           {/* Desktop tabs */}
           <div style={{ display: "flex", gap: 2 }}>
-            {TABS.map(t => {
-              const isActive = active === t.id;
+            {TABS.map(tab => {
+              const isActive = active === tab.id;
+              const label = tx(tab.tKey);
               return (
-                <button key={t.id} onClick={() => setActive(t.id)} style={{
+                <button key={tab.id} onClick={() => setActive(tab.id)} style={{
                   background: isActive ? S.goldBg : "transparent",
                   border: `1px solid ${isActive ? S.goldBorder : "transparent"}`,
                   color: isActive ? S.goldLight : S.textMuted,
@@ -1421,8 +1423,8 @@ function Navigation({ active, setActive, lang, setLang }) {
                   transition: "all 0.18s ease", letterSpacing: "0.01em",
                   fontFamily: "'Inter', sans-serif",
                 }}>
-                  <Icon name={t.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
-                  {t.label}
+                  <Icon name={tab.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
+                  {label}
                 </button>
               );
             })}
@@ -1443,10 +1445,11 @@ function Navigation({ active, setActive, lang, setLang }) {
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1,
           background: `linear-gradient(90deg, transparent, ${S.gold}88, ${S.goldLight}88, ${S.gold}88, transparent)` }} />
 
-        {visibleTabs.map(t => {
-          const isActive = active === t.id;
+        {visibleTabs.map(tab => {
+          const isActive = active === tab.id;
+          const label = tx(tab.tKey);
           return (
-            <button key={t.id} onClick={() => setActive(t.id)} style={{
+            <button key={tab.id} onClick={() => setActive(tab.id)} style={{
               flex: 1, background: "none", border: "none",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               gap: 3, padding: "10px 2px 8px", cursor: "pointer",
@@ -1467,7 +1470,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.18s ease",
               }}>
-                <Icon name={t.icon} size={18}
+                <Icon name={tab.icon} size={18}
                   color={isActive ? S.goldLight : S.textMuted}
                   strokeWidth={isActive ? 2 : 1.5} />
               </div>
@@ -1476,7 +1479,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 color: isActive ? S.goldLight : S.textMuted,
                 fontFamily: "'Inter', sans-serif",
                 textTransform: "uppercase",
-              }}>{t.label}</span>
+              }}>{label}</span>
             </button>
           );
         })}
@@ -1498,7 +1501,7 @@ function Navigation({ active, setActive, lang, setLang }) {
               strokeWidth={1.5} />
           </div>
           <span style={{ fontSize: 9, fontWeight: 700, color: S.textMuted,
-            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>Mais</span>
+            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>{tx("nav_more") || "Mais"}</span>
         </button>
 
         {/* More menu popup */}
@@ -1509,18 +1512,19 @@ function Navigation({ active, setActive, lang, setLang }) {
             border: `1px solid ${S.goldBorder}`, borderRadius: 20,
             padding: 8, boxShadow: `0 -8px 40px rgba(0,0,0,0.4)`,
           }}>
-            {moreTabs.map(t => {
-              const isActive = active === t.id;
+            {moreTabs.map(tab => {
+              const isActive = active === tab.id;
+              const label = tx(tab.tKey);
               return (
-                <button key={t.id} onClick={() => { setActive(t.id); setMenuOpen(false); }} style={{
+                <button key={tab.id} onClick={() => { setActive(tab.id); setMenuOpen(false); }} style={{
                   width: "100%", background: isActive ? S.goldBg : "transparent",
                   border: "none", borderRadius: 12, padding: "12px 16px",
                   display: "flex", alignItems: "center", gap: 12,
                   color: isActive ? S.goldLight : S.textSub,
                   cursor: "pointer", transition: "all 0.15s",
                 }}>
-                  <Icon name={t.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
-                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{t.label}</span>
+                  <Icon name={tab.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
+                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{label}</span>
                   {isActive && <Icon name="check" size={16} color={S.gold} style={{ marginLeft: "auto" }} />}
                 </button>
               );
@@ -4098,8 +4102,8 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
             },
             {
               t: LIGHT_THEME, name:"Claro", desc:"Pergaminho da Torá",
-              preview: "linear-gradient(135deg,#EAE2D4,#F4EFE6,#FFF8EE)",
-              active: !isDark, accentActive:"#B8960C",
+              preview: "linear-gradient(135deg,#EDE6D8,#F8F4ED,#FFFDF9)",
+              active: !isDark, accentActive:"#C9A227",
               stars: false,
             },
           ].map(opt => (
