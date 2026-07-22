@@ -1208,45 +1208,30 @@ function Card({ children, style = {}, onClick }) {
 
 // ─── MENORAH LOGO ─────────────────────────────────────────────────────────────
 
+import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
+
 function MenorahLogo({ size = 44, glow = true }) {
-  const gold  = "#D4AF37";
-  const goldL = "#F2D16B";
-  const sw    = Math.max(2, size / 16);
   return (
-    <svg width={size} height={size} viewBox="0 0 100 110"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: glow ? `drop-shadow(0 0 8px rgba(212,175,55,0.6))` : "none", flexShrink: 0 }}>
-      {/* base */}
-      <rect x="16" y="96" width="68" height="6" rx="3" fill={gold} opacity="0.9"/>
-      <rect x="18" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      <rect x="72" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      {/* central shaft */}
-      <rect x="48" y="34" width="4" height="62" rx="2" fill={goldL}/>
-      {/* arms — left */}
-      <path d="M50 72 C50 72 24 72 24 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 33 64 33 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 56 C50 56 41 56 41 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* arms — right */}
-      <path d="M50 56 C50 56 59 56 59 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 67 64 67 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 72 C50 72 76 72 76 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* vertical candle shafts */}
-      {[[22,27],[31,30],[39,33],[48,34],[57,33],[65,30],[74,27]].map(([x,y],i)=>(
-        <rect key={i} x={x} y={y} width={4} height={50-y+12} rx="2" fill={i===3?goldL:gold} opacity={i===3?1:0.85}/>
-      ))}
-      {/* flames */}
-      {[24,33,41,50,59,67,76].map((cx,i)=>(
-        <g key={i} className={i===3?"flame":""}>
-          <ellipse cx={cx} cy={22} rx={5} ry={7} fill="rgba(255,210,60,0.15)"/>
-          <path d={`M${cx} 31 C${cx-3.5} 26 ${cx-3} 18 ${cx} 15 C${cx+3} 18 ${cx+3.5} 26 ${cx} 31 Z`}
-            fill={i===3?"#FFF5AA":goldL} opacity={i===3?1:0.9}/>
-          <ellipse cx={cx} cy={23} rx={1.6} ry={2.5}
-            fill={i===3?"white":"rgba(255,255,255,0.75)"}/>
-        </g>
-      ))}
-    </svg>
+    <img
+      src={moedimLogoAsset.url}
+      alt="Moedim"
+      width={size}
+      height={size}
+      style={{
+        width: size,
+        height: size,
+        borderRadius: Math.max(6, size * 0.22),
+        objectFit: "cover",
+        flexShrink: 0,
+        display: "block",
+        filter: glow
+          ? "drop-shadow(0 6px 18px rgba(212,175,55,0.35)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))"
+          : "drop-shadow(0 2px 6px rgba(0,0,0,0.25))",
+      }}
+    />
   );
 }
+
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
 
