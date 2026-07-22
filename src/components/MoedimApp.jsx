@@ -853,7 +853,7 @@ let S = { ...DARK_THEME };
 function buildCSS(theme) {
   const isDark = theme.isDark;
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -861,7 +861,7 @@ function buildCSS(theme) {
     body {
       background: ${theme.bg};
       color: ${theme.text};
-      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       transition: background 0.4s ease, color 0.4s ease;
       -webkit-font-smoothing: antialiased;
@@ -876,7 +876,7 @@ function buildCSS(theme) {
 
     /* Font classes */
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
-    .jakarta   { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; letter-spacing: -0.01em; }
+    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
 
@@ -1127,7 +1127,7 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
         width: "100%", background: S.inputBg,
         border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`, borderRadius: 14,
         padding: "13px 16px", color: S.text, fontSize: 14,
-        outline: "none", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
+        outline: "none", fontFamily: "'Space Grotesk', 'Inter', sans-serif",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
       onFocus={e => { e.target.style.borderColor = S.emerald; e.target.style.boxShadow = `0 0 0 3px ${S.emeraldGlow}`; }}
@@ -1178,7 +1178,7 @@ function PButton({ children, onClick, disabled, variant = "primary", icon, fullW
         fontSize: 13.5, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all 0.2s ease", opacity: disabled ? 0.6 : 1,
-        fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", letterSpacing: "0.01em",
+        fontFamily: "'Space Grotesk', 'Inter', sans-serif", letterSpacing: "0.01em",
         width: fullWidth ? "100%" : "auto",
       }}
       onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.filter = "brightness(1.05)"; } }}
