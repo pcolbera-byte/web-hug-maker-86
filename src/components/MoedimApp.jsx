@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
+
 
 // ─── HEBREW CALENDAR DATA ────────────────────────────────────────────────────
 
