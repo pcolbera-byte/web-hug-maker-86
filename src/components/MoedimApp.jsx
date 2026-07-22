@@ -1210,7 +1210,6 @@ function Card({ children, style = {}, onClick }) {
 
 // ─── MENORAH LOGO ─────────────────────────────────────────────────────────────
 
-import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
 
 function MenorahLogo({ size = 44, glow = true }) {
   return (
