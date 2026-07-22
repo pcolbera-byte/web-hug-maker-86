@@ -944,14 +944,15 @@ function buildCSS(theme) {
     .flame { animation: flameDance 1.8s ease-in-out infinite; transform-origin: bottom center; }
 
     /* Mobile bottom nav */
-    @media (max-width: 768px) {
+    @media (max-width: 1099px) {
       .desktop-nav { display: none !important; }
       .mobile-bottom-nav { display: flex !important; }
       body { padding-bottom: 76px; }
     }
-    @media (min-width: 769px) {
+    @media (min-width: 1100px) {
       .mobile-bottom-nav { display: none !important; }
     }
+
 
     /* Date input */
     input[type="date"] { color-scheme: ${isDark ? "dark" : "light"}; }
