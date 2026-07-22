@@ -944,14 +944,15 @@ function buildCSS(theme) {
     .flame { animation: flameDance 1.8s ease-in-out infinite; transform-origin: bottom center; }
 
     /* Mobile bottom nav */
-    @media (max-width: 768px) {
+    @media (max-width: 1099px) {
       .desktop-nav { display: none !important; }
       .mobile-bottom-nav { display: flex !important; }
       body { padding-bottom: 76px; }
     }
-    @media (min-width: 769px) {
+    @media (min-width: 1100px) {
       .mobile-bottom-nav { display: none !important; }
     }
+
 
     /* Date input */
     input[type="date"] { color-scheme: ${isDark ? "dark" : "light"}; }
@@ -1379,23 +1380,23 @@ function Navigation({ active, setActive, lang, setLang }) {
       }}>
         {/* gold accent line top */}
         <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${S.gold}, ${S.goldLight}, ${S.gold}, transparent)` }} />
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, height: 64 }}>
           {/* Brand */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer", flexShrink: 0, minWidth: 0 }}
             onClick={() => setActive("calendar")}>
-            <MenorahLogo size={40} />
-            <div>
-              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, lineHeight: 1, letterSpacing: "0.06em" }}>
-                Moedim — Calendário Bíblico
+            <MenorahLogo size={36} />
+            <div style={{ minWidth: 0 }}>
+              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 14, lineHeight: 1, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
+                Moedim
               </div>
-              <div className="hebrew" style={{ color: S.gold, fontSize: 12, opacity: 0.8, letterSpacing: "0.06em" }}>
+              <div className="hebrew" style={{ color: S.gold, fontSize: 11, opacity: 0.8, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
                 מוֹעֲדִים
               </div>
             </div>
           </div>
           {/* Desktop tabs */}
-          <div style={{ display: "flex", gap: 2 }}>
+          <div style={{ display: "flex", gap: 2, flex: "1 1 auto", justifyContent: "flex-end", overflowX: "auto", minWidth: 0 }}>
             {TABS.map(tab => {
               const isActive = active === tab.id;
               const label = tx(tab.tKey);
@@ -1404,11 +1405,12 @@ function Navigation({ active, setActive, lang, setLang }) {
                   background: isActive ? S.goldBg : "transparent",
                   border: `1px solid ${isActive ? S.goldBorder : "transparent"}`,
                   color: isActive ? S.goldLight : S.textMuted,
-                  borderRadius: 10, padding: "7px 13px",
+                  borderRadius: 10, padding: "7px 11px",
                   fontSize: 12, fontWeight: 600, cursor: "pointer",
                   display: "flex", alignItems: "center", gap: 6,
                   transition: "all 0.18s ease", letterSpacing: "0.01em",
                   fontFamily: "'Inter', sans-serif",
+                  whiteSpace: "nowrap", flexShrink: 0,
                 }}>
                   <Icon name={tab.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
                   {label}
@@ -1417,6 +1419,7 @@ function Navigation({ active, setActive, lang, setLang }) {
             })}
           </div>
         </div>
+
       </nav>
 
       {/* ── MOBILE BOTTOM NAV ── */}
