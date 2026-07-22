@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
+
 
 // ─── HEBREW CALENDAR DATA ────────────────────────────────────────────────────
 
@@ -759,51 +761,52 @@ function getUpcomingFeasts(daysAhead = 60) {
 // App Store / Google Play quality — Cinzel + Inter + Noto Serif Hebrew
 
 const DARK_THEME = {
-  // Backgrounds
-  bg:           "#0B1225",       // deep midnight slate
-  bgDeep:       "#060A1A",       // deepest layer
-  bgCard:       "rgba(20,29,56,0.78)",
-  bgCardHover:  "rgba(26,37,72,0.92)",
-  bgGlass:      "rgba(11,18,37,0.60)",
-  bgSection:    "rgba(15,24,50,0.85)",
-  // Gold palette — Davidic royalty (kept for identity)
-  gold:         "#D4AF37",
-  goldLight:    "#F2D16B",
-  goldPale:     "#FBF0C4",
-  goldBg:       "rgba(212,175,55,0.10)",
-  goldBorder:   "rgba(212,175,55,0.22)",
-  goldGlow:     "rgba(212,175,55,0.35)",
-  // Modern CTA accents
-  emerald:      "#10B981",
-  emeraldLight: "#34D399",
-  emeraldGlow:  "rgba(16,185,129,0.32)",
-  orange:       "#F97316",
-  orangeLight:  "#FB923C",
-  orangeGlow:   "rgba(249,115,22,0.30)",
+  // Backgrounds — modern deep indigo
+  bg:           "#080B1F",
+  bgDeep:       "#050716",
+  bgCard:       "rgba(22,28,58,0.72)",
+  bgCardHover:  "rgba(30,38,78,0.88)",
+  bgGlass:      "rgba(10,14,35,0.55)",
+  bgSection:    "rgba(16,22,48,0.82)",
+  // Gold — heritage accent
+  gold:         "#E9C46A",
+  goldLight:    "#F6D98A",
+  goldPale:     "#FBEBB8",
+  goldBg:       "rgba(233,196,106,0.10)",
+  goldBorder:   "rgba(233,196,106,0.24)",
+  goldGlow:     "rgba(233,196,106,0.35)",
+  // Modern CTA — vibrant indigo/violet
+  emerald:      "#7C5CFF",
+  emeraldLight: "#9C7BFF",
+  emeraldGlow:  "rgba(124,92,255,0.38)",
+  orange:       "#F59E0B",
+  orangeLight:  "#FBBF24",
+  orangeGlow:   "rgba(245,158,11,0.32)",
   // Text
-  text:         "#F8F6F0",
-  textSub:      "rgba(248,246,240,0.78)",
-  textMuted:    "rgba(248,246,240,0.52)",
-  textFaint:    "rgba(248,246,240,0.30)",
+  text:         "#F5F3EE",
+  textSub:      "rgba(245,243,238,0.76)",
+  textMuted:    "rgba(245,243,238,0.50)",
+  textFaint:    "rgba(245,243,238,0.28)",
   // Accents
-  blue:         "#162754",
-  blueMid:      "#1E3570",
-  blueLight:    "rgba(99,131,255,0.15)",
-  accent:       "#4A90D9",
+  blue:         "#141B44",
+  blueMid:      "#1E2865",
+  blueLight:    "rgba(124,92,255,0.16)",
+  accent:       "#7C5CFF",
   // Semantic
-  spring:       "rgba(74,222,128,0.14)",
+  spring:       "rgba(52,211,153,0.14)",
   fall:         "rgba(251,146,60,0.14)",
-  other:        "rgba(167,139,250,0.14)",
-  shabat:       "rgba(212,175,55,0.08)",
-  today:        "#D4AF37",
+  other:        "rgba(167,139,250,0.16)",
+  shabat:       "rgba(233,196,106,0.09)",
+  today:        "#E9C46A",
   // Nav
-  navBg:        "rgba(6,10,26,0.97)",
-  navBorder:    "rgba(212,175,55,0.15)",
-  inputBg:      "rgba(6,10,26,0.70)",
-  cardAlt:      "rgba(20,29,56,0.55)",
-  divider:      "rgba(212,175,55,0.12)",
+  navBg:        "rgba(6,9,24,0.92)",
+  navBorder:    "rgba(233,196,106,0.14)",
+  inputBg:      "rgba(10,14,35,0.72)",
+  cardAlt:      "rgba(22,28,58,0.55)",
+  divider:      "rgba(233,196,106,0.12)",
   isDark:       true,
 };
+
 
 const LIGHT_THEME = {
   bg:           "#F8F4ED",       // warm parchment cream
@@ -851,7 +854,7 @@ let S = { ...DARK_THEME };
 function buildCSS(theme) {
   const isDark = theme.isDark;
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -859,7 +862,7 @@ function buildCSS(theme) {
     body {
       background: ${theme.bg};
       color: ${theme.text};
-      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       transition: background 0.4s ease, color 0.4s ease;
       -webkit-font-smoothing: antialiased;
@@ -874,7 +877,7 @@ function buildCSS(theme) {
 
     /* Font classes */
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
-    .jakarta   { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; letter-spacing: -0.01em; }
+    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
 
@@ -1125,7 +1128,7 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
         width: "100%", background: S.inputBg,
         border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`, borderRadius: 14,
         padding: "13px 16px", color: S.text, fontSize: 14,
-        outline: "none", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
+        outline: "none", fontFamily: "'Space Grotesk', 'Inter', sans-serif",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
       onFocus={e => { e.target.style.borderColor = S.emerald; e.target.style.boxShadow = `0 0 0 3px ${S.emeraldGlow}`; }}
@@ -1176,7 +1179,7 @@ function PButton({ children, onClick, disabled, variant = "primary", icon, fullW
         fontSize: 13.5, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all 0.2s ease", opacity: disabled ? 0.6 : 1,
-        fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", letterSpacing: "0.01em",
+        fontFamily: "'Space Grotesk', 'Inter', sans-serif", letterSpacing: "0.01em",
         width: fullWidth ? "100%" : "auto",
       }}
       onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.filter = "brightness(1.05)"; } }}
@@ -1208,45 +1211,29 @@ function Card({ children, style = {}, onClick }) {
 
 // ─── MENORAH LOGO ─────────────────────────────────────────────────────────────
 
+
 function MenorahLogo({ size = 44, glow = true }) {
-  const gold  = "#D4AF37";
-  const goldL = "#F2D16B";
-  const sw    = Math.max(2, size / 16);
   return (
-    <svg width={size} height={size} viewBox="0 0 100 110"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: glow ? `drop-shadow(0 0 8px rgba(212,175,55,0.6))` : "none", flexShrink: 0 }}>
-      {/* base */}
-      <rect x="16" y="96" width="68" height="6" rx="3" fill={gold} opacity="0.9"/>
-      <rect x="18" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      <rect x="72" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      {/* central shaft */}
-      <rect x="48" y="34" width="4" height="62" rx="2" fill={goldL}/>
-      {/* arms — left */}
-      <path d="M50 72 C50 72 24 72 24 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 33 64 33 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 56 C50 56 41 56 41 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* arms — right */}
-      <path d="M50 56 C50 56 59 56 59 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 67 64 67 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 72 C50 72 76 72 76 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* vertical candle shafts */}
-      {[[22,27],[31,30],[39,33],[48,34],[57,33],[65,30],[74,27]].map(([x,y],i)=>(
-        <rect key={i} x={x} y={y} width={4} height={50-y+12} rx="2" fill={i===3?goldL:gold} opacity={i===3?1:0.85}/>
-      ))}
-      {/* flames */}
-      {[24,33,41,50,59,67,76].map((cx,i)=>(
-        <g key={i} className={i===3?"flame":""}>
-          <ellipse cx={cx} cy={22} rx={5} ry={7} fill="rgba(255,210,60,0.15)"/>
-          <path d={`M${cx} 31 C${cx-3.5} 26 ${cx-3} 18 ${cx} 15 C${cx+3} 18 ${cx+3.5} 26 ${cx} 31 Z`}
-            fill={i===3?"#FFF5AA":goldL} opacity={i===3?1:0.9}/>
-          <ellipse cx={cx} cy={23} rx={1.6} ry={2.5}
-            fill={i===3?"white":"rgba(255,255,255,0.75)"}/>
-        </g>
-      ))}
-    </svg>
+    <img
+      src={moedimLogoAsset.url}
+      alt="Moedim"
+      width={size}
+      height={size}
+      style={{
+        width: size,
+        height: size,
+        borderRadius: Math.max(6, size * 0.22),
+        objectFit: "cover",
+        flexShrink: 0,
+        display: "block",
+        filter: glow
+          ? "drop-shadow(0 6px 18px rgba(212,175,55,0.35)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))"
+          : "drop-shadow(0 2px 6px rgba(0,0,0,0.25))",
+      }}
+    />
   );
 }
+
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
 
