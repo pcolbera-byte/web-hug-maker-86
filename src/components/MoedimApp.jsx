@@ -761,51 +761,52 @@ function getUpcomingFeasts(daysAhead = 60) {
 // App Store / Google Play quality — Cinzel + Inter + Noto Serif Hebrew
 
 const DARK_THEME = {
-  // Backgrounds
-  bg:           "#0B1225",       // deep midnight slate
-  bgDeep:       "#060A1A",       // deepest layer
-  bgCard:       "rgba(20,29,56,0.78)",
-  bgCardHover:  "rgba(26,37,72,0.92)",
-  bgGlass:      "rgba(11,18,37,0.60)",
-  bgSection:    "rgba(15,24,50,0.85)",
-  // Gold palette — Davidic royalty (kept for identity)
-  gold:         "#D4AF37",
-  goldLight:    "#F2D16B",
-  goldPale:     "#FBF0C4",
-  goldBg:       "rgba(212,175,55,0.10)",
-  goldBorder:   "rgba(212,175,55,0.22)",
-  goldGlow:     "rgba(212,175,55,0.35)",
-  // Modern CTA accents
-  emerald:      "#10B981",
-  emeraldLight: "#34D399",
-  emeraldGlow:  "rgba(16,185,129,0.32)",
-  orange:       "#F97316",
-  orangeLight:  "#FB923C",
-  orangeGlow:   "rgba(249,115,22,0.30)",
+  // Backgrounds — modern deep indigo
+  bg:           "#080B1F",
+  bgDeep:       "#050716",
+  bgCard:       "rgba(22,28,58,0.72)",
+  bgCardHover:  "rgba(30,38,78,0.88)",
+  bgGlass:      "rgba(10,14,35,0.55)",
+  bgSection:    "rgba(16,22,48,0.82)",
+  // Gold — heritage accent
+  gold:         "#E9C46A",
+  goldLight:    "#F6D98A",
+  goldPale:     "#FBEBB8",
+  goldBg:       "rgba(233,196,106,0.10)",
+  goldBorder:   "rgba(233,196,106,0.24)",
+  goldGlow:     "rgba(233,196,106,0.35)",
+  // Modern CTA — vibrant indigo/violet
+  emerald:      "#7C5CFF",
+  emeraldLight: "#9C7BFF",
+  emeraldGlow:  "rgba(124,92,255,0.38)",
+  orange:       "#F59E0B",
+  orangeLight:  "#FBBF24",
+  orangeGlow:   "rgba(245,158,11,0.32)",
   // Text
-  text:         "#F8F6F0",
-  textSub:      "rgba(248,246,240,0.78)",
-  textMuted:    "rgba(248,246,240,0.52)",
-  textFaint:    "rgba(248,246,240,0.30)",
+  text:         "#F5F3EE",
+  textSub:      "rgba(245,243,238,0.76)",
+  textMuted:    "rgba(245,243,238,0.50)",
+  textFaint:    "rgba(245,243,238,0.28)",
   // Accents
-  blue:         "#162754",
-  blueMid:      "#1E3570",
-  blueLight:    "rgba(99,131,255,0.15)",
-  accent:       "#4A90D9",
+  blue:         "#141B44",
+  blueMid:      "#1E2865",
+  blueLight:    "rgba(124,92,255,0.16)",
+  accent:       "#7C5CFF",
   // Semantic
-  spring:       "rgba(74,222,128,0.14)",
+  spring:       "rgba(52,211,153,0.14)",
   fall:         "rgba(251,146,60,0.14)",
-  other:        "rgba(167,139,250,0.14)",
-  shabat:       "rgba(212,175,55,0.08)",
-  today:        "#D4AF37",
+  other:        "rgba(167,139,250,0.16)",
+  shabat:       "rgba(233,196,106,0.09)",
+  today:        "#E9C46A",
   // Nav
-  navBg:        "rgba(6,10,26,0.97)",
-  navBorder:    "rgba(212,175,55,0.15)",
-  inputBg:      "rgba(6,10,26,0.70)",
-  cardAlt:      "rgba(20,29,56,0.55)",
-  divider:      "rgba(212,175,55,0.12)",
+  navBg:        "rgba(6,9,24,0.92)",
+  navBorder:    "rgba(233,196,106,0.14)",
+  inputBg:      "rgba(10,14,35,0.72)",
+  cardAlt:      "rgba(22,28,58,0.55)",
+  divider:      "rgba(233,196,106,0.12)",
   isDark:       true,
 };
+
 
 const LIGHT_THEME = {
   bg:           "#F8F4ED",       // warm parchment cream
