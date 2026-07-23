@@ -1558,6 +1558,19 @@ function CalendarPage() {
   const next    = () => month === 12 ? (setMonth(1),  setYear(y=>y+1)) : setMonth(m=>m+1);
   const goToday = () => { setYear(hebrewToday.getFullYear()); setMonth(hebrewToday.getMonth()+1); };
 
+  // Sync month strip scroll with active month
+  const monthsBarRef = useRef(null);
+  useEffect(() => {
+    const bar = monthsBarRef.current;
+    if (!bar) return;
+    const active = bar.querySelector(`[data-month="${month}"]`);
+    if (!active) return;
+    const barRect = bar.getBoundingClientRect();
+    const elRect  = active.getBoundingClientRect();
+    const offset  = (elRect.left - barRect.left) - (bar.clientWidth / 2) + (active.clientWidth / 2);
+    bar.scrollTo({ left: bar.scrollLeft + offset, behavior: "smooth" });
+  }, [month, year]);
+
   // Data civil para exibição (dia gregoriano real, não ajustado)
   const todayStr = now.toLocaleDateString("pt-BR", { weekday:"long", day:"numeric", month:"long" });
 
