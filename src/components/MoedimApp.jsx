@@ -1683,7 +1683,17 @@ function CalendarPage() {
       </div>
 
       {/* ══ CALENDAR GRID ══ */}
-      <GlassCard noPad style={{ marginBottom: 20 }}>
+      <GlassCard noPad style={{ marginBottom: 20, overflow: "visible" }}>
+        <div style={{
+          overflowX: "auto",
+          overflowY: "visible",
+          WebkitOverflowScrolling: "touch",
+          overscrollBehaviorX: "contain",
+          touchAction: "pan-x pan-y",
+          scrollbarWidth: "thin",
+          borderRadius: 24,
+        }}>
+        <div style={{ minWidth: 560 }}>
         {/* Month nav header */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
           padding:"18px 22px 14px", borderBottom:`1px solid ${S.divider}` }}>
@@ -1787,6 +1797,8 @@ function CalendarPage() {
               </div>
             );
           })}
+        </div>
+        </div>
         </div>
 
         {/* Selected day panel */}
