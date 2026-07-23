@@ -1741,8 +1741,55 @@ function CalendarPage() {
           </button>
         </div>
 
+        {/* Months strip — synced with active month */}
+        <div
+          ref={monthsBarRef}
+          style={{
+            display: "flex", gap: 8, padding: "12px 14px",
+            overflowX: "auto", overflowY: "hidden",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "thin",
+            borderBottom: `1px solid ${S.divider}`,
+            scrollSnapType: "x proximity",
+          }}
+        >
+          {MONTHS_PT.map((mName, i) => {
+            const mNum = i + 1;
+            const active = mNum === month;
+            return (
+              <button
+                key={mName}
+                data-month={mNum}
+                onClick={() => setMonth(mNum)}
+                style={{
+                  flex: "0 0 auto",
+                  padding: "8px 14px",
+                  borderRadius: 999,
+                  border: `1px solid ${active ? S.gold : S.divider}`,
+                  background: active
+                    ? `linear-gradient(135deg, ${S.gold}, ${S.goldLight})`
+                    : S.bgGlass,
+                  color: active ? "#0A1B45" : S.text,
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: "0.03em",
+                  cursor: "pointer",
+                  scrollSnapAlign: "center",
+                  whiteSpace: "nowrap",
+                  transition: "all 0.15s ease",
+                  boxShadow: active ? `0 4px 12px ${S.goldBg}` : "none",
+                }}
+              >
+                {mName.slice(0, 3)}
+              </button>
+            );
+          })}
+        </div>
+
         {/* Weekday headers */}
         <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", padding:"10px 14px 0" }}>
+
           {WEEKDAYS.map((d,i) => (
             <div key={d} style={{ textAlign:"center", fontSize:11, fontWeight:700,
               color: i===6 ? S.gold : S.textMuted,
