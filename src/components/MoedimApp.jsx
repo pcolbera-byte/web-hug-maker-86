@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
 
 
@@ -1558,19 +1558,6 @@ function CalendarPage() {
   const next    = () => month === 12 ? (setMonth(1),  setYear(y=>y+1)) : setMonth(m=>m+1);
   const goToday = () => { setYear(hebrewToday.getFullYear()); setMonth(hebrewToday.getMonth()+1); };
 
-  // Sync month strip scroll with active month
-  const monthsBarRef = useRef(null);
-  useEffect(() => {
-    const bar = monthsBarRef.current;
-    if (!bar) return;
-    const active = bar.querySelector(`[data-month="${month}"]`);
-    if (!active) return;
-    const barRect = bar.getBoundingClientRect();
-    const elRect  = active.getBoundingClientRect();
-    const offset  = (elRect.left - barRect.left) - (bar.clientWidth / 2) + (active.clientWidth / 2);
-    bar.scrollTo({ left: bar.scrollLeft + offset, behavior: "smooth" });
-  }, [month, year]);
-
   // Data civil para exibição (dia gregoriano real, não ajustado)
   const todayStr = now.toLocaleDateString("pt-BR", { weekday:"long", day:"numeric", month:"long" });
 
@@ -1696,17 +1683,7 @@ function CalendarPage() {
       </div>
 
       {/* ══ CALENDAR GRID ══ */}
-      <GlassCard noPad style={{ marginBottom: 20, overflow: "visible" }}>
-        <div style={{
-          overflowX: "auto",
-          overflowY: "visible",
-          WebkitOverflowScrolling: "touch",
-          overscrollBehaviorX: "contain",
-          touchAction: "pan-x pan-y",
-          scrollbarWidth: "thin",
-          borderRadius: 24,
-        }}>
-        <div style={{ minWidth: 560 }}>
+      <GlassCard noPad style={{ marginBottom: 20 }}>
         {/* Month nav header */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
           padding:"18px 22px 14px", borderBottom:`1px solid ${S.divider}` }}>
@@ -1741,55 +1718,8 @@ function CalendarPage() {
           </button>
         </div>
 
-        {/* Months strip — synced with active month */}
-        <div
-          ref={monthsBarRef}
-          style={{
-            display: "flex", gap: 8, padding: "12px 14px",
-            overflowX: "auto", overflowY: "hidden",
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "thin",
-            borderBottom: `1px solid ${S.divider}`,
-            scrollSnapType: "x proximity",
-          }}
-        >
-          {MONTHS_PT.map((mName, i) => {
-            const mNum = i + 1;
-            const active = mNum === month;
-            return (
-              <button
-                key={mName}
-                data-month={mNum}
-                onClick={() => setMonth(mNum)}
-                style={{
-                  flex: "0 0 auto",
-                  padding: "8px 14px",
-                  borderRadius: 999,
-                  border: `1px solid ${active ? S.gold : S.divider}`,
-                  background: active
-                    ? `linear-gradient(135deg, ${S.gold}, ${S.goldLight})`
-                    : S.bgGlass,
-                  color: active ? "#0A1B45" : S.text,
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: "0.03em",
-                  cursor: "pointer",
-                  scrollSnapAlign: "center",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.15s ease",
-                  boxShadow: active ? `0 4px 12px ${S.goldBg}` : "none",
-                }}
-              >
-                {mName.slice(0, 3)}
-              </button>
-            );
-          })}
-        </div>
-
         {/* Weekday headers */}
         <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", padding:"10px 14px 0" }}>
-
           {WEEKDAYS.map((d,i) => (
             <div key={d} style={{ textAlign:"center", fontSize:11, fontWeight:700,
               color: i===6 ? S.gold : S.textMuted,
@@ -1857,8 +1787,6 @@ function CalendarPage() {
               </div>
             );
           })}
-        </div>
-        </div>
         </div>
 
         {/* Selected day panel */}
