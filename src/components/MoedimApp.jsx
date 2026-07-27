@@ -61,7 +61,16 @@ const BIBLICAL_FEASTS = [
     desc: "Celebra a salvação dos judeus na Pérsia através da rainha Ester.",
     sig: "Demonstra a providência divina e proteção do povo de Deus.",
     scripture: "Ester 9:20-28" },
+  { name: "Tisha B'Av", heb: "תִּשְׁעָה בְּאָב", date: "9 Av", month: 5, day: 9, dur: 1, cat: "other", emoji: "🕯️",
+    desc: "Dia de jejum e luto pela destruição do Primeiro e do Segundo Templo em Jerusalém.",
+    sig: "Dia de lamento e arrependimento, com esperança na restauração e na consolação prometida pelo Eterno.",
+    scripture: "Zacarias 7:3-5; Lamentações 1:1-5" },
+  { name: "Tu B'Av", heb: "טוּ בְּאָב", date: "15 Av", month: 5, day: 15, dur: 1, cat: "other", emoji: "💞",
+    desc: "Dia de alegria e reconciliação, celebrado seis dias após Tisha B'Av — festa do amor e da união em Israel.",
+    sig: "Representa a passagem do luto para a alegria e a restauração das relações no povo do Eterno.",
+    scripture: "Juízes 21:19-23; Jeremias 31:13" },
 ];
+
 
 // ─── PARASHAT HASHAVUA 5786 — CALENDÁRIO REAL (Hebcal / Shivim Panim L'Torah)
 // Cada entrada: dataDiaspora = data do Shabat na Diáspora (fora de Israel)
