@@ -13,11 +13,10 @@ export default defineConfig({
   // Inside Lovable the default Cloudflare build is kept; in CI (GitHub Actions)
   // nitro is skipped so `vite build` emits plain prerendered files in dist/client.
   nitro: isLovableSandbox ? undefined : false,
-  tanstackStart: {
-    prerender: {
-      enabled: true,
-      crawlLinks: true,
-    },
-    pages: [{ path: "/" }],
-  },
+  tanstackStart: isLovableSandbox
+    ? {}
+    : {
+        prerender: { enabled: true, crawlLinks: true },
+        pages: [{ path: "/" }],
+      },
 });
