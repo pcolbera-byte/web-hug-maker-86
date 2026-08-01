@@ -7,9 +7,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   // Full static output (no server) for GitHub Pages.
-  nitro: {
-    preset: "node-server",
-  },
+  nitro: false,
   tanstackStart: {
     prerender: {
       enabled: true,
