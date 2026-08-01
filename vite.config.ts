@@ -9,10 +9,6 @@ export default defineConfig({
   // Full static output (no server) for GitHub Pages.
   nitro: {
     preset: "static",
-    output: {
-      dir: "dist",
-      publicDir: "dist/public",
-    },
   },
   tanstackStart: {
     prerender: {
