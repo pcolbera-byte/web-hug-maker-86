@@ -2,7 +2,7 @@ name: Deploy Vite Site to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # Se sua branch principal for "master", mude aqui para "master"
+    branches: ["main"] # Altere para "master" se o nome da sua branch for master
 
 permissions:
   contents: read
@@ -26,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -35,6 +35,7 @@ jobs:
         run: npx vite build
         env:
           NODE_ENV: production
+          CI: false
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
