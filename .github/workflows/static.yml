@@ -32,19 +32,17 @@ jobs:
 
       - name: Build (static prerender)
         run: npm run build
-        env:
-          NITRO_PRESET: static
 
       - name: SPA fallback + Pages files
         run: |
-          cp dist/public/index.html dist/public/404.html
-          touch dist/public/.nojekyll
-          echo "moedim.website" > dist/public/CNAME
+          cp dist/client/index.html dist/client/404.html
+          touch dist/client/.nojekyll
+          echo "moedim.website" > dist/client/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/public
+          path: ./dist/client
 
   deploy:
     needs: build

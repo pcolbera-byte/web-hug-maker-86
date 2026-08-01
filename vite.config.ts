@@ -5,9 +5,14 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const isLovableSandbox =
+  process.env["LOVABLE_SANDBOX"] === "1" || !!process.env["DEV_SERVER__PROJECT_PATH"];
+
 export default defineConfig({
-  // Full static output (no server) for GitHub Pages.
-  nitro: false,
+  // Static-only output (no server) for GitHub Pages.
+  // Inside Lovable the default Cloudflare build is kept; in CI (GitHub Actions)
+  // nitro is skipped so `vite build` emits plain prerendered files in dist/client.
+  nitro: isLovableSandbox ? undefined : false,
   tanstackStart: {
     prerender: {
       enabled: true,
