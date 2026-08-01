@@ -9,9 +9,10 @@ const isLovableSandbox =
   process.env["LOVABLE_SANDBOX"] === "1" || !!process.env["DEV_SERVER__PROJECT_PATH"];
 
 export default defineConfig({
+  base: '/', // <-- Adicionado para corrigir o caminho dos arquivos na Vercel
   // Static-only output (no server) for GitHub Pages.
   // Inside Lovable the default Cloudflare build is kept; in CI (GitHub Actions)
-  // nitro is skipped so `vite build` emits plain prerendered files in dist/client.
+  // nitro is skipped so vite build emits plain prerendered files in dist/client.
   nitro: isLovableSandbox ? undefined : false,
   tanstackStart: isLovableSandbox
     ? {}
