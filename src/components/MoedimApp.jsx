@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
+
 
 // ─── CAMADA DE NOTIFICAÇÕES (Web + Capacitor nativo) ──────────────────────────
 // A Web Notification API (Notification.requestPermission / new Notification)
@@ -1360,7 +1360,7 @@ function Card({ children, style = {}, onClick }) {
 function MenorahLogo({ size = 44, glow = true }) {
   return (
     <img
-      src={moedimLogoAsset.url}
+      src="/moedim-logo.png"
       alt="Moedim"
       width={size}
       height={size}
