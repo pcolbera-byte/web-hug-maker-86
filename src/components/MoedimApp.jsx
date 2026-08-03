@@ -1360,7 +1360,7 @@ function Card({ children, style = {}, onClick }) {
 function MenorahLogo({ size = 44, glow = true }) {
   return (
     <img
-      src={moedimLogoAsset.url}
+      src="/moedim-logo.png"
       alt="Moedim"
       width={size}
       height={size}
