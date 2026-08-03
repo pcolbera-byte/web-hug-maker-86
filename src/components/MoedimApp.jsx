@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 
-
 // ─── CAMADA DE NOTIFICAÇÕES (Web + Capacitor nativo) ──────────────────────────
 // A Web Notification API (Notification.requestPermission / new Notification)
 // NÃO funciona dentro do WebView do Android (Capacitor). Para funcionar no
@@ -1041,10 +1040,10 @@ function buildCSS(theme) {
     ::-webkit-scrollbar-thumb { background: ${theme.goldBorder}; border-radius: 2px; }
 
     /* Font classes */
+    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
-    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
 
     /* Animations */
     @keyframes fadeUp {
@@ -1404,6 +1403,7 @@ const T = {
   nav_verse:      { pt:"Versículo",    en:"Verse",      es:"Versículo",   fr:"Verset",      de:"Vers",        he:"פָּסוּק",        ru:"Стих" },
   nav_learn:      { pt:"Aprender",     en:"Learn",      es:"Aprender",    fr:"Apprendre",   de:"Lernen",      he:"לִלְמֹד",       ru:"Учиться" },
   nav_settings:   { pt:"Config.",      en:"Settings",   es:"Config.",     fr:"Paramètres",  de:"Einstellungen",he:"הגדרות",       ru:"Настройки" },
+  more:           { pt:"Mais",         en:"More",       es:"Más",         fr:"Plus",        de:"Mehr",        he:"עוֹד",           ru:"Ещё" },
   // ── Geral ──────────────────────────────────────────
   today:          { pt:"Hoje",         en:"Today",      es:"Hoy",         fr:"Aujourd'hui", de:"Heute",       he:"הַיּוֹם",        ru:"Сегодня" },
   next:           { pt:"Próximo",      en:"Next",       es:"Próximo",     fr:"Prochain",    de:"Nächste",     he:"הַבָּא",         ru:"Следующий" },
@@ -1437,6 +1437,7 @@ const T = {
   torahReading:   { pt:"Torá", en:"Torah", es:"Torá", fr:"Torah", de:"Tora", he:"תּוֹרָה", ru:"Тора" },
   haftarah:       { pt:"Haftará", en:"Haftarah", es:"Haftará", fr:"Haftara", de:"Haftara", he:"הַפְטָרָה", ru:"Гафтара" },
   doublePortion:  { pt:"Porção Dupla", en:"Double Portion", es:"Porción Doble", fr:"Double Portion", de:"Doppelabschnitt", he:"פָּרָשָׁה כְּפוּלָה", ru:"Двойная часть" },
+  diffDate:       { pt:"data diferente", en:"different date", es:"fecha diferente", fr:"date différente", de:"anderes Datum", he:"תַּאֲרִיךְ שׁוֹנֶה", ru:"другая дата" },
   // ── Festas ─────────────────────────────────────────
   upcomingFeasts: { pt:"Festas Próximas", en:"Upcoming Feasts", es:"Próximas Fiestas", fr:"Prochaines Fêtes", de:"Bevorstehende Feste", he:"מוֹעֲדִים קְרוֹבִים", ru:"Предстоящие праздники" },
   spring:         { pt:"Primavera", en:"Spring", es:"Primavera", fr:"Printemps", de:"Frühling", he:"אָבִיב", ru:"Весна" },
@@ -1474,6 +1475,226 @@ const T = {
   weekdays_de: ["So","Mo","Di","Mi","Do","Fr","Sa"],
   weekdays_he: ["ראש","שני","שלי","רבי","חמי","שישי","שבת"],
   weekdays_ru: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+
+  // ── Calendário (Home) ─────────────────────────────────────────────
+  todayLabel:        { pt:"הַיּוֹם — HOJE", en:"הַיּוֹם — TODAY", es:"הַיּוֹם — HOY", fr:"הַיּוֹם — AUJOURD'HUI", de:"הַיּוֹם — HEUTE", he:"הַיּוֹם", ru:"הַיּוֹם — СЕГОДНЯ" },
+  parashatOfDay:     { pt:"Parashat do Dia", en:"Parashah of the Day", es:"Parashat del Día", fr:"Parashat du Jour", de:"Parashat des Tages", he:"פָּרָשַׁת הַיּוֹם", ru:"Параша дня" },
+  nextFeast:         { pt:"Próxima Festa", en:"Next Feast", es:"Próxima Fiesta", fr:"Prochaine Fête", de:"Nächstes Fest", he:"מוֹעֵד הַבָּא", ru:"Следующий праздник" },
+  todayBang:         { pt:"Hoje!", en:"Today!", es:"¡Hoy!", fr:"Aujourd'hui!", de:"Heute!", he:"הַיּוֹם!", ru:"Сегодня!" },
+  tomorrowBang:      { pt:"Amanhã!", en:"Tomorrow!", es:"¡Mañana!", fr:"Demain!", de:"Morgen!", he:"מָחָר!", ru:"Завтра!" },
+  inDays:            { pt:"Em {n} dias", en:"In {n} days", es:"En {n} días", fr:"Dans {n} jours", de:"In {n} Tagen", he:"בְּעוֹד {n} יָמִים", ru:"Через {n} дней" },
+  newHebrewDay:      { pt:"Novo dia hebraico iniciado", en:"New Hebrew day begun", es:"Nuevo día hebreo iniciado", fr:"Nouveau jour hébraïque commencé", de:"Neuer hebräischer Tag begonnen", he:"יוֹם עִבְרִי חָדָשׁ הֵחֵל", ru:"Начался новый еврейский день" },
+  newHebrewDayDesc:  { pt:"Após as 18h o calendário hebraico já avançou para o próximo dia. O dia gregoriano muda à meia-noite.", en:"After 6pm the Hebrew calendar has already moved to the next day. The Gregorian day changes at midnight.", es:"Después de las 18h el calendario hebreo ya avanzó al día siguiente. El día gregoriano cambia a medianoche.", fr:"Après 18h, le calendrier hébraïque est déjà passé au jour suivant. Le jour grégorien change à minuit.", de:"Nach 18 Uhr ist der hebräische Kalender bereits zum nächsten Tag übergegangen. Der gregorianische Tag wechselt um Mitternacht.", he:"אַחֲרֵי 18:00 הַלּוּחַ הָעִבְרִי כְּבָר עָבַר לַיּוֹם הַבָּא.", ru:"После 18:00 еврейский календарь уже перешёл на следующий день. Григорианский день меняется в полночь." },
+  hebrewDayAdvanced: { pt:"Dia hebraico avançou após 18h", en:"Hebrew day advanced after 6pm", es:"Día hebreo avanzó después de las 18h", fr:"Jour hébraïque avancé après 18h", de:"Hebräischer Tag nach 18 Uhr fortgeschritten", he:"הַיּוֹם הָעִבְרִי הִתְקַדֵּם אַחֲרֵי 18:00", ru:"Еврейский день продвинулся после 18:00" },
+  civilTime:         { pt:"hora civil", en:"civil time", es:"hora civil", fr:"heure civile", de:"Zivilzeit", he:"שָׁעָה אֶזְרָחִית", ru:"гражданское время" },
+  legendToday:       { pt:"Hoje (Heb)", en:"Today (Heb)", es:"Hoy (Heb)", fr:"Aujourd'hui (Héb)", de:"Heute (Hebr)", he:"הַיּוֹם (עב')", ru:"Сегодня (евр.)" },
+  legendFeast:       { pt:"Festa Bíblica", en:"Biblical Feast", es:"Fiesta Bíblica", fr:"Fête Biblique", de:"Biblisches Fest", he:"מוֹעֵד מִקְרָאִי", ru:"Библейский праздник" },
+  legendShabat:      { pt:"Shabat", en:"Shabbat", es:"Shabat", fr:"Chabbat", de:"Schabbat", he:"שַׁבָּת", ru:"Шаббат" },
+  legendErev:        { pt:"🌙 Erev (véspera)", en:"🌙 Erev (eve)", es:"🌙 Erev (víspera)", fr:"🌙 Erev (veille)", de:"🌙 Erev (Vorabend)", he:"🌙 עֶרֶב", ru:"🌙 Эрев (канун)" },
+
+  // ── Conversor ──────────────────────────────────────────────────────
+  converterTitle:    { pt:"Conversor de Datas", en:"Date Converter", es:"Conversor de Fechas", fr:"Convertisseur de Dates", de:"Datumskonverter", he:"מַמִּיר תַּאֲרִיכִים", ru:"Конвертер дат" },
+  converterSub:      { pt:"Descubra sua data no calendário bíblico e sua tribo de Israel", en:"Discover your date in the biblical calendar and your tribe of Israel", es:"Descubre tu fecha en el calendario bíblico y tu tribu de Israel", fr:"Découvrez votre date dans le calendrier biblique et votre tribu d'Israël", de:"Entdecke dein Datum im biblischen Kalender und deinen Stamm Israels", he:"גַּלֵּה אֶת תַּאֲרִיכְךָ בַּלּוּחַ הַמִּקְרָאִי וְאֶת שִׁבְטְךָ", ru:"Узнайте свою дату по библейскому календарю и своё колено Израиля" },
+  tabBirthday:       { pt:"🎂 Meu Aniversário Hebraico", en:"🎂 My Hebrew Birthday", es:"🎂 Mi Cumpleaños Hebreo", fr:"🎂 Mon Anniversaire Hébraïque", de:"🎂 Mein Hebräischer Geburtstag", he:"🎂 יוֹם הֻלֶּדֶת עִבְרִי", ru:"🎂 Мой еврейский день рождения" },
+  tabConvertAny:     { pt:"📅 Converter Qualquer Data", en:"📅 Convert Any Date", es:"📅 Convertir Cualquier Fecha", fr:"📅 Convertir N'importe Quelle Date", de:"📅 Beliebiges Datum Umrechnen", he:"📅 הָמֵר כָּל תַּאֲרִיךְ", ru:"📅 Конвертировать любую дату" },
+  enterBirthDate:    { pt:"🎂 Digite sua data de nascimento", en:"🎂 Enter your birth date", es:"🎂 Ingresa tu fecha de nacimiento", fr:"🎂 Entrez votre date de naissance", de:"🎂 Gib dein Geburtsdatum ein", he:"🎂 הַזֵּן אֶת תַּאֲרִיךְ לֵדָתְךָ", ru:"🎂 Введите вашу дату рождения" },
+  discover:          { pt:"Descobrir ✡", en:"Discover ✡", es:"Descubrir ✡", fr:"Découvrir ✡", de:"Entdecken ✡", he:"גַּלֵּה ✡", ru:"Узнать ✡" },
+  yourBirthHebrew:   { pt:"Seu nascimento no calendário hebraico", en:"Your birth in the Hebrew calendar", es:"Tu nacimiento en el calendario hebreo", fr:"Votre naissance dans le calendrier hébraïque", de:"Deine Geburt im hebräischen Kalender", he:"לֵדָתְךָ בַּלּוּחַ הָעִבְרִי", ru:"Ваше рождение по еврейскому календарю" },
+  bornOnA:           { pt:"Nasceu numa {day}", en:"Born on a {day}", es:"Nació un {day}", fr:"Né un {day}", de:"Geboren an einem {day}", he:"נוֹלַד בְּיוֹם {day}", ru:"Родился в {day}" },
+  biblicalSummary:   { pt:"RESUMO BÍBLICO", en:"BIBLICAL SUMMARY", es:"RESUMEN BÍBLICO", fr:"RÉSUMÉ BIBLIQUE", de:"BIBLISCHE ZUSAMMENFASSUNG", he:"תַּקְצִיר מִקְרָאִי", ru:"Библейская сводка" },
+  hebrewMonthLabel:  { pt:"Mês Hebraico", en:"Hebrew Month", es:"Mes Hebreo", fr:"Mois Hébraïque", de:"Hebräischer Monat", he:"חֹדֶשׁ עִבְרִי", ru:"Еврейский месяц" },
+  hebrewDayLabel:    { pt:"Dia Hebraico", en:"Hebrew Day", es:"Día Hebreo", fr:"Jour Hébraïque", de:"Hebräischer Tag", he:"יוֹם עִבְרִי", ru:"Еврейский день" },
+  hebrewYearLabel:   { pt:"Ano Hebraico", en:"Hebrew Year", es:"Año Hebreo", fr:"Année Hébraïque", de:"Hebräisches Jahr", he:"שָׁנָה עִבְרִית", ru:"Еврейский год" },
+  tribeLabel:        { pt:"Tribo", en:"Tribe", es:"Tribu", fr:"Tribu", de:"Stamm", he:"שֵׁבֶט", ru:"Колено" },
+  mazalLabel:        { pt:"Mazal", en:"Mazal", es:"Mazal", fr:"Mazal", de:"Mazal", he:"מַזָּל", ru:"Мазаль" },
+  stoneLabel:        { pt:"Pedra", en:"Stone", es:"Piedra", fr:"Pierre", de:"Stein", he:"אֶבֶן", ru:"Камень" },
+  parashatLabel:     { pt:"Parashat", en:"Parashah", es:"Parashat", fr:"Parashat", de:"Parashat", he:"פָּרָשָׁה", ru:"Параша" },
+  bornDuringFeast:   { pt:"Nasceu durante {feast}!", en:"Born during {feast}!", es:"¡Nació durante {feast}!", fr:"Né pendant {feast}!", de:"Geboren während {feast}!", he:"נוֹלַד בִּתְקוּפַת {feast}!", ru:"Родился во время {feast}!" },
+  yourTribeTitle:    { pt:"✡ Sua Tribo de Israel", en:"✡ Your Tribe of Israel", es:"✡ Tu Tribu de Israel", fr:"✡ Votre Tribu d'Israël", de:"✡ Dein Stamm Israels", he:"✡ הַשֵּׁבֶט שֶׁלְּךָ", ru:"✡ Ваше колено Израиля" },
+  tribeBasedOn:      { pt:"Baseado no mês hebraico do seu nascimento — tradição do Sefer Yetzirah", en:"Based on the Hebrew month of your birth — Sefer Yetzirah tradition", es:"Basado en el mes hebreo de tu nacimiento — tradición del Sefer Yetzirah", fr:"Basé sur le mois hébraïque de votre naissance — tradition du Sefer Yetzirah", de:"Basierend auf dem hebräischen Monat deiner Geburt — Sefer-Yetzirah-Tradition", he:"מְבֻסָּס עַל הַחֹדֶשׁ הָעִבְרִי שֶׁל לֵדָתְךָ", ru:"На основе еврейского месяца вашего рождения — традиция Сефер Йецира" },
+  yourBirthParasha:  { pt:"📖 Sua Parashat de Nascimento", en:"📖 Your Birth Parashah", es:"📖 Tu Parashat de Nacimiento", fr:"📖 Votre Parashat de Naissance", de:"📖 Deine Geburts-Parascha", he:"📖 הַפָּרָשָׁה שֶׁל לֵדָתְךָ", ru:"📖 Ваша параша рождения" },
+  birthParashaDesc:  { pt:"A porção da Torá lida na semana correspondente ao seu nascimento", en:"The Torah portion read the week corresponding to your birth", es:"La porción de la Torá leída en la semana correspondiente a tu nacimiento", fr:"La portion de la Torah lue la semaine correspondant à votre naissance", de:"Der Toraabschnitt, der in der Woche deiner Geburt gelesen wurde", he:"קֶטַע הַתּוֹרָה שֶׁנִּקְרָא בַּשָּׁבוּעַ שֶׁל לֵדָתְךָ", ru:"Отрывок Торы, читаемый в неделю вашего рождения" },
+  gregorianDate:     { pt:"Data Gregoriana", en:"Gregorian Date", es:"Fecha Gregoriana", fr:"Date Grégorienne", de:"Gregorianisches Datum", he:"תַּאֲרִיךְ גְּרֵגוֹרְיָאנִי", ru:"Григорианская дата" },
+  convertBtn:        { pt:"Converter ✡", en:"Convert ✡", es:"Convertir ✡", fr:"Convertir ✡", de:"Umrechnen ✡", he:"הָמֵר ✡", ru:"Конвертировать ✡" },
+  hebrewDateResult:  { pt:"Data no Calendário Hebraico", en:"Date in the Hebrew Calendar", es:"Fecha en el Calendario Hebreo", fr:"Date dans le Calendrier Hébraïque", de:"Datum im Hebräischen Kalender", he:"תַּאֲרִיךְ בַּלּוּחַ הָעִבְרִי", ru:"Дата по еврейскому календарю" },
+  equivalence:       { pt:"EQUIVALÊNCIA", en:"EQUIVALENCE", es:"EQUIVALENCIA", fr:"ÉQUIVALENCE", de:"ÄQUIVALENZ", he:"מַקְבִּילָה", ru:"Эквивалент" },
+  gregorianLabel:    { pt:"GREGORIANO", en:"GREGORIAN", es:"GREGORIANO", fr:"GRÉGORIEN", de:"GREGORIANISCH", he:"גְּרֵגוֹרְיָאנִי", ru:"ГРИГОРИАНСКИЙ" },
+  hebrewLabel:       { pt:"HEBRAICO", en:"HEBREW", es:"HEBREO", fr:"HÉBREU", de:"HEBRÄISCH", he:"עִבְרִי", ru:"ЕВРЕЙСКИЙ" },
+  annoMundi:         { pt:"Anno Mundi", en:"Anno Mundi", es:"Anno Mundi", fr:"Anno Mundi", de:"Anno Mundi", he:"לִבְּרִיאַת הָעוֹלָם", ru:"Anno Mundi" },
+  weekdayHebrewLabel:{ pt:"DIA DA SEMANA HEBRAICO", en:"HEBREW WEEKDAY", es:"DÍA DE LA SEMANA HEBREO", fr:"JOUR DE LA SEMAINE HÉBREU", de:"HEBRÄISCHER WOCHENTAG", he:"יוֹם בַּשָּׁבוּעַ הָעִבְרִי", ru:"Еврейский день недели" },
+  itsShabat:         { pt:"🕯️ Shabat!", en:"🕯️ Shabbat!", es:"🕯️ ¡Shabat!", fr:"🕯️ Chabbat!", de:"🕯️ Schabbat!", he:"🕯️ שַׁבָּת!", ru:"🕯️ Шаббат!" },
+  dateIsFeast:       { pt:"Esta data é {feast}!", en:"This date is {feast}!", es:"¡Esta fecha es {feast}!", fr:"Cette date est {feast}!", de:"Dieses Datum ist {feast}!", he:"תַּאֲרִיךְ זֶה הוּא {feast}!", ru:"Эта дата — {feast}!" },
+  monthTribeTitle:   { pt:"✡ Tribo do Mês de {month}", en:"✡ Tribe of the Month of {month}", es:"✡ Tribu del Mes de {month}", fr:"✡ Tribu du Mois de {month}", de:"✡ Stamm des Monats {month}", he:"✡ שֵׁבֶט הַחֹדֶשׁ {month}", ru:"✡ Колено месяца {month}" },
+  allTribesTitle:    { pt:"As 12 Tribos de Israel e os Meses Hebraicos", en:"The 12 Tribes of Israel and the Hebrew Months", es:"Las 12 Tribus de Israel y los Meses Hebreos", fr:"Les 12 Tribus d'Israël et les Mois Hébraïques", de:"Die 12 Stämme Israels und die hebräischen Monate", he:"12 שִׁבְטֵי יִשְׂרָאֵל וְהַחֳדָשִׁים הָעִבְרִיִּים", ru:"12 колен Израиля и еврейские месяцы" },
+  allTribesSub:      { pt:"Baseado no Sefer Yetzirah, Arizal e tradição judaica", en:"Based on Sefer Yetzirah, Arizal and Jewish tradition", es:"Basado en el Sefer Yetzirah, Arizal y la tradición judía", fr:"Basé sur le Sefer Yetzirah, l'Arizal et la tradition juive", de:"Basierend auf Sefer Yetzirah, Arizal und jüdischer Tradition", he:"מְבֻסָּס עַל סֵפֶר יְצִירָה, הָאֲרִ״י וְהַמָּסֹרֶת הַיְּהוּדִית", ru:"На основе Сефер Йецира, Аризаля и еврейской традиции" },
+  giftsLabel:        { pt:"✨ DONS", en:"✨ GIFTS", es:"✨ DONES", fr:"✨ DONS", de:"✨ GABEN", he:"✨ מַתָּנוֹת", ru:"✨ Дары" },
+  challengeLabel:    { pt:"⚔️ DESAFIO", en:"⚔️ CHALLENGE", es:"⚔️ DESAFÍO", fr:"⚔️ DÉFI", de:"⚔️ HERAUSFORDERUNG", he:"⚔️ אֶתְגָּר", ru:"⚔️ Вызов" },
+  hoshenStone:       { pt:"PEDRA DO HOSHEN (PEITORAL DO SUMO SACERDOTE)", en:"HOSHEN STONE (HIGH PRIEST'S BREASTPLATE)", es:"PIEDRA DEL HOSHEN (PECTORAL DEL SUMO SACERDOTE)", fr:"PIERRE DU HOSHEN (PECTORAL DU GRAND PRÊTRE)", de:"HOSHEN-STEIN (BRUSTSCHILD DES HOHENPRIESTERS)", he:"אֶבֶן הַחֹשֶׁן", ru:"Камень хошена (нагрудник первосвященника)" },
+  jacobsBlessing:    { pt:"📜 BÊNÇÃO DE YAAKOV", en:"📜 JACOB'S BLESSING", es:"📜 BENDICIÓN DE YAAKOV", fr:"📜 BÉNÉDICTION DE YAAKOV", de:"📜 JAAKOBS SEGEN", he:"📜 בִּרְכַּת יַעֲקֹב", ru:"📜 Благословение Иакова" },
+  monthOf:           { pt:"Mês de {month}", en:"Month of {month}", es:"Mes de {month}", fr:"Mois de {month}", de:"Monat {month}", he:"חֹדֶשׁ {month}", ru:"Месяц {month}" },
+
+  // ── Parashah page ──────────────────────────────────────────────────
+  parashaHeaderSub:  { pt:"Leitura semanal da Torá — Ano 5786 (2025-2026)", en:"Weekly Torah reading — Year 5786 (2025-2026)", es:"Lectura semanal de la Torá — Año 5786 (2025-2026)", fr:"Lecture hebdomadaire de la Torah — Année 5786 (2025-2026)", de:"Wöchentliche Tora-Lesung — Jahr 5786 (2025-2026)", he:"קְרִיאַת הַתּוֹרָה הַשְּׁבוּעִית — שְׁנַת תשפ״ו", ru:"Еженедельное чтение Торы — год 5786 (2025-2026)" },
+  thisWeekBadge:     { pt:"📖 ESTA SEMANA", en:"📖 THIS WEEK", es:"📖 ESTA SEMANA", fr:"📖 CETTE SEMAINE", de:"📖 DIESE WOCHE", he:"📖 הַשָּׁבוּעַ", ru:"📖 На этой неделе" },
+  doublePortionBadge:{ pt:"⚡ Porção Dupla", en:"⚡ Double Portion", es:"⚡ Porción Doble", fr:"⚡ Double Portion", de:"⚡ Doppelabschnitt", he:"⚡ פָּרָשָׁה כְּפוּלָה", ru:"⚡ Двойная часть" },
+  torahLabelIcon:    { pt:"📚 Torá:", en:"📚 Torah:", es:"📚 Torá:", fr:"📚 Torah:", de:"📚 Tora:", he:"📚 תּוֹרָה:", ru:"📚 Тора:" },
+  haftaraLabelIcon:  { pt:"🎵 Haftará:", en:"🎵 Haftarah:", es:"🎵 Haftará:", fr:"🎵 Haftara:", de:"🎵 Haftara:", he:"🎵 הַפְטָרָה:", ru:"🎵 Гафтара:" },
+  britLabelIcon:     { pt:"✡ B'rit Chadashá:", en:"✡ B'rit Chadashah:", es:"✡ B'rit Chadashá:", fr:"✡ B'rit Chadasha:", de:"✡ B'rit Chadascha:", he:"✡ הַבְּרִית הַחֲדָשָׁה:", ru:"✡ Брит Хадаша:" },
+  shabatLabelIcon:   { pt:"📅 Shabat:", en:"📅 Shabbat:", es:"📅 Shabat:", fr:"📅 Chabbat:", de:"📅 Schabbat:", he:"📅 שַׁבָּת:", ru:"📅 Шаббат:" },
+  israelDiasporaDiff:{ pt:"🌍 DIFERENÇA ISRAEL × DIÁSPORA", en:"🌍 ISRAEL × DIASPORA DIFFERENCE", es:"🌍 DIFERENCIA ISRAEL × DIÁSPORA", fr:"🌍 DIFFÉRENCE ISRAËL × DIASPORA", de:"🌍 UNTERSCHIED ISRAEL × DIASPORA", he:"🌍 הֶבְדֵּל יִשְׂרָאֵל וְתְפוּצוֹת", ru:"🌍 Разница Израиль × Диаспора" },
+  israelBadge:       { pt:"🇮🇱 ISRAEL", en:"🇮🇱 ISRAEL", es:"🇮🇱 ISRAEL", fr:"🇮🇱 ISRAËL", de:"🇮🇱 ISRAEL", he:"🇮🇱 יִשְׂרָאֵל", ru:"🇮🇱 Израиль" },
+  diasporaBadge:     { pt:"🌎 DIÁSPORA", en:"🌎 DIASPORA", es:"🌎 DIÁSPORA", fr:"🌎 DIASPORA", de:"🌎 DIASPORA", he:"🌎 תְּפוּצוֹת", ru:"🌎 Диаспора" },
+  nextShabatCountdown:{ pt:"Próximo Shabat:", en:"Next Shabbat:", es:"Próximo Shabat:", fr:"Prochain Chabbat:", de:"Nächster Schabbat:", he:"שַׁבָּת הַבָּא:", ru:"Следующий Шаббат:" },
+  nextReading:       { pt:"Próxima leitura:", en:"Next reading:", es:"Próxima lectura:", fr:"Prochaine lecture:", de:"Nächste Lesung:", he:"קְרִיאָה הַבָּאָה:", ru:"Следующее чтение:" },
+  nextWeekBadge:     { pt:"PRÓXIMA SEMANA —", en:"NEXT WEEK —", es:"PRÓXIMA SEMANA —", fr:"SEMAINE PROCHAINE —", de:"NÄCHSTE WOCHE —", he:"שָׁבוּעַ הַבָּא —", ru:"Следующая неделя —" },
+  modeDiaspora:      { pt:"🌎 Diáspora", en:"🌎 Diaspora", es:"🌎 Diáspora", fr:"🌎 Diaspora", de:"🌎 Diaspora", he:"🌎 תְּפוּצוֹת", ru:"🌎 Диаспора" },
+  modeIsrael:        { pt:"🇮🇱 Israel", en:"🇮🇱 Israel", es:"🇮🇱 Israel", fr:"🇮🇱 Israël", de:"🇮🇱 Israel", he:"🇮🇱 יִשְׂרָאֵל", ru:"🇮🇱 Израиль" },
+  filterAll:         { pt:"Todos", en:"All", es:"Todos", fr:"Tous", de:"Alle", he:"הַכֹּל", ru:"Все" },
+  searchParasha:     { pt:"🔍 Buscar por nome, referência, tema ou Haftará…", en:"🔍 Search by name, reference, theme or Haftarah…", es:"🔍 Buscar por nombre, referencia, tema o Haftará…", fr:"🔍 Rechercher par nom, référence, thème ou Haftara…", de:"🔍 Suche nach Name, Referenz, Thema oder Haftara…", he:"🔍 חַפֵּשׂ לְפִי שֵׁם, מַרְאֶה מָקוֹם אוֹ הַפְטָרָה…", ru:"🔍 Поиск по имени, ссылке, теме или гафтаре…" },
+  currentBadge:      { pt:"● Atual", en:"● Current", es:"● Actual", fr:"● Actuel", de:"● Aktuell", he:"● נוֹכְחִי", ru:"● Текущая" },
+  noParashaFound:    { pt:"Nenhuma porção encontrada para", en:"No portion found for", es:"No se encontró ninguna porción para", fr:"Aucune portion trouvée pour", de:"Kein Abschnitt gefunden für", he:"לֹא נִמְצָא קֶטַע עֲבוּר", ru:"Не найдено ни одной части для" },
+
+  // ── Festas page ─────────────────────────────────────────────────────
+  feastsHeaderSub:   { pt:"Os Moadim — Encontros Marcados pelo Eterno", en:"The Moadim — Appointed Times of the Eternal", es:"Los Moadim — Citas Señaladas del Eterno", fr:"Les Moadim — Rendez-vous Fixés par l'Éternel", de:"Die Moadim — Festgesetzte Zeiten des Ewigen", he:"הַמּוֹעֲדִים — זְמַנֵּי ה' הַקְּבוּעִים", ru:"Моадим — назначенные времена Вечного" },
+  upcomingFeastsBox: { pt:"⭐ Festas Próximas (próximos 365 dias)", en:"⭐ Upcoming Feasts (next 365 days)", es:"⭐ Próximas Fiestas (próximos 365 días)", fr:"⭐ Prochaines Fêtes (365 prochains jours)", de:"⭐ Bevorstehende Feste (nächste 365 Tage)", he:"⭐ מוֹעֲדִים קְרוֹבִים (365 יָמִים הַבָּאִים)", ru:"⭐ Предстоящие праздники (следующие 365 дней)" },
+  tabSpring:         { pt:"🌸 Primavera", en:"🌸 Spring", es:"🌸 Primavera", fr:"🌸 Printemps", de:"🌸 Frühling", he:"🌸 אָבִיב", ru:"🌸 Весна" },
+  tabFall:           { pt:"🍂 Outono", en:"🍂 Fall", es:"🍂 Otoño", fr:"🍂 Automne", de:"🍂 Herbst", he:"🍂 סְתָיו", ru:"🍂 Осень" },
+  tabOther:          { pt:"✨ Outras", en:"✨ Other", es:"✨ Otras", fr:"✨ Autres", de:"✨ Andere", he:"✨ אֲחֵרוֹת", ru:"✨ Другие" },
+  messianicMeaning:  { pt:"✡ SIGNIFICADO MESSIÂNICO", en:"✡ MESSIANIC MEANING", es:"✡ SIGNIFICADO MESIÁNICO", fr:"✡ SIGNIFICATION MESSIANIQUE", de:"✡ MESSIANISCHE BEDEUTUNG", he:"✡ מַשְׁמָעוּת מָשִׁיחִית", ru:"✡ Мессианское значение" },
+  daysLabel:         { pt:"dias", en:"days", es:"días", fr:"jours", de:"Tage", he:"יָמִים", ru:"дней" },
+  categorySpring:    { pt:"Primavera", en:"Spring", es:"Primavera", fr:"Printemps", de:"Frühling", he:"אָבִיב", ru:"Весна" },
+  categoryFall:      { pt:"Outono", en:"Fall", es:"Otoño", fr:"Automne", de:"Herbst", he:"סְתָיו", ru:"Осень" },
+  categoryOther:     { pt:"Outras", en:"Other", es:"Otras", fr:"Autres", de:"Andere", he:"אֲחֵרוֹת", ru:"Другие" },
+
+  // ── Rosh Chodesh page ──────────────────────────────────────────────
+  roshChodeshTitle:  { pt:"🌙 Lua Nova", en:"🌙 New Moon", es:"🌙 Luna Nueva", fr:"🌙 Nouvelle Lune", de:"🌙 Neumond", he:"🌙 רֹאשׁ חֹדֶשׁ", ru:"🌙 Новолуние" },
+  roshChodeshSub:    { pt:"Rosh Chodesh — O Início de Cada Mês Hebraico", en:"Rosh Chodesh — The Start of Each Hebrew Month", es:"Rosh Chodesh — El Inicio de Cada Mes Hebreo", fr:"Rosh Chodesh — Le Début de Chaque Mois Hébraïque", de:"Rosch Chodesch — Der Beginn jedes hebräischen Monats", he:"רֹאשׁ חֹדֶשׁ — תְּחִלַּת כָּל חֹדֶשׁ עִבְרִי", ru:"Рош Ходеш — начало каждого еврейского месяца" },
+  cycleDay:          { pt:"Dia {n} do ciclo lunar", en:"Day {n} of the lunar cycle", es:"Día {n} del ciclo lunar", fr:"Jour {n} du cycle lunaire", de:"Tag {n} des Mondzyklus", he:"יוֹם {n} בַּמַּחֲזוֹר הַיָּרֵחִי", ru:"День {n} лунного цикла" },
+  daysSinceNewMoon:  { pt:"dias desde a Lua Nova", en:"days since New Moon", es:"días desde la Luna Nueva", fr:"jours depuis la Nouvelle Lune", de:"Tage seit Neumond", he:"יָמִים מֵראשׁ חֹדֶשׁ", ru:"дней с новолуния" },
+  todayLabel2:       { pt:"Hoje:", en:"Today:", es:"Hoy:", fr:"Aujourd'hui:", de:"Heute:", he:"הַיּוֹם:", ru:"Сегодня:" },
+  nextRoshChodesh:   { pt:"PRÓXIMO ROSH CHODESH", en:"NEXT ROSH CHODESH", es:"PRÓXIMO ROSH CHODESH", fr:"PROCHAIN ROSH CHODESH", de:"NÄCHSTER ROSCH CHODESCH", he:"רֹאשׁ חֹדֶשׁ הַבָּא", ru:"Следующий Рош Ходеш" },
+  daysWord:          { pt:"dias", en:"days", es:"días", fr:"jours", de:"Tage", he:"יָמִים", ru:"дней" },
+  dayWord:           { pt:"dia", en:"day", es:"día", fr:"jour", de:"Tag", he:"יוֹם", ru:"день" },
+  fullCalendarRC:    { pt:"Calendário de Rosh Chodesh 5786", en:"Rosh Chodesh Calendar 5786", es:"Calendario de Rosh Chodesh 5786", fr:"Calendrier de Rosh Chodesh 5786", de:"Rosch-Chodesch-Kalender 5786", he:"לוּחַ רָאשֵׁי חֳדָשִׁים תשפ״ו", ru:"Календарь Рош Ходеш 5786" },
+  past:              { pt:"Passado", en:"Past", es:"Pasado", fr:"Passé", de:"Vergangen", he:"עָבַר", ru:"Прошло" },
+  roshChodeshMeaning:{ pt:"🌙 O Significado de Rosh Chodesh", en:"🌙 The Meaning of Rosh Chodesh", es:"🌙 El Significado de Rosh Chodesh", fr:"🌙 La Signification de Rosh Chodesh", de:"🌙 Die Bedeutung von Rosch Chodesch", he:"🌙 מַשְׁמָעוּת רֹאשׁ חֹדֶשׁ", ru:"🌙 Значение Рош Ходеша" },
+  roshChodeshText1: {
+    pt:'Rosh Chodesh (ראש חודש) significa "cabeça do mês" — o dia da Lua Nova. No calendário hebraico, cada novo mês começa com a renovação da lua, símbolo de renovação espiritual para Israel. As mulheres têm uma conexão especial com Rosh Chodesh, pois se recusaram a dar seus ornamentos para o bezerro de ouro (Êxodo 32), sendo recompensadas com este dia sagrado.',
+    en:'Rosh Chodesh (ראש חודש) means "head of the month" — the day of the New Moon. In the Hebrew calendar, each new month begins with the moon\'s renewal, a symbol of spiritual renewal for Israel. Women have a special connection to Rosh Chodesh, as they refused to give their ornaments for the golden calf (Exodus 32), being rewarded with this sacred day.',
+    es:'Rosh Chodesh (ראש חודש) significa "cabeza del mes" — el día de la Luna Nueva. En el calendario hebreo, cada mes nuevo comienza con la renovación de la luna, símbolo de renovación espiritual para Israel. Las mujeres tienen una conexión especial con Rosh Chodesh, pues se negaron a dar sus adornos para el becerro de oro (Éxodo 32), siendo recompensadas con este día sagrado.',
+    fr:'Rosh Chodesh (ראש חודש) signifie "tête du mois" — le jour de la Nouvelle Lune. Dans le calendrier hébraïque, chaque nouveau mois commence par le renouvellement de la lune, symbole de renouveau spirituel pour Israël. Les femmes ont un lien spécial avec Rosh Chodesh, car elles refusèrent de donner leurs bijoux pour le veau d\'or (Exode 32), étant récompensées par ce jour sacré.',
+    de:'Rosch Chodesch (ראש חודש) bedeutet "Kopf des Monats" — der Tag des Neumonds. Im hebräischen Kalender beginnt jeder neue Monat mit der Erneuerung des Mondes, ein Symbol geistlicher Erneuerung für Israel. Frauen haben eine besondere Verbindung zu Rosch Chodesch, da sie sich weigerten, ihren Schmuck für das goldene Kalb herzugeben (2. Mose 32), und mit diesem heiligen Tag belohnt wurden.',
+    he:'רֹאשׁ חֹדֶשׁ מְסַמֵּל אֶת יוֹם הַלְּבָנָה הַחֲדָשָׁה. בַּלּוּחַ הָעִבְרִי, כָּל חֹדֶשׁ חָדָשׁ מַתְחִיל בְּהִתְחַדְּשׁוּת הַיָּרֵחַ — סֵמֶל לְהִתְחַדְּשׁוּת רוּחָנִית לְיִשְׂרָאֵל.',
+    ru:'Рош Ходеш (ראש חודש) означает «глава месяца» — день Новолуния. В еврейском календаре каждый новый месяц начинается с обновления луны, символа духовного обновления для Израиля. Женщины имеют особую связь с Рош Ходешем, так как отказались отдать свои украшения для золотого тельца (Исход 32), будучи вознаграждены этим святым днём.',
+  },
+  roshChodeshText2: {
+    pt:'Nos tempos do Templo, Rosh Chodesh era declarado por testemunhas que avistavam a lua nova. Ofertas especiais eram trazidas (Números 28:11-15) e o shofar era tocado. Para os crentes messiânicos, aponta para a renovação em Yeshua — "a quem pertence a sombra, mas o corpo pertence ao Messias" (Colossenses 2:17).',
+    en:'In Temple times, Rosh Chodesh was declared by witnesses who sighted the new moon. Special offerings were brought (Numbers 28:11-15) and the shofar was sounded. For Messianic believers, it points to renewal in Yeshua — "which are a shadow of things to come; but the substance is of Christ" (Colossians 2:17).',
+    es:'En los tiempos del Templo, Rosh Chodesh era declarado por testigos que avistaban la luna nueva. Se traían ofrendas especiales (Números 28:11-15) y se tocaba el shofar. Para los creyentes mesiánicos, apunta a la renovación en Yeshua — "sombra de lo que ha de venir; pero el cuerpo es de Cristo" (Colosenses 2:17).',
+    fr:'À l\'époque du Temple, Rosh Chodesh était déclaré par des témoins qui apercevaient la nouvelle lune. Des offrandes spéciales étaient apportées (Nombres 28:11-15) et le shofar était sonné. Pour les croyants messianiques, cela pointe vers le renouveau en Yeshua — "c\'est l\'ombre des choses à venir, mais le corps est en Christ" (Colossiens 2:17).',
+    de:'In der Zeit des Tempels wurde Rosch Chodesch von Zeugen erklärt, die den Neumond sichteten. Besondere Opfer wurden gebracht (4. Mose 28:11-15) und der Schofar geblasen. Für messianische Gläubige weist es auf die Erneuerung in Jeschua hin — "die ein Schatten der zukünftigen Dinge sind; der Körper aber ist Christi" (Kolosser 2:17).',
+    he:'בִּימֵי בֵּית הַמִּקְדָּשׁ, רֹאשׁ חֹדֶשׁ הֻכְרַז עַל יְדֵי עֵדִים שֶׁרָאוּ אֶת הַלְּבָנָה הַחֲדָשָׁה. קָרְבָּנוֹת מְיֻחָדִים הוּבְאוּ (בְּמִדְבַּר כח:יא-טו) וְהַשּׁוֹפָר נִתְקַע.',
+    ru:'Во времена Храма Рош Ходеш объявлялся свидетелями, увидевшими новую луну. Приносились особые жертвы (Числа 28:11-15) и трубили в шофар. Для мессианских верующих это указывает на обновление в Йешуа.',
+  },
+
+  // ── Verse page ──────────────────────────────────────────────────────
+  verseHebrew:       { pt:"Hebraico", en:"Hebrew", es:"Hebreo", fr:"Hébreu", de:"Hebräisch", he:"עִבְרִית", ru:"Иврит" },
+  versePortuguese:   { pt:"Português", en:"Portuguese", es:"Portugués", fr:"Portugais", de:"Portugiesisch", he:"פּוֹרְטוּגֶזִית", ru:"Португальский" },
+  copyBtn:           { pt:"📋 Copiar", en:"📋 Copy", es:"📋 Copiar", fr:"📋 Copier", de:"📋 Kopieren", he:"📋 הַעְתֵּק", ru:"📋 Копировать" },
+  copiedBtn:         { pt:"✓ Copiado!", en:"✓ Copied!", es:"✓ ¡Copiado!", fr:"✓ Copié!", de:"✓ Kopiert!", he:"✓ הֻעְתַּק!", ru:"✓ Скопировано!" },
+  whatsappBtn:       { pt:"📲 WhatsApp", en:"📲 WhatsApp", es:"📲 WhatsApp", fr:"📲 WhatsApp", de:"📲 WhatsApp", he:"📲 וַאטְסַאפּ", ru:"📲 WhatsApp" },
+  shareBtn:          { pt:"🔗 Compartilhar", en:"🔗 Share", es:"🔗 Compartir", fr:"🔗 Partager", de:"🔗 Teilen", he:"🔗 שִׁתּוּף", ru:"🔗 Поделиться" },
+  allVerses:         { pt:"Todos os Versículos", en:"All Verses", es:"Todos los Versículos", fr:"Tous les Versets", de:"Alle Verse", he:"כָּל הַפְּסוּקִים", ru:"Все стихи" },
+  todayBadge:        { pt:"HOJE", en:"TODAY", es:"HOY", fr:"AUJOURD'HUI", de:"HEUTE", he:"הַיּוֹם", ru:"СЕГОДНЯ" },
+
+  // ── Learn page ──────────────────────────────────────────────────────
+  learnTitle:        { pt:"Os Meses Hebraicos", en:"The Hebrew Months", es:"Los Meses Hebreos", fr:"Les Mois Hébraïques", de:"Die Hebräischen Monate", he:"הַחֳדָשִׁים הָעִבְרִיִּים", ru:"Еврейские месяцы" },
+  learnSub:          { pt:"Os 13 meses do calendário bíblico hebraico", en:"The 13 months of the Hebrew biblical calendar", es:"Los 13 meses del calendario bíblico hebreo", fr:"Les 13 mois du calendrier biblique hébraïque", de:"Die 13 Monate des hebräischen biblischen Kalenders", he:"13 הַחֳדָשִׁים שֶׁל הַלּוּחַ הַמִּקְרָאִי", ru:"13 месяцев еврейского библейского календаря" },
+  lunisolarTitle:    { pt:"📖 O Calendário Lunissolar", en:"📖 The Lunisolar Calendar", es:"📖 El Calendario Lunisolar", fr:"📖 Le Calendrier Lunisolaire", de:"📖 Der Lunisolare Kalender", he:"📖 הַלּוּחַ הַשָּׁנִי-יָרֵחִי", ru:"📖 Лунно-солнечный календарь" },
+  monthsOfYear:      { pt:"Os 13 Meses do Ano Hebraico", en:"The 13 Months of the Hebrew Year", es:"Los 13 Meses del Año Hebreo", fr:"Les 13 Mois de l'Année Hébraïque", de:"Die 13 Monate des Hebräischen Jahres", he:"13 חָדְשֵׁי הַשָּׁנָה הָעִבְרִית", ru:"13 месяцев еврейского года" },
+  feastsThisMonth:   { pt:"Festas neste mês:", en:"Feasts this month:", es:"Fiestas este mes:", fr:"Fêtes ce mois-ci:", de:"Feste in diesem Monat:", he:"מוֹעֲדִים בְּחֹדֶשׁ זֶה:", ru:"Праздники в этом месяце:" },
+  messianicConnTitle:{ pt:"✡ Conexão Messiânica", en:"✡ Messianic Connection", es:"✡ Conexión Mesiánica", fr:"✡ Connexion Messianique", de:"✡ Messianische Verbindung", he:"✡ הַקֶּשֶׁר הַמָּשִׁיחִי", ru:"✡ Мессианская связь" },
+  lunisolarText: {
+    pt:"O calendário hebraico é __lunissolar__ — baseado nos ciclos da lua e do sol. O primeiro mês bíblico é __Nissan__ (Êxodo 12:2), e o ano civil começa em __Tishrei__ (Rosh Hashaná). O ano hebraico conta desde a criação do mundo (Anno Mundi); adicione ~3760 ao ano gregoriano.",
+    en:"The Hebrew calendar is __lunisolar__ — based on the cycles of the moon and the sun. The first biblical month is __Nissan__ (Exodus 12:2), and the civil year begins in __Tishrei__ (Rosh Hashanah). The Hebrew year counts from the creation of the world (Anno Mundi); add ~3760 to the Gregorian year.",
+    es:"El calendario hebreo es __lunisolar__ — basado en los ciclos de la luna y el sol. El primer mes bíblico es __Nisán__ (Éxodo 12:2), y el año civil comienza en __Tishrei__ (Rosh Hashaná). El año hebreo cuenta desde la creación del mundo (Anno Mundi); agregue ~3760 al año gregoriano.",
+    fr:"Le calendrier hébraïque est __lunisolaire__ — basé sur les cycles de la lune et du soleil. Le premier mois biblique est __Nissan__ (Exode 12:2), et l'année civile commence en __Tishrei__ (Roch Hachana). L'année hébraïque compte depuis la création du monde (Anno Mundi); ajoutez ~3760 à l'année grégorienne.",
+    de:"Der hebräische Kalender ist __lunisolar__ — basierend auf den Zyklen von Mond und Sonne. Der erste biblische Monat ist __Nissan__ (2. Mose 12:2), und das bürgerliche Jahr beginnt im __Tischri__ (Rosch Haschana). Das hebräische Jahr zählt seit der Erschaffung der Welt (Anno Mundi); addiere ~3760 zum gregorianischen Jahr.",
+    he:"הַלּוּחַ הָעִבְרִי הוּא __שָׁנִי-יָרֵחִי__ — מְבֻסָּס עַל מַחְזוֹרֵי הַיָּרֵחַ וְהַשֶּׁמֶשׁ. הַחֹדֶשׁ הַמִּקְרָאִי הָרִאשׁוֹן הוּא __נִיסָן__ (שְׁמוֹת יב:ב), וְהַשָּׁנָה הָאֶזְרָחִית מַתְחִילָה בְּ__תִּשְׁרֵי__ (רֹאשׁ הַשָּׁנָה).",
+    ru:"Еврейский календарь __лунно-солнечный__ — основан на циклах луны и солнца. Первый библейский месяц — __Нисан__ (Исход 12:2), а гражданский год начинается в __Тишрей__ (Рош ха-Шана). Еврейский год отсчитывается от сотворения мира (Anno Mundi); добавьте ~3760 к григорианскому году.",
+  },
+  messianicConnText: {
+    pt:"Para os crentes messiânicos, o calendário bíblico revela o plano redentor de Deus através de Yeshua. As festas da __primavera__ foram cumpridas em Sua primeira vinda, enquanto as festas do __outono__ apontam para Sua segunda vinda e o reinado eterno.",
+    en:"For Messianic believers, the biblical calendar reveals God's redemptive plan through Yeshua. The __spring__ feasts were fulfilled at His first coming, while the __fall__ feasts point to His second coming and eternal reign.",
+    es:"Para los creyentes mesiánicos, el calendario bíblico revela el plan redentor de Dios a través de Yeshua. Las fiestas de __primavera__ se cumplieron en Su primera venida, mientras que las fiestas de __otoño__ apuntan a Su segunda venida y reinado eterno.",
+    fr:"Pour les croyants messianiques, le calendrier biblique révèle le plan rédempteur de Dieu à travers Yeshua. Les fêtes de __printemps__ ont été accomplies lors de Sa première venue, tandis que les fêtes d'__automne__ pointent vers Son second avènement et son règne éternel.",
+    de:"Für messianische Gläubige offenbart der biblische Kalender Gottes Erlösungsplan durch Jeschua. Die __Frühlings__feste wurden bei Seinem ersten Kommen erfüllt, während die __Herbst__feste auf Sein zweites Kommen und ewiges Reich hinweisen.",
+    he:"עֲבוּר מַאֲמִינִים מְשִׁיחִיִּים, הַלּוּחַ הַמִּקְרָאִי חוֹשֵׂף אֶת תָּכְנִית הַגְּאֻלָּה שֶׁל אֱלֹהִים דֶּרֶךְ יֵשׁוּעַ.",
+    ru:"Для мессианских верующих библейский календарь открывает искупительный план Бога через Йешуа. Праздники __весны__ исполнились при Его первом пришествии, а праздники __осени__ указывают на Его второе пришествие и вечное царство.",
+  },
+
+  // ── Settings page ───────────────────────────────────────────────────
+  settingsTitle:     { pt:"⚙️ Configurações", en:"⚙️ Settings", es:"⚙️ Configuración", fr:"⚙️ Paramètres", de:"⚙️ Einstellungen", he:"⚙️ הַגְדָּרוֹת", ru:"⚙️ Настройки" },
+  settingsSub:       { pt:"Personalize sua experiência", en:"Customize your experience", es:"Personaliza tu experiencia", fr:"Personnalisez votre expérience", de:"Passe deine Erfahrung an", he:"הַתְאֵם אֶת הַחֲוָיָה שֶׁלְּךָ", ru:"Настройте свой опыт" },
+  themeDark:         { pt:"Escuro", en:"Dark", es:"Oscuro", fr:"Sombre", de:"Dunkel", he:"כֵּהֶה", ru:"Тёмная" },
+  themeLight:        { pt:"Claro", en:"Light", es:"Claro", fr:"Clair", de:"Hell", he:"בָּהִיר", ru:"Светлая" },
+  themeDarkDesc:     { pt:"Noite de Jerusalém", en:"Jerusalem Night", es:"Noche de Jerusalén", fr:"Nuit de Jérusalem", de:"Jerusalemer Nacht", he:"לֵיל יְרוּשָׁלַיִם", ru:"Иерусалимская ночь" },
+  themeLightDesc:    { pt:"Pergaminho da Torá", en:"Torah Parchment", es:"Pergamino de la Torá", fr:"Parchemin de la Torah", de:"Tora-Pergament", he:"קְלַף הַתּוֹרָה", ru:"Пергамент Торы" },
+  activeTheme:       { pt:"ATIVO", en:"ACTIVE", es:"ACTIVO", fr:"ACTIF", de:"AKTIV", he:"פָּעִיל", ru:"АКТИВНО" },
+  themePreview:      { pt:"Visualização do tema", en:"Theme preview", es:"Vista previa del tema", fr:"Aperçu du thème", de:"Themenvorschau", he:"תְּצוּגָה מְקַדֶּמֶת שֶׁל הַנוֹשֵׂא", ru:"Предпросмотр темы" },
+  languageSection:   { pt:"Idioma", en:"Language", es:"Idioma", fr:"Langue", de:"Sprache", he:"שָׂפָה", ru:"Язык" },
+  notifStatusOn:     { pt:"Notificações permitidas", en:"Notifications allowed", es:"Notificaciones permitidas", fr:"Notifications autorisées", de:"Benachrichtigungen erlaubt", he:"הוֹדָעוֹת מֻתָּרוֹת", ru:"Уведомления разрешены" },
+  notifStatusOff:    { pt:"Notificações bloqueadas", en:"Notifications blocked", es:"Notificaciones bloqueadas", fr:"Notifications bloquées", de:"Benachrichtigungen blockiert", he:"הוֹדָעוֹת חֲסוּמוֹת", ru:"Уведомления заблокированы" },
+  notifStatusAsk:    { pt:"Permissão necessária", en:"Permission needed", es:"Permiso necesario", fr:"Autorisation nécessaire", de:"Berechtigung erforderlich", he:"נִדְרֶשֶׁת הַרְשָׁאָה", ru:"Требуется разрешение" },
+  notifStatusOnDesc: { pt:"O app pode enviar alertas. Configure cada tipo abaixo.", en:"The app can send alerts. Configure each type below.", es:"La app puede enviar alertas. Configura cada tipo abajo.", fr:"L'application peut envoyer des alertes. Configurez chaque type ci-dessous.", de:"Die App kann Benachrichtigungen senden. Konfiguriere jeden Typ unten.", he:"הָאַפְּלִיקַצְיָה יְכוֹלָה לִשְׁלֹחַ הַתְרָאוֹת. הַגְדֵּר כָּל סוּג לְמַטָּה.", ru:"Приложение может отправлять уведомления. Настройте каждый тип ниже." },
+  notifStatusOffDesc:{ pt:"Acesse Configurações do navegador → Notificações → Permitir para este site.", en:"Go to Browser Settings → Notifications → Allow for this site.", es:"Ve a Configuración del navegador → Notificaciones → Permitir para este sitio.", fr:"Allez dans Paramètres du navigateur → Notifications → Autoriser pour ce site.", de:"Gehe zu Browser-Einstellungen → Benachrichtigungen → Für diese Seite erlauben.", he:"עֲבֹר לְהַגְדְּרוֹת הַדְּפַדְפָן → הוֹדָעוֹת → אַפְשֵׁר לְאֲתָר זֶה.", ru:"Перейдите в настройки браузера → Уведомления → Разрешить для этого сайта." },
+  notifStatusAskDesc:{ pt:"Toque em Ativar para receber alertas de Shabat, Festas e mais.", en:"Tap Activate to receive alerts for Shabbat, Feasts and more.", es:"Toca Activar para recibir alertas de Shabat, Fiestas y más.", fr:"Appuyez sur Activer pour recevoir des alertes pour Chabbat, Fêtes et plus.", de:"Tippe auf Aktivieren, um Benachrichtigungen für Schabbat, Feste und mehr zu erhalten.", he:"הַקֵּשׁ עַל הַפְעֵל כְּדֵי לְקַבֵּל הַתְרָאוֹת עַל שַׁבָּת, מוֹעֲדִים וְעוֹד.", ru:"Нажмите «Включить», чтобы получать уведомления о Шаббате, праздниках и не только." },
+  pleaseWait:        { pt:"Aguarde…", en:"Please wait…", es:"Espera…", fr:"Veuillez patienter…", de:"Bitte warten…", he:"אָנָּא הַמְתֵּן…", ru:"Пожалуйста, подождите…" },
+  typesEnabled:      { pt:"Tipos habilitados", en:"Enabled types", es:"Tipos habilitados", fr:"Types activés", de:"Aktivierte Typen", he:"סוּגִים מֻפְעָלִים", ru:"Включённые типы" },
+  activate:          { pt:"Ativar", en:"Activate", es:"Activar", fr:"Activer", de:"Aktivieren", he:"הַפְעֵל", ru:"Включить" },
+  testNow:           { pt:"🔔 Testar agora", en:"🔔 Test now", es:"🔔 Probar ahora", fr:"🔔 Tester maintenant", de:"🔔 Jetzt testen", he:"🔔 בְּדֹק עַכְשָׁו", ru:"🔔 Проверить сейчас" },
+  sentBtn:           { pt:"✓ Enviada!", en:"✓ Sent!", es:"✓ ¡Enviada!", fr:"✓ Envoyée!", de:"✓ Gesendet!", he:"✓ נִשְׁלַח!", ru:"✓ Отправлено!" },
+  savedBadge:        { pt:"Salvo", en:"Saved", es:"Guardado", fr:"Enregistré", de:"Gespeichert", he:"נִשְׁמַר", ru:"Сохранено" },
+  enableAllBtn:      { pt:"Ativar todas", en:"Enable all", es:"Activar todas", fr:"Activer tout", de:"Alle aktivieren", he:"הַפְעֵל הַכֹּל", ru:"Включить все" },
+  disableAllBtn:     { pt:"Desativar todas", en:"Disable all", es:"Desactivar todas", fr:"Désactiver tout", de:"Alle deaktivieren", he:"כַּבֵּה הַכֹּל", ru:"Выключить все" },
+  aboutApp:          { pt:"✡ Sobre o Calendário Moedim", en:"✡ About the Moedim Calendar", es:"✡ Sobre el Calendario Moedim", fr:"✡ À Propos du Calendrier Moedim", de:"✡ Über den Moedim-Kalender", he:"✡ אוֹדוֹת לוּחַ מוֹעֲדִים", ru:"✡ О календаре Моэдим" },
+
+  // ── Textos de notificações (NOTIF_DEFS) ────────────────────────────
+  notif_shabat_label:   { pt:"Shabat", en:"Shabbat", es:"Shabat", fr:"Chabbat", de:"Schabbat", he:"שַׁבָּת", ru:"Шаббат" },
+  notif_shabat_when:    { pt:"Toda sexta-feira, 1h antes do pôr do sol", en:"Every Friday, 1h before sunset", es:"Cada viernes, 1h antes del atardecer", fr:"Chaque vendredi, 1h avant le coucher du soleil", de:"Jeden Freitag, 1 Std. vor Sonnenuntergang", he:"כָּל יוֹם שִׁישִׁי, שָׁעָה לִפְנֵי הַשְּׁקִיעָה", ru:"Каждую пятницу, за 1 час до заката" },
+  notif_shabat_detail:  { pt:"Receba um alerta para preparar o coração, a mesa e acender as velas no tempo certo.", en:"Get an alert to prepare your heart, the table, and light candles at the right time.", es:"Recibe una alerta para preparar el corazón, la mesa y encender las velas a tiempo.", fr:"Recevez une alerte pour préparer votre cœur, la table et allumer les bougies au bon moment.", de:"Erhalte eine Erinnerung, um Herz, Tisch und Kerzen rechtzeitig vorzubereiten.", he:"קַבֵּל הַתְרָאָה לְהָכִין אֶת הַלֵּב, הַשֻּׁלְחָן וּלְהַדְלִיק נֵרוֹת בַּזְּמַן הַנָּכוֹן.", ru:"Получите напоминание, чтобы вовремя подготовить сердце, стол и зажечь свечи." },
+  notif_shabat_verse:   { pt:"Êxodo 20:8 — Lembra do dia do Shabat para santificá-lo.", en:"Exodus 20:8 — Remember the Sabbath day, to keep it holy.", es:"Éxodo 20:8 — Acuérdate del día de reposo para santificarlo.", fr:"Exode 20:8 — Souviens-toi du jour du repos, pour le sanctifier.", de:"2. Mose 20:8 — Gedenke des Sabbattags, dass du ihn heiligest.", he:"שְׁמוֹת כ:ח — זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ.", ru:"Исход 20:8 — Помни день субботний, чтобы святить его." },
+
+  notif_feasts_label:   { pt:"Festas Bíblicas", en:"Biblical Feasts", es:"Fiestas Bíblicas", fr:"Fêtes Bibliques", de:"Biblische Feste", he:"מוֹעֲדִים", ru:"Библейские праздники" },
+  notif_feasts_when:    { pt:"3 dias antes de cada Moed (festa bíblica)", en:"3 days before each Moed (biblical feast)", es:"3 días antes de cada Moed (fiesta bíblica)", fr:"3 jours avant chaque Moed (fête biblique)", de:"3 Tage vor jedem Moed (biblisches Fest)", he:"3 יָמִים לִפְנֵי כָּל מוֹעֵד", ru:"За 3 дня до каждого Моэда (библейского праздника)" },
+  notif_feasts_detail:  { pt:"Alertas para Pessach, Shavuot, Rosh Hashaná, Yom Kippur, Sukkot, Chanukah e Purim.", en:"Alerts for Passover, Shavuot, Rosh Hashanah, Yom Kippur, Sukkot, Chanukah and Purim.", es:"Alertas para Pesaj, Shavuot, Rosh Hashaná, Yom Kipur, Sucot, Janucá y Purim.", fr:"Alertes pour Pessah, Chavouot, Roch Hachana, Yom Kippour, Souccot, Hanoucca et Pourim.", de:"Erinnerungen für Pessach, Schawuot, Rosch Haschana, Jom Kippur, Sukkot, Chanukka und Purim.", he:"הַתְרָאוֹת לְפֶסַח, שָׁבוּעוֹת, רֹאשׁ הַשָּׁנָה, יוֹם כִּפּוּר, סֻכּוֹת, חֲנֻכָּה וּפוּרִים.", ru:"Напоминания о Песахе, Шавуоте, Рош ха-Шана, Йом Кипур, Суккот, Ханука и Пурим." },
+  notif_feasts_verse:   { pt:"Levítico 23:2 — As festas do Senhor são convocações sagradas.", en:"Leviticus 23:2 — The feasts of the LORD are holy convocations.", es:"Levítico 23:2 — Las fiestas del Señor son santas convocaciones.", fr:"Lévitique 23:2 — Les fêtes de l'Éternel sont de saintes convocations.", de:"3. Mose 23:2 — Die Feste des HERRN sind heilige Versammlungen.", he:"וַיִּקְרָא כג:ב — מוֹעֲדֵי ה' מִקְרָאֵי קֹדֶשׁ.", ru:"Левит 23:2 — Праздники Господни — священные собрания." },
+
+  notif_parasha_label:  { pt:"Parashat HaShavua", en:"Parashat HaShavua", es:"Parashat HaShavua", fr:"Parashat HaShavua", de:"Parashat HaShavua", he:"פָּרָשַׁת הַשָּׁבוּעַ", ru:"Парашат ха-Шавуа" },
+  notif_parasha_when:   { pt:"Toda sexta-feira de manhã", en:"Every Friday morning", es:"Cada viernes por la mañana", fr:"Chaque vendredi matin", de:"Jeden Freitagmorgen", he:"כָּל בֹּקֶר יוֹם שִׁישִׁי", ru:"Каждое утро пятницы" },
+  notif_parasha_detail: { pt:"O nome, a referência e o tema da porção semanal da Torá antes do Shabat.", en:"The name, reference and theme of the weekly Torah portion before Shabbat.", es:"El nombre, referencia y tema de la porción semanal de la Torá antes del Shabat.", fr:"Le nom, la référence et le thème de la portion hebdomadaire de la Torah avant Chabbat.", de:"Name, Referenz und Thema des wöchentlichen Toraabschnitts vor dem Schabbat.", he:"הַשֵּׁם, הַמַּרְאֶה מָקוֹם וְהַנּוֹשֵׂא שֶׁל הַפָּרָשָׁה הַשְּׁבוּעִית לִפְנֵי הַשַּׁבָּת.", ru:"Название, отрывок и тема недельной главы Торы перед Шаббатом." },
+  notif_parasha_verse:  { pt:"Deuteronômio 17:19 — Leia nela todos os dias da sua vida.", en:"Deuteronomy 17:19 — Read it all the days of his life.", es:"Deuteronomio 17:19 — Leerá en él todos los días de su vida.", fr:"Deutéronome 17:19 — Il y lira tous les jours de sa vie.", de:"5. Mose 17:19 — Er soll darin lesen alle Tage seines Lebens.", he:"דְּבָרִים יז:יט — וְקָרָא בוֹ כָּל יְמֵי חַיָּיו.", ru:"Второзаконие 17:19 — Пусть читает его во все дни жизни своей." },
+
+  notif_rosh_label:     { pt:"Rosh Chodesh", en:"Rosh Chodesh", es:"Rosh Chodesh", fr:"Rosh Chodesh", de:"Rosch Chodesch", he:"רֹאשׁ חֹדֶשׁ", ru:"Рош Ходеш" },
+  notif_rosh_when:      { pt:"No início de cada mês hebraico (Lua Nova)", en:"At the start of each Hebrew month (New Moon)", es:"Al inicio de cada mes hebreo (Luna Nueva)", fr:"Au début de chaque mois hébraïque (Nouvelle Lune)", de:"Zu Beginn jedes hebräischen Monats (Neumond)", he:"בִּתְחִלַּת כָּל חֹדֶשׁ עִבְרִי", ru:"В начале каждого еврейского месяца (Новолуние)" },
+  notif_rosh_detail:    { pt:"Seja alertado no início de cada mês — tempo de renovação espiritual e bênção.", en:"Be alerted at the start of each month — a time of spiritual renewal and blessing.", es:"Sé alertado al inicio de cada mes — tiempo de renovación espiritual y bendición.", fr:"Soyez alerté au début de chaque mois — un temps de renouveau spirituel et de bénédiction.", de:"Werde zu Beginn jedes Monats benachrichtigt — eine Zeit geistlicher Erneuerung und des Segens.", he:"קַבֵּל הַתְרָאָה בִּתְחִלַּת כָּל חֹדֶשׁ — זְמַן הִתְחַדְּשׁוּת רוּחָנִית וּבְרָכָה.", ru:"Получайте напоминание в начале каждого месяца — время духовного обновления и благословения." },
+  notif_rosh_verse:     { pt:"Números 28:11 — No início de cada mês, ofertai ao Senhor.", en:"Numbers 28:11 — At the beginnings of your months, offer to the LORD.", es:"Números 28:11 — En los principios de vuestros meses, ofreceréis al Señor.", fr:"Nombres 28:11 — Au commencement de vos mois, vous offrirez à l'Éternel.", de:"4. Mose 28:11 — Am Anfang eurer Monate sollt ihr dem HERRN darbringen.", he:"בְּמִדְבַּר כח:יא — וּבְרָאשֵׁי חָדְשֵׁיכֶם תַּקְרִיבוּ לַה'.", ru:"Числа 28:11 — В новомесячия ваши приносите Господу." },
+
+  sentBadge:         { pt:"Enviada!", en:"Sent!", es:"¡Enviada!", fr:"Envoyée!", de:"Gesendet!", he:"נִשְׁלַח!", ru:"Отправлено!" },
+  testNowBtn:        { pt:"Testar agora", en:"Test now", es:"Probar ahora", fr:"Tester maintenant", de:"Jetzt testen", he:"בְּדֹק עַכְשָׁו", ru:"Проверить сейчас" },
+  blockedHint:       { pt:"Bloqueado — habilite nas configurações do navegador", en:"Blocked — enable in browser settings", es:"Bloqueado — habilita en la configuración del navegador", fr:"Bloqué — activez dans les paramètres du navigateur", de:"Blockiert — in den Browsereinstellungen aktivieren", he:"חָסוּם — הַפְעֵל בְּהַגְדְּרוֹת הַדְּפַדְפָן", ru:"Заблокировано — включите в настройках браузера" },
+  enableAboveHint:   { pt:"Ative as notificações acima para configurar", en:"Enable notifications above to configure", es:"Activa las notificaciones arriba para configurar", fr:"Activez les notifications ci-dessus pour configurer", de:"Aktiviere die Benachrichtigungen oben zum Konfigurieren", he:"הַפְעֵל אֶת הַהוֹדָעוֹת לְמַעְלָה כְּדֵי לְהַגְדִּיר", ru:"Включите уведомления выше для настройки" },
+  enableAllBtn:      { pt:"Ativar todas", en:"Enable all", es:"Activar todas", fr:"Activer tout", de:"Alle aktivieren", he:"הַפְעֵל הַכֹּל", ru:"Включить все" },
+  disableAllBtn:     { pt:"Desativar todas", en:"Disable all", es:"Desactivar todas", fr:"Désactiver tout", de:"Alle deaktivieren", he:"כַּבֵּה הַכֹּל", ru:"Выключить все" },
+  encountersEternal: { pt:"Encontros Marcados pelo Eterno", en:"Appointed Encounters with the Eternal", es:"Encuentros Señalados por el Eterno", fr:"Rencontres Fixées par l'Éternel", de:"Festgesetzte Begegnungen mit dem Ewigen", he:"מוֹעֲדִים קְבוּעִים עִם הַנִּצְחִי", ru:"Назначенные встречи с Вечным" },
+  featCalendar:      { pt:"Hebraico + gregoriano", en:"Hebrew + Gregorian", es:"Hebreo + gregoriano", fr:"Hébreu + grégorien", de:"Hebräisch + gregorianisch", he:"עִבְרִי + גְּרֵגוֹרְיָאנִי", ru:"Еврейский + григорианский" },
+  featConverter:     { pt:"Com tribos de Israel", en:"With tribes of Israel", es:"Con tribus de Israel", fr:"Avec les tribus d'Israël", de:"Mit Stämmen Israels", he:"עִם שִׁבְטֵי יִשְׂרָאֵל", ru:"С коленами Израиля" },
+  featParashah:      { pt:"Ciclo real 5786", en:"Real 5786 cycle", es:"Ciclo real 5786", fr:"Cycle réel 5786", de:"Echter Zyklus 5786", he:"מַחֲזוֹר אֲמִתִּי תשפ״ו", ru:"Настоящий цикл 5786" },
+  featShabat:        { pt:"Horários por GPS", en:"GPS-based times", es:"Horarios por GPS", fr:"Horaires par GPS", de:"Zeiten per GPS", he:"זְמַנִּים לְפִי GPS", ru:"Время по GPS" },
+  featFeasts:        { pt:"Moadim messiânicos", en:"Messianic Moadim", es:"Moadim mesiánicos", fr:"Moadim messianiques", de:"Messianische Moadim", he:"מוֹעֲדִים מְשִׁיחִיִּים", ru:"Мессианские Моадим" },
+  featRosh:          { pt:"Fase lunar real", en:"Real moon phase", es:"Fase lunar real", fr:"Phase lunaire réelle", de:"Echte Mondphase", he:"שְׁלַב יָרֵחַ אֲמִתִּי", ru:"Настоящая фаза луны" },
+  featVerse:         { pt:"30 versos em Heb+PT", en:"30 verses in Heb+PT", es:"30 versos en Heb+PT", fr:"30 versets en Héb+PT", de:"30 Verse auf Hebr+PT", he:"30 פְּסוּקִים בְּעִבְרִית וּפוֹרְטוּגֶזִית", ru:"30 стихов на иврите и португальском" },
+  featSettings:      { pt:"Tema + notificações", en:"Theme + notifications", es:"Tema + notificaciones", fr:"Thème + notifications", de:"Thema + Benachrichtigungen", he:"נוֹשֵׂא + הוֹדָעוֹת", ru:"Тема + уведомления" },
 };
 
 // Hook de tradução
@@ -1506,7 +1727,7 @@ const TABS = [
 ];
 
 function Navigation({ active, setActive, lang, setLang }) {
-  const tx = useT(lang);
+  const t = useT(lang);
   const [menuOpen, setMenuOpen] = useState(false);
   const visibleTabs = TABS.slice(0, 5);   // bottom nav shows first 5
   const moreTabs    = TABS.slice(5);       // rest in "More" menu
@@ -1522,8 +1743,8 @@ function Navigation({ active, setActive, lang, setLang }) {
       }}>
         {/* gold accent line top */}
         <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${S.gold}, ${S.goldLight}, ${S.gold}, transparent)` }} />
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, height: 64 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px",
+          display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
           {/* Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
             onClick={() => setActive("calendar")}>
@@ -1539,10 +1760,10 @@ function Navigation({ active, setActive, lang, setLang }) {
           </div>
           {/* Desktop tabs */}
           <div style={{ display: "flex", gap: 2, overflowX: "auto", minWidth: 0 }}>
-            {TABS.map(t => {
-              const isActive = active === t.id;
+            {TABS.map(tab => {
+              const isActive = active === tab.id;
               return (
-                <button key={t.id} onClick={() => setActive(t.id)} style={{
+                <button key={tab.id} onClick={() => setActive(tab.id)} style={{
                   background: isActive ? S.goldBg : "transparent",
                   border: `1px solid ${isActive ? S.goldBorder : "transparent"}`,
                   color: isActive ? S.goldLight : S.textMuted,
@@ -1552,8 +1773,8 @@ function Navigation({ active, setActive, lang, setLang }) {
                   transition: "all 0.18s ease", letterSpacing: "0.01em",
                   fontFamily: "'Inter', sans-serif",
                 }}>
-                  <Icon name={t.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
-                  {tx(t.tKey)}
+                  <Icon name={tab.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
+                  {t(tab.tKey)}
                 </button>
               );
             })}
@@ -1574,10 +1795,10 @@ function Navigation({ active, setActive, lang, setLang }) {
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1,
           background: `linear-gradient(90deg, transparent, ${S.gold}88, ${S.goldLight}88, ${S.gold}88, transparent)` }} />
 
-        {visibleTabs.map(t => {
-          const isActive = active === t.id;
+        {visibleTabs.map(tab => {
+          const isActive = active === tab.id;
           return (
-            <button key={t.id} onClick={() => setActive(t.id)} style={{
+            <button key={tab.id} onClick={() => setActive(tab.id)} style={{
               flex: 1, background: "none", border: "none",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               gap: 3, padding: "10px 2px 8px", cursor: "pointer",
@@ -1598,7 +1819,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.18s ease",
               }}>
-                <Icon name={t.icon} size={18}
+                <Icon name={tab.icon} size={18}
                   color={isActive ? S.goldLight : S.textMuted}
                   strokeWidth={isActive ? 2 : 1.5} />
               </div>
@@ -1607,7 +1828,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 color: isActive ? S.goldLight : S.textMuted,
                 fontFamily: "'Inter', sans-serif",
                 textTransform: "uppercase",
-              }}>{tx(t.tKey)}</span>
+              }}>{t(tab.tKey)}</span>
             </button>
           );
         })}
@@ -1629,7 +1850,7 @@ function Navigation({ active, setActive, lang, setLang }) {
               strokeWidth={1.5} />
           </div>
           <span style={{ fontSize: 9, fontWeight: 700, color: S.textMuted,
-            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>Mais</span>
+            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>{t("more")}</span>
         </button>
 
         {/* More menu popup */}
@@ -1640,18 +1861,18 @@ function Navigation({ active, setActive, lang, setLang }) {
             border: `1px solid ${S.goldBorder}`, borderRadius: 20,
             padding: 8, boxShadow: `0 -8px 40px rgba(0,0,0,0.4)`,
           }}>
-            {moreTabs.map(t => {
-              const isActive = active === t.id;
+            {moreTabs.map(tab => {
+              const isActive = active === tab.id;
               return (
-                <button key={t.id} onClick={() => { setActive(t.id); setMenuOpen(false); }} style={{
+                <button key={tab.id} onClick={() => { setActive(tab.id); setMenuOpen(false); }} style={{
                   width: "100%", background: isActive ? S.goldBg : "transparent",
                   border: "none", borderRadius: 12, padding: "12px 16px",
                   display: "flex", alignItems: "center", gap: 12,
                   color: isActive ? S.goldLight : S.textSub,
                   cursor: "pointer", transition: "all 0.15s",
                 }}>
-                  <Icon name={t.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
-                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{tx(t.tKey)}</span>
+                  <Icon name={tab.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
+                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{t(tab.tKey)}</span>
                   {isActive && <Icon name="check" size={16} color={S.gold} style={{ marginLeft: "auto" }} />}
                 </button>
               );
@@ -1672,7 +1893,11 @@ function Navigation({ active, setActive, lang, setLang }) {
 
 // ─── CALENDAR PAGE ────────────────────────────────────────────────────────────
 
-function CalendarPage() {
+function CalendarPage({ lang = "pt" }) {
+  const t = useT(lang);
+  const monthsLoc   = getMonthsPT(lang);
+  const weekdaysLoc = getWeekdays(lang);
+
   // ── Hora hebraica: o dia começa às 18h ──────────────────────────
   const now            = new Date();
   const hebrewToday    = getHebrewCivilDate();       // D+1 se após 18h
@@ -1696,7 +1921,8 @@ function CalendarPage() {
   const goToday = () => { setYear(hebrewToday.getFullYear()); setMonth(hebrewToday.getMonth()+1); };
 
   // Data civil para exibição (dia gregoriano real, não ajustado)
-  const todayStr = now.toLocaleDateString("pt-BR", { weekday:"long", day:"numeric", month:"long" });
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
+  const todayStr = now.toLocaleDateString(localeMap[lang] || "pt-BR", { weekday:"long", day:"numeric", month:"long" });
 
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "28px 16px 100px" }}>
@@ -1712,18 +1938,17 @@ function CalendarPage() {
           <span style={{ fontSize: 22 }}>🌙</span>
           <div style={{ flex: 1 }}>
             <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13 }}>
-              Novo dia hebraico iniciado
+              {t("newHebrewDay")}
             </div>
             <div style={{ color: S.textMuted, fontSize: 11 }}>
-              Após as 18h o calendário hebraico já avançou para o próximo dia.
-              O dia gregoriano muda à meia-noite.
+              {t("newHebrewDayDesc")}
             </div>
           </div>
           <div style={{ textAlign: "right", flexShrink: 0 }}>
             <div style={{ color: S.gold, fontSize: 13, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
               {now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
             </div>
-            <div style={{ color: S.textMuted, fontSize: 9, marginTop: 1 }}>hora civil</div>
+            <div style={{ color: S.textMuted, fontSize: 9, marginTop: 1 }}>{t("civilTime")}</div>
           </div>
         </div>
       )}
@@ -1751,7 +1976,7 @@ function CalendarPage() {
           {/* Left: Hebrew date */}
           <div style={{ flex:"1 1 200px" }}>
             <div style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.12em",
-              textTransform:"uppercase", marginBottom:8 }}>הַיּוֹם — HOJE</div>
+              textTransform:"uppercase", marginBottom:8 }}>{t("todayLabel")}</div>
             <div className="cinzel gold-shimmer" style={{ fontSize:34, fontWeight:900, lineHeight:1, marginBottom:4 }}>
               {todayHeb.day} de {todayHeb.monthName}
             </div>
@@ -1767,7 +1992,7 @@ function CalendarPage() {
                 fontSize: 10, color: S.gold,
               }}>
                 <span>🌙</span>
-                <span>Dia hebraico avançou após 18h</span>
+                <span>{t("hebrewDayAdvanced")}</span>
               </div>
             )}
           </div>
@@ -1779,7 +2004,7 @@ function CalendarPage() {
               borderRadius:16, padding:"12px 16px", minWidth:180 }}>
               <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
                 <Icon name="scroll" size={13} color={S.gold} />
-                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>Parashat do Dia</span>
+                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>{t("parashatOfDay")}</span>
               </div>
               <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14 }}>{parasha?.name}</div>
               <div className="hebrew" style={{ color:S.gold, fontSize:17, lineHeight:1 }}>{parasha?.heb}</div>
@@ -1796,7 +2021,7 @@ function CalendarPage() {
               borderRadius:16, padding:"12px 16px", minWidth:140 }}>
               <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
                 <Icon name="moon" size={13} color="#a78bfa" />
-                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>Lua Nova</span>
+                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>{t("newMoon")}</span>
               </div>
               <div style={{ fontSize:28, lineHeight:1, marginBottom:4 }}>{getMoonEmoji(moonPhase)}</div>
               <div style={{ color:S.textSub, fontSize:11 }}>{getMoonPhaseName(moonPhase)}</div>
@@ -1811,12 +2036,12 @@ function CalendarPage() {
                 borderRadius:16, padding:"12px 16px", minWidth:150 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
                   <Icon name="star" size={13} color={S.gold} />
-                  <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>Próxima Festa</span>
+                  <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>{t("nextFeast")}</span>
                 </div>
                 <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:13 }}>{upcomingFeasts[0].feast.name}</div>
                 <div className="hebrew" style={{ color:S.gold, fontSize:16 }}>{upcomingFeasts[0].feast.heb}</div>
                 <div style={{ color:S.gold, fontSize:11, marginTop:3 }}>
-                  {upcomingFeasts[0].daysAway === 0 ? "Hoje!" : upcomingFeasts[0].daysAway === 1 ? "Amanhã!" : `Em ${upcomingFeasts[0].daysAway} dias`}
+                  {upcomingFeasts[0].daysAway === 0 ? t("todayBang") : upcomingFeasts[0].daysAway === 1 ? t("tomorrowBang") : t("inDays").replace("{n}", upcomingFeasts[0].daysAway)}
                 </div>
               </div>
             )}
@@ -1841,12 +2066,12 @@ function CalendarPage() {
 
           <div style={{ textAlign:"center" }}>
             <div className="cinzel" style={{ fontSize:20, fontWeight:700, color:S.text, letterSpacing:"0.04em" }}>
-              {MONTHS_PT[month-1]} {year}
+              {monthsLoc[month-1]} {year}
             </div>
             <button onClick={goToday} style={{
               background:"none", border:"none", color:S.gold, fontSize:11,
               cursor:"pointer", fontFamily:"'Inter',sans-serif", marginTop:2,
-            }}>Ir para hoje</button>
+            }}>{t("goToToday")}</button>
           </div>
 
           <button onClick={next} style={{
@@ -1862,7 +2087,7 @@ function CalendarPage() {
 
         {/* Weekday headers */}
         <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", padding:"10px 14px 0" }}>
-          {WEEKDAYS.map((d,i) => (
+          {weekdaysLoc.map((d,i) => (
             <div key={d} style={{ textAlign:"center", fontSize:11, fontWeight:700,
               color: i===6 ? S.gold : S.textMuted,
               letterSpacing:"0.06em", textTransform:"uppercase", paddingBottom:8 }}>{d}</div>
@@ -1970,14 +2195,14 @@ function CalendarPage() {
         <div style={{ padding:"12px 22px 16px", borderTop:`1px solid ${S.divider}`,
           display:"flex", gap:20, flexWrap:"wrap" }}>
           {[
-            [S.gold,                     "Hoje (Hebraico)"],
-            [S.goldLight,                "Festa Bíblica"],
-            [`${S.gold}55`,              "Shabat"],
-            ["rgba(212,175,55,0.30)",    "🌙 Erev (véspera)"],
+            [S.gold,                     t("legendToday")],
+            [S.goldLight,                t("legendFeast")],
+            [`${S.gold}55`,              t("legendShabat")],
+            ["rgba(212,175,55,0.30)",    t("legendErev")],
           ].map(([c,l]) => (
             <div key={l} style={{ display:"flex", alignItems:"center", gap:6 }}>
               <div style={{ width:10, height:10, borderRadius:3, background:c,
-                border: l.includes("Erev") ? "1px solid rgba(212,175,55,0.5)" : "none" }}/>
+                border: (l.includes("Erev")||l.includes("עֶרֶב")) ? "1px solid rgba(212,175,55,0.5)" : "none" }}/>
               <span style={{ color:S.textMuted, fontSize:11 }}>{l}</span>
             </div>
           ))}
@@ -2004,7 +2229,9 @@ function fmtDate(str) {
   return `${d}/${m}/${y}`;
 }
 
-function ParashaPage() {
+function ParashaPage({ lang = "pt" }) {
+  const t = useT(lang);
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
   const current  = useMemo(() => getCurrentParasha(), []);
   const nextP    = useMemo(() => getNextParasha(), []);
   const [search, setSearch]       = useState("");
@@ -2015,7 +2242,7 @@ function ParashaPage() {
   const now = new Date();
   const daysUntilShabat = (6 - now.getDay() + 7) % 7 || 7;
   const nextShabatDate  = new Date(now); nextShabatDate.setDate(now.getDate() + daysUntilShabat);
-  const nextShabatStr   = nextShabatDate.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+  const nextShabatStr   = nextShabatDate.toLocaleDateString(localeMap[lang] || "pt-BR", { weekday: "long", day: "2-digit", month: "long" });
 
   const BOOKS = ["Todos", "Bereshit", "Shemot", "Vayikra", "Bamidbar", "Devarim"];
 
@@ -2039,7 +2266,7 @@ function ParashaPage() {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub="Leitura semanal da Torá — Ano 5786 (2025-2026)">Parashat HaShavua</SectionTitle>
+      <SectionTitle sub={t("parashaHeaderSub")}>Parashat HaShavua</SectionTitle>
 
       {/* ── HERO: porção atual ── */}
       {current && (
@@ -2055,11 +2282,11 @@ function ParashaPage() {
           <div style={{ position: "relative" }}>
             {/* badges row */}
             <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:12 }}>
-              <Badge color={S.goldLight}>📖 ESTA SEMANA</Badge>
+              <Badge color={S.goldLight}>{t("thisWeekBadge")}</Badge>
               <Badge color={BOOK_COLORS[current.book]?.label || S.gold}>
                 {BOOK_EMOJI[current.book]} {current.book}
               </Badge>
-              {current.double && <Badge color="#fb923c">⚡ Porção Dupla</Badge>}
+              {current.double && <Badge color="#fb923c">{t("doublePortionBadge")}</Badge>}
               {shabatEsp && <Badge color="#a78bfa">✨ {shabatEsp.name}</Badge>}
             </div>
 
@@ -2074,18 +2301,18 @@ function ParashaPage() {
               <div style={{ paddingTop:6 }}>
                 <div style={{ color:S.text, fontWeight:600, fontSize:15 }}>{current.theme}</div>
                 <div style={{ color:S.textMuted, fontSize:13, marginTop:4 }}>
-                  📚 Torá: <strong style={{color:S.text}}>{current.ref}</strong>
+                  {t("torahLabelIcon")} <strong style={{color:S.text}}>{current.ref}</strong>
                 </div>
                 <div style={{ color:S.textMuted, fontSize:13 }}>
-                  🎵 Haftará: <strong style={{color:S.text}}>{current.haftara}</strong>
+                  {t("haftaraLabelIcon")} <strong style={{color:S.text}}>{current.haftara}</strong>
                 </div>
                 {current.brit && (
                   <div style={{ color:S.textMuted, fontSize:13 }}>
-                    ✡ B'rit Chadashá: <strong style={{color:S.text}}>{current.brit}</strong>
+                    {t("britLabelIcon")} <strong style={{color:S.text}}>{current.brit}</strong>
                   </div>
                 )}
                 <div style={{ color:S.textMuted, fontSize:12, marginTop:4 }}>
-                  📅 Shabat: <strong style={{color:S.gold}}>{fmtDate(current.dataDiaspora)}</strong>
+                  {t("shabatLabelIcon")} <strong style={{color:S.gold}}>{fmtDate(current.dataDiaspora)}</strong>
                   {" "}• {current.hebrewDate}
                 </div>
               </div>
@@ -2096,11 +2323,11 @@ function ParashaPage() {
               <div style={{ background:"rgba(167,139,250,0.12)", border:"1px solid rgba(167,139,250,0.3)",
                 borderRadius:12, padding:"10px 14px", marginBottom:12 }}>
                 <div style={{ color:"#a78bfa", fontWeight:700, fontSize:12, marginBottom:6 }}>
-                  🌍 DIFERENÇA ISRAEL × DIÁSPORA
+                  {t("israelDiasporaDiff")}
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
                   <div style={{ background:ink(0.4), borderRadius:8, padding:"8px 12px" }}>
-                    <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:3 }}>🇮🇱 ISRAEL</div>
+                    <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:3 }}>{t("israelBadge")}</div>
                     {current.israelReading && <>
                       <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{current.israelReading.name}</div>
                       <div style={{ color:S.textMuted, fontSize:11 }}>{current.israelReading.ref}</div>
@@ -2115,7 +2342,7 @@ function ParashaPage() {
                     </div>}
                   </div>
                   <div style={{ background:ink(0.4), borderRadius:8, padding:"8px 12px" }}>
-                    <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:3 }}>🌎 DIÁSPORA</div>
+                    <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:3 }}>{t("diasporaBadge")}</div>
                     <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{current.name}</div>
                     <div style={{ color:S.textMuted, fontSize:11 }}>{current.ref}</div>
                     <div style={{ color:S.textMuted, fontSize:11 }}>Haf: {current.haftara}</div>
@@ -2138,9 +2365,9 @@ function ParashaPage() {
             <div style={{ background:ink(0.5), borderRadius:10, padding:"10px 14px",
               fontSize:12, color:S.textMuted, display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
               <span>🕯️</span>
-              <span>Próximo Shabat: <strong style={{color:S.gold}}>{nextShabatStr}</strong></span>
+              <span>{t("nextShabatCountdown")} <strong style={{color:S.gold}}>{nextShabatStr}</strong></span>
               <span style={{ color:S.goldBorder }}>•</span>
-              <span>Próxima leitura: <strong style={{color:S.text}}>{nextP?.name}</strong> ({nextP?.ref})</span>
+              <span>{t("nextReading")} <strong style={{color:S.text}}>{nextP?.name}</strong> ({nextP?.ref})</span>
             </div>
           </div>
         </div>
@@ -2152,18 +2379,18 @@ function ParashaPage() {
           padding:"14px 18px", marginBottom:20, display:"flex", alignItems:"center", gap:16, flexWrap:"wrap" }}>
           <div style={{ fontSize:28 }}>📜</div>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:11, color:S.textMuted, marginBottom:3 }}>PRÓXIMA SEMANA — {fmtDate(nextP.dataDiaspora)}</div>
+            <div style={{ fontSize:11, color:S.textMuted, marginBottom:3 }}>{t("nextWeekBadge")} {fmtDate(nextP.dataDiaspora)}</div>
             <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
               <span style={{ color:S.text, fontWeight:700, fontSize:15 }}>{nextP.name}</span>
               <span className="hebrew" style={{ color:S.gold, fontSize:20 }}>{nextP.heb}</span>
-              {nextP.double && <Badge color="#fb923c">⚡ Dupla</Badge>}
+              {nextP.double && <Badge color="#fb923c">⚡ {t("doublePortion")}</Badge>}
             </div>
             <div style={{ color:S.textMuted, fontSize:12, marginTop:2 }}>
               📚 {nextP.ref} &nbsp;•&nbsp; 🎵 {nextP.haftara}
             </div>
             {nextP.brit && (
               <div style={{ color:S.textMuted, fontSize:12 }}>
-                ✡ B'rit Chadashá: {nextP.brit}
+                {t("britLabelIcon")} {nextP.brit}
               </div>
             )}
             <div style={{ color:S.textMuted, fontSize:12 }}>{nextP.theme}</div>
@@ -2174,7 +2401,7 @@ function ParashaPage() {
       {/* ── TOGGLE MODO Israel/Diáspora ── */}
       <div style={{ display:"flex", background:S.bgCard, border:`1px solid ${S.goldBorder}`,
         borderRadius:12, padding:4, marginBottom:16, gap:4 }}>
-        {[["diaspora","🌎 Diáspora"],["israel","🇮🇱 Israel"]].map(([id,label]) => (
+        {[["diaspora",t("modeDiaspora")],["israel",t("modeIsrael")]].map(([id,label]) => (
           <button key={id} onClick={() => setViewMode(id)} style={{
             flex:1, background: viewMode===id ? S.goldBg : "transparent",
             border:"none", color: viewMode===id ? S.goldLight : S.textMuted,
@@ -2192,7 +2419,7 @@ function ParashaPage() {
             color: bookFilter===b ? (BOOK_COLORS[b]?.label || S.goldLight) : S.textMuted,
             borderRadius:20, padding:"4px 14px", fontSize:12, fontWeight:600, cursor:"pointer",
           }}>
-            {b !== "Todos" && BOOK_EMOJI[b] + " "}{b}
+            {b !== "Todos" && BOOK_EMOJI[b] + " "}{b === "Todos" ? t("filterAll") : b}
           </button>
         ))}
       </div>
@@ -2200,7 +2427,7 @@ function ParashaPage() {
       {/* ── BUSCA ── */}
       <div style={{ marginBottom:16 }}>
         <input value={search} onChange={e => setSearch(e.target.value)}
-          placeholder="🔍 Buscar por nome, referência, tema ou Haftará…"
+          placeholder={t("searchParasha")}
           style={{ width:"100%", background:S.bgCard, border:`1px solid ${S.goldBorder}`,
             borderRadius:10, padding:"10px 16px", color:S.text, fontSize:14, outline:"none" }}
         />
@@ -2238,8 +2465,8 @@ function ParashaPage() {
                   <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap", marginBottom:2 }}>
                     <span style={{ color: isCur ? S.goldLight : S.text, fontWeight:700, fontSize:15 }}>{p.name}</span>
                     <span className="hebrew" style={{ color:S.gold, fontSize:19 }}>{p.heb}</span>
-                    {isCur && <Badge color={S.goldLight}>● Atual</Badge>}
-                    {p.double && <Badge color="#fb923c">⚡ Dupla</Badge>}
+                    {isCur && <Badge color={S.goldLight}>{t("currentBadge")}</Badge>}
+                    {p.double && <Badge color="#fb923c">⚡ {t("doublePortion")}</Badge>}
                     {p.nota && p.nota.includes("Shabat") && !p.nota.includes("Porção") && (
                       <Badge color="#a78bfa">✨</Badge>
                     )}
@@ -2248,7 +2475,7 @@ function ParashaPage() {
                     📚 {p.ref}
                     {displayDate && <span style={{ color:S.gold, marginLeft:8 }}>📅 {fmtDate(displayDate)}</span>}
                     {p.diffIsrael && viewMode==="israel" && p.dataIsrael && (
-                      <span style={{ color:"#a78bfa", marginLeft:6, fontSize:11 }}>🇮🇱 data diferente</span>
+                      <span style={{ color:"#a78bfa", marginLeft:6, fontSize:11 }}>🇮🇱 {t("diffDate") || "data diferente"}</span>
                     )}
                   </div>
                   <div style={{ color:S.textMuted, fontSize:12 }}>{p.theme}</div>
@@ -2266,20 +2493,20 @@ function ParashaPage() {
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:10, marginBottom:12 }}>
                     {/* Torá */}
                     <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
-                      <div style={{ color:S.gold, fontSize:10, fontWeight:700, marginBottom:4 }}>📚 TORÁ</div>
+                      <div style={{ color:S.gold, fontSize:10, fontWeight:700, marginBottom:4 }}>{t("torahLabelIcon")}</div>
                       <div style={{ color:S.text, fontWeight:600, fontSize:14 }}>{p.name}</div>
                       <div className="hebrew" style={{ color:S.gold, fontSize:18 }}>{p.heb}</div>
                       <div style={{ color:S.textMuted, fontSize:12, marginTop:2 }}>{p.ref}</div>
                     </div>
                     {/* Haftará */}
                     <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
-                      <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:4 }}>🎵 HAFTARÁ</div>
+                      <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:4 }}>{t("haftaraLabelIcon")}</div>
                       <div style={{ color:S.text, fontSize:13, lineHeight:1.5 }}>{p.haftara}</div>
                     </div>
                     {/* B'rit Chadashá */}
                     {p.brit && (
                       <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
-                        <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:4 }}>✡ B'RIT CHADASHÁ</div>
+                        <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:4 }}>{t("britLabelIcon")}</div>
                         <div style={{ color:S.text, fontSize:13, lineHeight:1.5 }}>{p.brit}</div>
                       </div>
                     )}
@@ -2289,7 +2516,7 @@ function ParashaPage() {
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 }}>
                     <div style={{ background:"rgba(96,165,250,0.08)", border:"1px solid rgba(96,165,250,0.2)",
                       borderRadius:10, padding:"8px 12px" }}>
-                      <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:3 }}>🇮🇱 ISRAEL</div>
+                      <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:3 }}>{t("israelBadge")}</div>
                       {p.diffIsrael && p.israelReading ? (
                         <>
                           <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{p.israelReading.name}</div>
@@ -2315,7 +2542,7 @@ function ParashaPage() {
                     </div>
                     <div style={{ background:"rgba(74,222,128,0.08)", border:"1px solid rgba(74,222,128,0.2)",
                       borderRadius:10, padding:"8px 12px" }}>
-                      <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:3 }}>🌎 DIÁSPORA</div>
+                      <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:3 }}>{t("diasporaBadge")}</div>
                       <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{p.name}</div>
                       <div style={{ color:S.textMuted, fontSize:11 }}>{p.ref}</div>
                       <div style={{ color:S.textMuted, fontSize:11 }}>Haf: {p.haftara}</div>
@@ -2333,7 +2560,7 @@ function ParashaPage() {
 
                   {/* Data hebraica */}
                   <div style={{ marginTop:10, color:S.textMuted, fontSize:11, textAlign:"right" }}>
-                    {p.hebrewDate} • Ano 5786
+                    {p.hebrewDate} • 5786
                   </div>
                 </div>
               )}
@@ -2344,7 +2571,7 @@ function ParashaPage() {
 
       {filtered.length === 0 && (
         <div style={{ textAlign:"center", padding:40, color:S.textMuted, fontSize:14 }}>
-          Nenhuma porção encontrada para "{search}"
+          {t("noParashaFound")} "{search}"
         </div>
       )}
     </div>
@@ -2857,7 +3084,9 @@ function ShabatPage({ lang = "pt" }) {
 
 // ─── FEASTS PAGE ──────────────────────────────────────────────────────────────
 
-function FeastsPage() {
+function FeastsPage({ lang = "pt" }) {
+  const t = useT(lang);
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
   const [selected, setSelected] = useState(null);
   const upcoming = useMemo(() => getUpcomingFeasts(365), []);
   const spring = BIBLICAL_FEASTS.filter(f => f.cat === "spring");
@@ -2886,12 +3115,12 @@ function FeastsPage() {
               <span style={{ fontSize: 20 }}>{feast.emoji}</span>
               <span style={{ color: S.text, fontWeight: 700, fontSize: 15 }}>{feast.name}</span>
               <span style={{ background: `${catColor[feast.cat]}22`, color: catColor[feast.cat], fontSize: 10, padding: "2px 8px", borderRadius: 20, border: `1px solid ${catColor[feast.cat]}44` }}>
-                {feast.cat === "spring" ? "Primavera" : feast.cat === "fall" ? "Outono" : "Outras"}
+                {feast.cat === "spring" ? t("categorySpring") : feast.cat === "fall" ? t("categoryFall") : t("categoryOther")}
               </span>
-              {upcomingInfo && <Badge color={S.goldLight}>{upcomingInfo.daysAway === 0 ? "Hoje!" : upcomingInfo.daysAway === 1 ? "Amanhã!" : `${upcomingInfo.daysAway} dias`}</Badge>}
+              {upcomingInfo && <Badge color={S.goldLight}>{upcomingInfo.daysAway === 0 ? t("todayBang") : upcomingInfo.daysAway === 1 ? t("tomorrowBang") : `${upcomingInfo.daysAway} ${t("daysWord")}`}</Badge>}
             </div>
             <div className="hebrew" style={{ color: S.gold, fontSize: 20 }}>{feast.heb}</div>
-            <div style={{ color: S.textMuted, fontSize: 12, marginTop: 2 }}>{feast.date} • {feast.dur} {feast.dur === 1 ? "dia" : "dias"}</div>
+            <div style={{ color: S.textMuted, fontSize: 12, marginTop: 2 }}>{feast.date} • {feast.dur} {feast.dur === 1 ? t("dayWord") : t("daysWord")}</div>
           </div>
           <span style={{ color: S.textMuted, fontSize: 18, marginLeft: 8 }}>{isSel ? "▲" : "▼"}</span>
         </div>
@@ -2900,7 +3129,7 @@ function FeastsPage() {
           <div className="fade-up" style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${S.goldBorder}` }}>
             <p style={{ color: S.text, fontSize: 13, lineHeight: 1.7, marginBottom: 10 }}>{feast.desc}</p>
             <div style={{ background: S.goldBg, borderRadius: 10, padding: 12, marginBottom: 10 }}>
-              <div style={{ color: S.goldLight, fontSize: 11, fontWeight: 700, marginBottom: 4 }}>✡ SIGNIFICADO MESSIÂNICO</div>
+              <div style={{ color: S.goldLight, fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{t("messianicMeaning")}</div>
               <p style={{ color: S.text, fontSize: 13, lineHeight: 1.6 }}>{feast.sig}</p>
             </div>
             <div style={{ color: S.gold, fontSize: 12, fontStyle: "italic" }}>📖 {feast.scripture}</div>
@@ -2923,22 +3152,22 @@ function FeastsPage() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub="Os Moadim — Encontros Marcados pelo Eterno">Festas Bíblicas</SectionTitle>
+      <SectionTitle sub={t("feastsHeaderSub")}>{t("nav_feasts")}</SectionTitle>
 
       {/* Upcoming alerts */}
       {upcoming.length > 0 && (
         <div className="fade-up" style={{ background: S.goldBg, border: `1px solid ${S.goldBorder}`, borderRadius: 14, padding: 16, marginBottom: 20 }}>
-          <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13, marginBottom: 10 }}>⭐ Festas Próximas (próximos 365 dias)</div>
+          <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13, marginBottom: 10 }}>{t("upcomingFeastsBox")}</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {upcoming.map(({ feast, date, daysAway }) => (
               <div key={feast.name} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", background: ink(0.4), borderRadius: 10 }}>
                 <span style={{ fontSize: 22 }}>{feast.emoji}</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ color: S.text, fontWeight: 600, fontSize: 13 }}>{feast.name}</div>
-                  <div style={{ color: S.textMuted, fontSize: 11 }}>{date.toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}</div>
+                  <div style={{ color: S.textMuted, fontSize: 11 }}>{date.toLocaleDateString(localeMap[lang] || "pt-BR", { day: "2-digit", month: "long" })}</div>
                 </div>
                 <Badge color={daysAway === 0 ? "#4ade80" : daysAway <= 7 ? S.goldLight : S.gold}>
-                  {daysAway === 0 ? "Hoje!" : daysAway === 1 ? "Amanhã" : `${daysAway} dias`}
+                  {daysAway === 0 ? t("todayBang") : daysAway === 1 ? t("tomorrowBang").replace("!","") : `${daysAway} ${t("daysWord")}`}
                 </Badge>
               </div>
             ))}
@@ -2948,9 +3177,9 @@ function FeastsPage() {
 
       {/* Tabs */}
       <div style={{ display: "flex", background: S.bgCard, border: `1px solid ${S.goldBorder}`, borderRadius: 12, padding: 4, marginBottom: 20, gap: 4 }}>
-        <TabBtn id="upcoming" label="🌸 Primavera" />
-        <TabBtn id="fall" label="🍂 Outono" />
-        <TabBtn id="other" label="✨ Outras" />
+        <TabBtn id="upcoming" label={t("tabSpring")} />
+        <TabBtn id="fall" label={t("tabFall")} />
+        <TabBtn id="other" label={t("tabOther")} />
       </div>
 
       {tab === "upcoming" && spring.map(f => <FeastCard key={f.name} feast={f} upcomingInfo={upcomingMap[f.name]} />)}
@@ -2962,19 +3191,29 @@ function FeastsPage() {
 
 // ─── LEARN PAGE ───────────────────────────────────────────────────────────────
 
-function LearnPage() {
+// Renderiza texto com marcadores __palavra__ como <strong> colorido
+function renderBold(text, color) {
+  if (!text) return null;
+  const parts = text.split(/__(.+?)__/g);
+  return parts.map((part, i) =>
+    i % 2 === 1
+      ? <strong key={i} style={{ color: color || "inherit" }}>{part}</strong>
+      : <span key={i}>{part}</span>
+  );
+}
+
+function LearnPage({ lang = "pt" }) {
+  const t = useT(lang);
   const [expanded, setExpanded] = useState(null);
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub="Os 13 meses do calendário bíblico hebraico">Os Meses Hebraicos</SectionTitle>
+      <SectionTitle sub={t("learnSub")}>{t("learnTitle")}</SectionTitle>
 
       <Card style={{ marginBottom: 24, background: inkMid(0.4) }}>
-        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 10 }}>📖 O Calendário Lunissolar</div>
+        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 10 }}>{t("lunisolarTitle")}</div>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.7 }}>
-          O calendário hebraico é <strong style={{ color: S.text }}>lunissolar</strong> — baseado nos ciclos da lua e do sol.
-          O primeiro mês bíblico é <strong style={{ color: S.gold }}>Nissan</strong> (Êxodo 12:2), e o ano civil começa em <strong style={{ color: S.gold }}>Tishrei</strong> (Rosh Hashaná).
-          O ano hebraico conta desde a criação do mundo (Anno Mundi); adicione ~3760 ao ano gregoriano.
+          {renderBold(T.lunisolarText[lang] || T.lunisolarText.pt, S.gold)}
         </p>
       </Card>
 
@@ -2991,7 +3230,7 @@ function LearnPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <span style={{ background: S.goldBg, color: S.gold, fontSize: 10, padding: "2px 8px", borderRadius: 20, border: `1px solid ${S.goldBorder}` }}>{m.id}º mês</span>
+                    <span style={{ background: S.goldBg, color: S.gold, fontSize: 10, padding: "2px 8px", borderRadius: 20, border: `1px solid ${S.goldBorder}` }}>{m.id}º {t("month")}</span>
                     <span style={{ color: S.textMuted, fontSize: 11 }}>{m.approx}</span>
                   </div>
                   <div style={{ color: S.text, fontWeight: 700, fontSize: 16 }}>{m.name}</div>
@@ -3016,11 +3255,9 @@ function LearnPage() {
       </div>
 
       <Card style={{ marginTop: 24, background: inkMid(0.4) }}>
-        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 8 }}>✡ Conexão Messiânica</div>
+        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 8 }}>{t("messianicConnTitle")}</div>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.7 }}>
-          Para os crentes messiânicos, o calendário bíblico revela o plano redentor de Deus através de Yeshua.
-          As festas da <strong style={{ color: "#4ade80" }}>primavera</strong> foram cumpridas em Sua primeira vinda,
-          enquanto as festas do <strong style={{ color: "#fb923c" }}>outono</strong> apontam para Sua segunda vinda e o reinado eterno.
+          {renderBold(T.messianicConnText[lang] || T.messianicConnText.pt, "#4ade80")}
         </p>
       </Card>
     </div>
@@ -3285,7 +3522,9 @@ const TRIBE_BY_MONTH = Object.fromEntries(TRIBES.map(t => [t.monthId, t]));
 
 // ─── CONVERSOR DE DATAS PAGE ──────────────────────────────────────────────────
 
-function ConverterPage() {
+function ConverterPage({ lang = "pt" }) {
+  const t = useT(lang);
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
   // Data hebraica: após 18h o dia já avançou
   const _civil   = getHebrewCivilDate();
   const today    = _civil;
@@ -3306,7 +3545,7 @@ function ConverterPage() {
     const hd    = gregorianToHebrew(y,m,d);
     const tribe = TRIBE_BY_MONTH[hd.month] || null;
     const feast = BIBLICAL_FEASTS.find(f => f.month===hd.month && hd.day>=f.day && hd.day<f.day+f.dur) || null;
-    const weekday = new Date(y,m-1,d).toLocaleDateString("pt-BR",{weekday:"long"});
+    const weekday = new Date(y,m-1,d).toLocaleDateString(localeMap[lang] || "pt-BR",{weekday:"long"});
     const parasha = getParashaForBirthday(m, d);
     // Próximo aniversário hebraico (ano corrente gregoriano)
     setBirthResult({ hd, tribe, feast, weekday, parasha, gDate: new Date(y,m-1,d) });
@@ -3356,7 +3595,7 @@ function ConverterPage() {
               </span>
               <span style={{background:`${tribe.color}22`,color:tribe.color,fontSize:10,fontWeight:600,
                 padding:"2px 8px",borderRadius:20,border:`1px solid ${tribe.color}44`}}>
-                Mês de {tribe.monthName}
+                {t("monthOf").replace("{month}", tribe.monthName)}
               </span>
             </div>
           </div>
@@ -3364,7 +3603,7 @@ function ConverterPage() {
 
         {/* bênção */}
         <div style={{background:ink(0.5),borderRadius:10,padding:"10px 14px",marginBottom:12}}>
-          <div style={{color:S.gold,fontSize:10,fontWeight:700,marginBottom:4}}>📜 BÊNÇÃO DE YAAKOV</div>
+          <div style={{color:S.gold,fontSize:10,fontWeight:700,marginBottom:4}}>{t("jacobsBlessing")}</div>
           <p style={{color:S.text,fontSize:12,fontStyle:"italic",lineHeight:1.6}}>{tribe.blessing}</p>
         </div>
 
@@ -3374,7 +3613,7 @@ function ConverterPage() {
         {/* qualidades e desafio */}
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
           <div style={{background:`${tribe.color}10`,borderRadius:10,padding:"10px 12px"}}>
-            <div style={{color:tribe.color,fontSize:10,fontWeight:700,marginBottom:6}}>✨ DONS</div>
+            <div style={{color:tribe.color,fontSize:10,fontWeight:700,marginBottom:6}}>{t("giftsLabel")}</div>
             <div style={{display:"flex",flexDirection:"column",gap:4}}>
               {tribe.qualities.map(q => (
                 <span key={q} style={{color:S.text,fontSize:11,display:"flex",alignItems:"center",gap:6}}>
@@ -3385,7 +3624,7 @@ function ConverterPage() {
             </div>
           </div>
           <div style={{background:"rgba(239,68,68,0.08)",borderRadius:10,padding:"10px 12px"}}>
-            <div style={{color:"#f87171",fontSize:10,fontWeight:700,marginBottom:6}}>⚔️ DESAFIO</div>
+            <div style={{color:"#f87171",fontSize:10,fontWeight:700,marginBottom:6}}>{t("challengeLabel")}</div>
             <p style={{color:S.textMuted,fontSize:11,lineHeight:1.5}}>{tribe.challenge}</p>
             <div style={{marginTop:8,color:S.gold,fontSize:10,fontStyle:"italic"}}>{tribe.scripture}</div>
           </div>
@@ -3396,9 +3635,9 @@ function ConverterPage() {
           padding:"8px 12px",display:"flex",alignItems:"center",gap:10}}>
           <span style={{fontSize:20}}>💎</span>
           <div>
-            <div style={{color:S.gold,fontSize:10,fontWeight:700}}>PEDRA DO HOSHEN (PEITORAL DO SUMO SACERDOTE)</div>
+            <div style={{color:S.gold,fontSize:10,fontWeight:700}}>{t("hoshenStone")}</div>
             <div style={{color:S.text,fontSize:12}}>{tribe.stone} <span className="hebrew" style={{color:S.gold}}>— {tribe.stoneHeb}</span></div>
-            <div style={{color:S.textMuted,fontSize:11}}>Êxodo 28:15-21 • Tribo: {tribe.eng}</div>
+            <div style={{color:S.textMuted,fontSize:11}}>Êxodo 28:15-21 • {t("tribeLabel")}: {tribe.eng}</div>
           </div>
         </div>
       </div>
@@ -3419,16 +3658,16 @@ function ConverterPage() {
   // ── render ──
   return (
     <div style={{maxWidth:860,margin:"0 auto",padding:"24px 16px 100px"}}>
-      <SectionTitle sub="Descubra sua data no calendário bíblico e sua tribo de Israel">
-        Conversor de Datas
+      <SectionTitle sub={t("converterSub")}>
+        {t("converterTitle")}
       </SectionTitle>
 
       {/* Toggle */}
       <div style={{display:"flex",background:S.bgCard,border:`1px solid ${S.goldBorder}`,
         borderRadius:12,padding:4,marginBottom:24,gap:4}}>
         {[
-          ["birth",   "🎂 Meu Aniversário Hebraico"],
-          ["convert", "📅 Converter Qualquer Data"],
+          ["birth",   t("tabBirthday")],
+          ["convert", t("tabConvertAny")],
         ].map(([id,label]) => (
           <button key={id} onClick={() => setActiveTab(id)} style={{
             flex:1, background: activeTab===id ? S.goldBg : "transparent",
@@ -3445,7 +3684,7 @@ function ConverterPage() {
           <div style={{background:S.bgCard,border:`1px solid ${S.goldBorder}`,borderRadius:16,
             padding:20,marginBottom:20}}>
             <div style={{color:S.gold,fontWeight:700,fontSize:14,marginBottom:12}}>
-              🎂 Digite sua data de nascimento
+              {t("enterBirthDate")}
             </div>
             <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
               <input type="date" value={birthDate}
@@ -3458,7 +3697,7 @@ function ConverterPage() {
                 background:`linear-gradient(135deg,${S.gold},${S.goldLight})`,
                 border:"none",borderRadius:10,padding:"10px 24px",
                 color:S.bg,fontWeight:700,fontSize:14,cursor:"pointer",whiteSpace:"nowrap",
-              }}>Descobrir ✡</button>
+              }}>{t("discover")}</button>
             </div>
           </div>
 
@@ -3466,38 +3705,38 @@ function ConverterPage() {
             <div className="fade-up">
               {/* Data hebraica + weekday */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:12,marginBottom:20}}>
-                <HebrewDateDisplay hd={birthResult.hd} label="Seu nascimento no calendário hebraico"
-                  sub={`Nasceu numa ${birthResult.weekday}`}/>
+                <HebrewDateDisplay hd={birthResult.hd} label={t("yourBirthHebrew")}
+                  sub={t("bornOnA").replace("{day}", birthResult.weekday)}/>
                 <div style={{background:inkMid(0.5),borderRadius:14,padding:18}}>
-                  <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>RESUMO BÍBLICO</div>
+                  <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>{t("biblicalSummary")}</div>
                   <div style={{display:"flex",flexDirection:"column",gap:8}}>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Mês Hebraico</span>
+                      <span style={{color:S.textMuted}}>{t("hebrewMonthLabel")}</span>
                       <span style={{color:S.text,fontWeight:600}}>{birthResult.hd.monthName}</span>
                     </div>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Dia Hebraico</span>
+                      <span style={{color:S.textMuted}}>{t("hebrewDayLabel")}</span>
                       <span style={{color:S.text,fontWeight:600}}>{birthResult.hd.day}</span>
                     </div>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Ano Hebraico</span>
+                      <span style={{color:S.textMuted}}>{t("hebrewYearLabel")}</span>
                       <span style={{color:S.text,fontWeight:600}}>{birthResult.hd.year} AM</span>
                     </div>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Tribo</span>
+                      <span style={{color:S.textMuted}}>{t("tribeLabel")}</span>
                       <span style={{color:S.goldLight,fontWeight:700}}>{birthResult.tribe?.tribe || "—"}</span>
                     </div>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Mazal</span>
+                      <span style={{color:S.textMuted}}>{t("mazalLabel")}</span>
                       <span style={{color:S.gold,fontWeight:600}}>{birthResult.tribe?.mazal || "—"}</span>
                     </div>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                      <span style={{color:S.textMuted}}>Pedra</span>
+                      <span style={{color:S.textMuted}}>{t("stoneLabel")}</span>
                       <span style={{color:S.gold,fontWeight:600}}>💎 {birthResult.tribe?.stone || "—"}</span>
                     </div>
                     {birthResult.parasha && (
                       <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
-                        <span style={{color:S.textMuted}}>Parashat</span>
+                        <span style={{color:S.textMuted}}>{t("parashatLabel")}</span>
                         <span style={{color:S.goldLight,fontWeight:700}}>{birthResult.parasha.name}</span>
                       </div>
                     )}
@@ -3505,7 +3744,7 @@ function ConverterPage() {
                       <div style={{marginTop:6,padding:"8px 10px",background:S.goldBg,borderRadius:8,
                         border:`1px solid ${S.goldBorder}`}}>
                         <div style={{color:S.goldLight,fontSize:11,fontWeight:700}}>
-                          {birthResult.feast.emoji} Nasceu durante {birthResult.feast.name}!
+                          {birthResult.feast.emoji} {t("bornDuringFeast").replace("{feast}", birthResult.feast.name)}
                         </div>
                         <div style={{color:S.textMuted,fontSize:10,marginTop:2}}>{birthResult.feast.desc}</div>
                       </div>
@@ -3519,10 +3758,10 @@ function ConverterPage() {
                 <>
                   <div style={{textAlign:"center",margin:"8px 0 16px"}}>
                     <div className="display-font" style={{color:S.goldLight,fontSize:18,fontWeight:700}}>
-                      ✡ Sua Tribo de Israel
+                      {t("yourTribeTitle")}
                     </div>
                     <p style={{color:S.textMuted,fontSize:12,marginTop:4}}>
-                      Baseado no mês hebraico do seu nascimento — tradição do Sefer Yetzirah
+                      {t("tribeBasedOn")}
                     </p>
                   </div>
                   <TribeCard tribe={birthResult.tribe} hd={birthResult.hd} />
@@ -3534,10 +3773,10 @@ function ConverterPage() {
                 <>
                   <div style={{textAlign:"center",margin:"24px 0 16px"}}>
                     <div className="display-font" style={{color:S.goldLight,fontSize:18,fontWeight:700}}>
-                      📖 Sua Parashat de Nascimento
+                      {t("yourBirthParasha")}
                     </div>
                     <p style={{color:S.textMuted,fontSize:12,marginTop:4}}>
-                      A porção da Torá lida na semana correspondente ao seu nascimento
+                      {t("birthParashaDesc")}
                     </p>
                   </div>
                   <div style={{
@@ -3557,12 +3796,12 @@ function ConverterPage() {
                     </div>
                     <div style={{color:S.textMuted,fontSize:13,marginBottom:8}}>{birthResult.parasha.theme}</div>
                     <div style={{background:ink(0.4),borderRadius:10,padding:"10px 14px",display:"flex",flexDirection:"column",gap:4}}>
-                      <div style={{color:S.text,fontSize:12}}>📚 Torá: <strong>{birthResult.parasha.ref}</strong></div>
+                      <div style={{color:S.text,fontSize:12}}>{t("torahLabelIcon")} <strong>{birthResult.parasha.ref}</strong></div>
                       {birthResult.parasha.haftara && (
-                        <div style={{color:S.text,fontSize:12}}>🎵 Haftará: <strong>{birthResult.parasha.haftara}</strong></div>
+                        <div style={{color:S.text,fontSize:12}}>{t("haftaraLabelIcon")} <strong>{birthResult.parasha.haftara}</strong></div>
                       )}
                       {birthResult.parasha.brit && (
-                        <div style={{color:S.text,fontSize:12}}>✡ B'rit Chadashá: <strong>{birthResult.parasha.brit}</strong></div>
+                        <div style={{color:S.text,fontSize:12}}>{t("britLabelIcon")} <strong>{birthResult.parasha.brit}</strong></div>
                       )}
                     </div>
                   </div>
@@ -3580,7 +3819,7 @@ function ConverterPage() {
           <div style={{background:S.bgCard,border:`1px solid ${S.goldBorder}`,borderRadius:16,
             padding:20,marginBottom:20}}>
             <div style={{color:S.gold,fontWeight:700,fontSize:14,marginBottom:12}}>
-              📅 Data Gregoriana
+              {t("gregorianDate")}
             </div>
             <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
               <input type="date" value={convertDate}
@@ -3593,7 +3832,7 @@ function ConverterPage() {
                 background:`linear-gradient(135deg,${S.gold},${S.goldLight})`,
                 border:"none",borderRadius:10,padding:"10px 24px",
                 color:S.bg,fontWeight:700,fontSize:14,cursor:"pointer",whiteSpace:"nowrap",
-              }}>Converter ✡</button>
+              }}>{t("convertBtn")}</button>
             </div>
           </div>
 
@@ -3601,34 +3840,34 @@ function ConverterPage() {
             <div className="fade-up">
               {/* Resultado principal */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:12,marginBottom:20}}>
-                <HebrewDateDisplay hd={convResult.hd} label="Data no Calendário Hebraico"
+                <HebrewDateDisplay hd={convResult.hd} label={t("hebrewDateResult")}
                   sub={convResult.weekdayHeb}/>
                 {/* Conversão dupla */}
                 <div style={{background:inkMid(0.5),borderRadius:14,padding:18}}>
-                  <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>EQUIVALÊNCIA</div>
+                  <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>{t("equivalence")}</div>
                   <div style={{display:"flex",flexDirection:"column",gap:10}}>
                     <div style={{background:ink(0.5),borderRadius:10,padding:"10px 12px"}}>
-                      <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>GREGORIANO</div>
+                      <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>{t("gregorianLabel")}</div>
                       <div style={{color:S.text,fontWeight:600,fontSize:14}}>
-                        {new Date(convertDate+"T12:00:00").toLocaleDateString("pt-BR",
+                        {new Date(convertDate+"T12:00:00").toLocaleDateString(localeMap[lang] || "pt-BR",
                           {day:"2-digit",month:"long",year:"numeric"})}
                       </div>
                     </div>
                     <div style={{background:S.goldBg,borderRadius:10,padding:"10px 12px",
                       border:`1px solid ${S.goldBorder}`}}>
-                      <div style={{color:S.gold,fontSize:10,marginBottom:3}}>HEBRAICO</div>
+                      <div style={{color:S.gold,fontSize:10,marginBottom:3}}>{t("hebrewLabel")}</div>
                       <div style={{color:S.goldLight,fontWeight:700,fontSize:14}}>
                         {convResult.hd.day} de {convResult.hd.monthName}{" "}
                         <span className="hebrew" style={{fontSize:16}}>{convResult.hd.monthNameHeb}</span>
                       </div>
-                      <div style={{color:S.textMuted,fontSize:12}}>{convResult.hd.year} Anno Mundi</div>
+                      <div style={{color:S.textMuted,fontSize:12}}>{convResult.hd.year} {t("annoMundi")}</div>
                     </div>
                     {/* dia da semana hebraico */}
                     <div style={{background:ink(0.5),borderRadius:10,padding:"10px 12px"}}>
-                      <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>DIA DA SEMANA HEBRAICO</div>
+                      <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>{t("weekdayHebrewLabel")}</div>
                       <div style={{color:convResult.wday===6?S.goldLight:S.text,fontWeight:600,fontSize:13}}>
                         {convResult.weekdayHeb}
-                        {convResult.wday===6 && <span style={{color:S.gold}}> 🕯️ Shabat!</span>}
+                        {convResult.wday===6 && <span style={{color:S.gold}}> {t("itsShabat")}</span>}
                       </div>
                     </div>
                   </div>
@@ -3640,7 +3879,7 @@ function ConverterPage() {
                 <div style={{background:S.goldBg,border:`1px solid ${S.goldBorder}`,
                   borderRadius:14,padding:16,marginBottom:20}}>
                   <div style={{color:S.goldLight,fontWeight:700,fontSize:15,marginBottom:6}}>
-                    {convResult.feast.emoji} Esta data é {convResult.feast.name}!
+                    {convResult.feast.emoji} {t("dateIsFeast").replace("{feast}", convResult.feast.name)}
                   </div>
                   <p style={{color:S.text,fontSize:13,lineHeight:1.6,marginBottom:6}}>{convResult.feast.desc}</p>
                   <p style={{color:S.textMuted,fontSize:12,fontStyle:"italic"}}>{convResult.feast.sig}</p>
@@ -3660,7 +3899,7 @@ function ConverterPage() {
                   <p style={{color:S.textMuted,fontSize:12,marginBottom:6}}>{convResult.parasha.theme}</p>
                   <div style={{color:S.text,fontSize:12}}>📚 {convResult.parasha.ref}</div>
                   {convResult.parasha.brit && (
-                    <div style={{color:S.text,fontSize:12,marginTop:2}}>✡ B'rit Chadashá: {convResult.parasha.brit}</div>
+                    <div style={{color:S.text,fontSize:12,marginTop:2}}>{t("britLabelIcon")} {convResult.parasha.brit}</div>
                   )}
                 </div>
               )}
@@ -3670,7 +3909,7 @@ function ConverterPage() {
                 <>
                   <div style={{textAlign:"center",margin:"8px 0 16px"}}>
                     <div className="display-font" style={{color:S.goldLight,fontSize:18,fontWeight:700}}>
-                      ✡ Tribo do Mês de {convResult.hd.monthName}
+                      {t("monthTribeTitle").replace("{month}", convResult.hd.monthName)}
                     </div>
                   </div>
                   <TribeCard tribe={convResult.tribe} hd={convResult.hd} compact />
@@ -3685,43 +3924,43 @@ function ConverterPage() {
       <div style={{marginTop:36}}>
         <div style={{textAlign:"center",marginBottom:20}}>
           <div className="display-font" style={{color:S.goldLight,fontSize:20,fontWeight:700}}>
-            As 12 Tribos de Israel e os Meses Hebraicos
+            {t("allTribesTitle")}
           </div>
           <p style={{color:S.textMuted,fontSize:12,marginTop:4}}>
-            Baseado no Sefer Yetzirah, Arizal e tradição judaica
+            {t("allTribesSub")}
           </p>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:10}}>
-          {TRIBES.filter(t => t.monthId <= 12).map(t => (
-            <div key={t.monthId} style={{
-              background:`${t.color}0d`, border:`1px solid ${t.color}33`,
+          {TRIBES.filter(tribe => tribe.monthId <= 12).map(tribe => (
+            <div key={tribe.monthId} style={{
+              background:`${tribe.color}0d`, border:`1px solid ${tribe.color}33`,
               borderRadius:13, padding:"12px 14px",
               transition:"all 0.15s",
             }}
-              onMouseEnter={e => e.currentTarget.style.background = `${t.color}1a`}
-              onMouseLeave={e => e.currentTarget.style.background = `${t.color}0d`}
+              onMouseEnter={e => e.currentTarget.style.background = `${tribe.color}1a`}
+              onMouseLeave={e => e.currentTarget.style.background = `${tribe.color}0d`}
             >
               <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-                <div style={{width:40,height:40,borderRadius:10,background:`${t.color}22`,
+                <div style={{width:40,height:40,borderRadius:10,background:`${tribe.color}22`,
                   display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>
-                  {t.symbol}
+                  {tribe.symbol}
                 </div>
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-                    <span style={{color:S.text,fontWeight:700,fontSize:14}}>{t.tribe}</span>
-                    <span className="hebrew" style={{color:t.color,fontSize:18}}>{t.heb}</span>
+                    <span style={{color:S.text,fontWeight:700,fontSize:14}}>{tribe.tribe}</span>
+                    <span className="hebrew" style={{color:tribe.color,fontSize:18}}>{tribe.heb}</span>
                   </div>
-                  <div style={{color:S.textMuted,fontSize:11}}>{t.mazal} · {t.monthName}</div>
+                  <div style={{color:S.textMuted,fontSize:11}}>{tribe.mazal} · {tribe.monthName}</div>
                 </div>
               </div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-                {t.qualities.slice(0,2).map(q => (
-                  <span key={q} style={{background:`${t.color}1a`,color:t.color,fontSize:10,
-                    padding:"2px 8px",borderRadius:20,border:`1px solid ${t.color}33`}}>{q}</span>
+                {tribe.qualities.slice(0,2).map(q => (
+                  <span key={q} style={{background:`${tribe.color}1a`,color:tribe.color,fontSize:10,
+                    padding:"2px 8px",borderRadius:20,border:`1px solid ${tribe.color}33`}}>{q}</span>
                 ))}
                 <span style={{background:"rgba(212,168,67,0.1)",color:S.gold,fontSize:10,
                   padding:"2px 8px",borderRadius:20,border:`1px solid ${S.goldBorder}`}}>
-                  💎 {t.stone}
+                  💎 {tribe.stone}
                 </span>
               </div>
             </div>
@@ -3734,7 +3973,9 @@ function ConverterPage() {
 
 // ─── ROSH CHODESH PAGE ────────────────────────────────────────────────────────
 
-function RoshChodeshPage() {
+function RoshChodeshPage({ lang = "pt" }) {
+  const t = useT(lang);
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
   const now      = new Date();
   const phase    = getMoonPhase(now);
   const moonEmoji = getMoonEmoji(phase);
@@ -3754,7 +3995,7 @@ function RoshChodeshPage() {
 
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub="Rosh Chodesh — O Início de Cada Mês Hebraico">🌙 Lua Nova</SectionTitle>
+      <SectionTitle sub={t("roshChodeshSub")}>{t("roshChodeshTitle")}</SectionTitle>
 
       {/* ── Hero: fase atual ── */}
       <div className="fade-up" style={{
@@ -3783,7 +4024,7 @@ function RoshChodeshPage() {
           {phaseName}
         </h2>
         <p style={{ color: "rgba(220,200,255,0.7)", fontSize: 13, marginBottom: 16 }}>
-          Dia {Math.floor(phase) + 1} do ciclo lunar • {phase.toFixed(1)} dias desde a Lua Nova
+          {t("cycleDay").replace("{n}", Math.floor(phase) + 1)} • {phase.toFixed(1)} {t("daysSinceNewMoon")}
         </p>
 
         {/* Phase progress bar */}
@@ -3800,7 +4041,7 @@ function RoshChodeshPage() {
         <div style={{ display: "inline-flex", gap: 16, background: "rgba(255,255,255,0.05)",
           borderRadius: 12, padding: "10px 20px", flexWrap: "wrap", justifyContent: "center" }}>
           <div style={{ color: "rgba(220,200,255,0.6)", fontSize: 12 }}>
-            Hoje: <strong style={{ color: "#e8d5ff" }}>
+            {t("todayLabel2")} <strong style={{ color: "#e8d5ff" }}>
               {todayHeb.day} de {todayHeb.monthName}
             </strong>{" "}
             <span className="hebrew" style={{ color: "#a78bfa", fontSize: 16 }}>
@@ -3819,7 +4060,7 @@ function RoshChodeshPage() {
           <div style={{ fontSize: 52 }}>🌑</div>
           <div style={{ flex: 1 }}>
             <div style={{ color: "rgba(167,139,250,0.8)", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>
-              PRÓXIMO ROSH CHODESH
+              {t("nextRoshChodesh")}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
               <span className="display-font" style={{ color: "#e8d5ff", fontSize: 22, fontWeight: 700 }}>
@@ -3828,7 +4069,7 @@ function RoshChodeshPage() {
               <span className="hebrew" style={{ color: "#a78bfa", fontSize: 24 }}>{nextRC.heb}</span>
             </div>
             <div style={{ color: "rgba(220,200,255,0.6)", fontSize: 13 }}>
-              📅 {new Date(nextRC.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
+              📅 {new Date(nextRC.date).toLocaleDateString(localeMap[lang] || "pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
             </div>
             <div style={{ color: "rgba(180,160,255,0.6)", fontSize: 12, marginTop: 3 }}>
               ✨ {nextRC.note}
@@ -3841,7 +4082,7 @@ function RoshChodeshPage() {
               {daysUntil <= 0 ? "🌑" : daysUntil}
             </div>
             <div style={{ color: "rgba(220,200,255,0.6)", fontSize: 11, marginTop: 4 }}>
-              {daysUntil <= 0 ? "HOJE!" : daysUntil === 1 ? "dia" : "dias"}
+              {daysUntil <= 0 ? t("todayBadge") : daysUntil === 1 ? t("dayWord") : t("daysWord")}
             </div>
           </div>
         </div>
@@ -3851,7 +4092,7 @@ function RoshChodeshPage() {
       <div style={{ marginBottom: 20 }}>
         <div className="display-font" style={{ color: S.goldLight, fontSize: 17, fontWeight: 700,
           marginBottom: 14, textAlign: "center" }}>
-          Calendário de Rosh Chodesh 5786
+          {t("fullCalendarRC")}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px,1fr))", gap: 10 }}>
           {withCountdown.map((rc, i) => {
@@ -3875,7 +4116,7 @@ function RoshChodeshPage() {
                       </span>
                     </div>
                     <div style={{ color: S.textMuted, fontSize: 11 }}>
-                      {new Date(rc.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
+                      {new Date(rc.date).toLocaleDateString(localeMap[lang] || "pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
                     </div>
                     <div style={{ color: "rgba(167,139,250,0.6)", fontSize: 11, marginTop: 2 }}>{rc.note}</div>
                   </div>
@@ -3884,7 +4125,7 @@ function RoshChodeshPage() {
                     borderRadius: 8, padding: "4px 8px", fontSize: 11, fontWeight: 700,
                     color: isNext ? "#a78bfa" : isPast ? S.textMuted : S.gold, whiteSpace: "nowrap",
                   }}>
-                    {isPast ? "Passado" : isToday ? "Hoje!" : `${rc.diff}d`}
+                    {isPast ? t("past") : isToday ? t("todayBang") : `${rc.diff}${t("dayWord")[0]}`}
                   </div>
                 </div>
               </div>
@@ -3896,19 +4137,13 @@ function RoshChodeshPage() {
       {/* ── Significado espiritual ── */}
       <div style={{ background: S.bgCard, border: `1px solid ${S.goldBorder}`, borderRadius: 16, padding: 20 }}>
         <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
-          🌙 O Significado de Rosh Chodesh
+          {t("roshChodeshMeaning")}
         </div>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.8 }}>
-          Rosh Chodesh (ראש חודש) significa "cabeça do mês" — o dia da Lua Nova. No calendário hebraico,
-          cada novo mês começa com a renovação da lua, símbolo de renovação espiritual para Israel.
-          As mulheres têm uma conexão especial com Rosh Chodesh, pois se recusaram a dar seus ornamentos
-          para o bezerro de ouro (Êxodo 32), sendo recompensadas com este dia sagrado.
+          {T.roshChodeshText1[lang] || T.roshChodeshText1.pt}
         </p>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.8, marginTop: 8 }}>
-          Nos tempos do Templo, Rosh Chodesh era declarado por testemunhas que avistavam a lua nova.
-          Ofertas especiais eram trazidas (Números 28:11-15) e o shofar era tocado. Para os crentes
-          messiânicos, aponta para a renovação em Yeshua — "a quem pertence a sombra, mas o corpo
-          pertence ao Messias" (Colossenses 2:17).
+          {T.roshChodeshText2[lang] || T.roshChodeshText2.pt}
         </p>
         <div style={{ marginTop: 12, color: S.gold, fontSize: 12, fontStyle: "italic" }}>
           📖 Números 28:11-15 • Isaías 66:23 • Colossenses 2:16-17
@@ -3920,13 +4155,15 @@ function RoshChodeshPage() {
 
 // ─── VERSÍCULO DIÁRIO PAGE ─────────────────────────────────────────────────────
 
-function VersePage() {
+function VersePage({ lang = "pt" }) {
+  const t = useT(lang);
+  const localeMap = { pt:"pt-BR", en:"en-US", es:"es-ES", fr:"fr-FR", de:"de-DE", he:"he-IL", ru:"ru-RU" };
   const verse = useMemo(() => getDailyVerse(), []);
   const [showHeb, setShowHeb] = useState(true);
   const [showPt,  setShowPt]  = useState(true);
   const [copied,  setCopied]  = useState(false);
   const todayHeb = useMemo(() => getTodayHebrew(), []);
-  const todayStr = new Date().toLocaleDateString("pt-BR", { weekday:"long", day:"2-digit", month:"long", year:"numeric" });
+  const todayStr = new Date().toLocaleDateString(localeMap[lang] || "pt-BR", { weekday:"long", day:"2-digit", month:"long", year:"numeric" });
 
   const shareText = `📖 ${verse.ref}
 
@@ -3944,7 +4181,7 @@ ${verse.heb}
 
   const handleShare = async () => {
     if (navigator.share) {
-      await navigator.share({ title: `Versículo do Dia — ${verse.ref}`, text: shareText });
+      await navigator.share({ title: `${t("dailyVerse")} — ${verse.ref}`, text: shareText });
     } else { handleCopy(); }
   };
 
@@ -3955,7 +4192,7 @@ ${verse.heb}
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: "24px 16px 100px" }}>
       <SectionTitle sub={`${todayStr} • ${todayHeb.day} de ${todayHeb.monthName} ${todayHeb.year} AM`}>
-        ✡ Versículo Diário
+        {t("dailyVerse")}
       </SectionTitle>
 
       {/* Hero card */}
@@ -4017,8 +4254,8 @@ ${verse.heb}
       {/* Controles de exibição */}
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap", justifyContent:"center" }}>
         {[
-          [showHeb, setShowHeb, "עִב", "Hebraico"],
-          [showPt,  setShowPt,  "PT",  "Português"],
+          [showHeb, setShowHeb, "עִב", t("verseHebrew")],
+          [showPt,  setShowPt,  "PT",  t("versePortuguese")],
         ].map(([active, setter, abbr, label]) => (
           <button key={label} onClick={() => setter(v => !v)} style={{
             background: active ? S.goldBg : S.bgCard,
@@ -4041,21 +4278,21 @@ ${verse.heb}
           borderRadius:10, padding:"10px 20px", fontSize:13, fontWeight:600, cursor:"pointer",
           display:"flex", alignItems:"center", gap:8,
         }}>
-          {copied ? "✓ Copiado!" : "📋 Copiar"}
+          {copied ? t("copiedBtn") : t("copyBtn")}
         </button>
         <button onClick={handleWhatsApp} style={{
           background:"rgba(37,211,102,0.12)", border:"1px solid rgba(37,211,102,0.3)",
           color:"#25d366", borderRadius:10, padding:"10px 20px", fontSize:13,
           fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:8,
         }}>
-          📲 WhatsApp
+          {t("whatsappBtn")}
         </button>
         <button onClick={handleShare} style={{
           background: S.goldBg, border:`1px solid ${S.goldBorder}`,
           color:S.goldLight, borderRadius:10, padding:"10px 20px", fontSize:13,
           fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:8,
         }}>
-          🔗 Compartilhar
+          {t("shareBtn")}
         </button>
       </div>
 
@@ -4063,7 +4300,7 @@ ${verse.heb}
       <div>
         <div className="display-font" style={{ color:S.goldLight, fontSize:17, fontWeight:700,
           marginBottom:14, textAlign:"center" }}>
-          Todos os Versículos ({DAILY_VERSES.length})
+          {t("allVerses")} ({DAILY_VERSES.length})
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:8 }}>
           {DAILY_VERSES.map((v, i) => {
@@ -4077,7 +4314,7 @@ ${verse.heb}
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:4 }}>
                   <span style={{ color: isToday ? S.goldLight : S.gold, fontWeight:700, fontSize:12 }}>{v.ref}</span>
                   {isToday && <span style={{ background:S.gold, color:S.bg, fontSize:9, fontWeight:700,
-                    padding:"2px 7px", borderRadius:20 }}>HOJE</span>}
+                    padding:"2px 7px", borderRadius:20 }}>{t("todayBadge")}</span>}
                 </div>
                 <p style={{ color:S.textMuted, fontSize:12, lineHeight:1.6 }}>"{v.pt}"</p>
               </div>
@@ -4212,6 +4449,7 @@ const NOTIF_DEFS = [
 // ─── SETTINGS PAGE ────────────────────────────────────────────────────────────
 
 function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLang }) {
+  const t = useT(lang);
   const [perm,       setPerm]       = useState("default");
   const [permChecked, setPermChecked] = useState(false);
   const [requesting, setRequesting] = useState(false);
@@ -4295,7 +4533,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
   // ── render ──
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 16px 100px" }}>
-      <PageTitle icon="settings" title="Configurações" sub="Personalize sua experiência" />
+      <PageTitle icon="settings" title={t("settingsTitle").replace("⚙️ ","")} sub={t("settingsSub")} />
 
       {/* ══════════════════════════════════════════════
           BLOCO 1 — APARÊNCIA
@@ -4312,9 +4550,9 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
           </div>
           <div>
             <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14, letterSpacing:"0.04em" }}>
-              Aparência
+              {t("appearance")}
             </div>
-            <div style={{ color:S.textMuted, fontSize:11 }}>Escolha o tema visual</div>
+            <div style={{ color:S.textMuted, fontSize:11 }}>{t("themePreview")}</div>
           </div>
         </div>
 
@@ -4322,13 +4560,13 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
           {[
             {
-              t: DARK_THEME, name:"Escuro", desc:"Noite de Jerusalém",
+              t: DARK_THEME, name:t("themeDark"), desc:t("themeDarkDesc"),
               preview: "linear-gradient(135deg,#060F2A,#0A1B45,#162754)",
               active: isDark, accentActive:"#D4AF37",
               stars: true,
             },
             {
-              t: LIGHT_THEME, name:"Claro", desc:"Pergaminho da Torá",
+              t: LIGHT_THEME, name:t("themeLight"), desc:t("themeLightDesc"),
               preview: "linear-gradient(135deg,#EAE2D4,#F4EFE6,#FFF8EE)",
               active: !isDark, accentActive:"#B8960C",
               stars: false,
@@ -4372,7 +4610,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                     background:opt.accentActive, color:"#0A1B45",
                     fontSize:9, fontWeight:800, padding:"2px 7px",
                     borderRadius:20, letterSpacing:"0.04em",
-                  }}>✓ ATIVO</div>
+                  }}>✓ {t("activeTheme")}</div>
                 )}
               </div>
               {/* Label */}
@@ -4395,7 +4633,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
             : "linear-gradient(90deg,#EAE2D4 0%,#F4EFE6 35%,#B8960C 60%,#D4A843 80%,#B8960C 100%)",
         }} />
         <div style={{ textAlign:"center", color:S.textMuted, fontSize:11, marginTop:6 }}>
-          {isDark ? "🌙 Noite de Jerusalém" : "☀️ Pergaminho da Torá"}
+          {isDark ? `🌙 ${t("themeDarkDesc")}` : `☀️ ${t("themeLightDesc")}`}
         </div>
       </GlassCard>
 
@@ -4411,7 +4649,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
           }}>🌐</div>
           <div>
             <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14, letterSpacing:"0.04em" }}>
-              {T.language[lang] || "Idioma"}
+              {t("languageSection")}
             </div>
             <div style={{ color:S.textMuted, fontSize:11 }}>
               {LANGUAGES.find(l => l.code===lang)?.nativeName || "Português"}
@@ -4465,10 +4703,10 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
             </div>
             <div>
               <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14, letterSpacing:"0.04em" }}>
-                Notificações
+                {t("notifications")}
               </div>
               <div style={{ color:S.textMuted, fontSize:11 }}>
-                {permGranted ? `${activeCount} de ${NOTIF_DEFS.length} tipos ativos` : "Configure os alertas"}
+                {permGranted ? `${activeCount}/${NOTIF_DEFS.length}` : t("notifStatusAsk")}
               </div>
             </div>
           </div>
@@ -4478,7 +4716,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
               color:"#34d399", fontSize:11, fontWeight:700,
               padding:"4px 12px", borderRadius:20, display:"flex", alignItems:"center", gap:5,
             }}>
-              <Icon name="check" size={12} color="#34d399" strokeWidth={2.5} /> Salvo
+              <Icon name="check" size={12} color="#34d399" strokeWidth={2.5} /> {t("savedBadge")}
             </span>
           )}
         </div>
@@ -4521,21 +4759,21 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                 color: permGranted ? "#34d399" : permDenied ? "#f87171" : S.goldLight,
                 marginBottom:3,
               }}>
-                {permGranted ? "Notificações permitidas"
-                  : permDenied ? "Notificações bloqueadas"
-                  : "Permissão necessária"}
+                {permGranted ? t("notifStatusOn")
+                  : permDenied ? t("notifStatusOff")
+                  : t("notifStatusAsk")}
               </div>
               <div style={{ color:S.textMuted, fontSize:12, lineHeight:1.5 }}>
                 {permGranted
-                  ? "O app pode enviar alertas. Configure cada tipo abaixo."
+                  ? t("notifStatusOnDesc")
                   : permDenied
-                  ? "Acesse Configurações do navegador → Notificações → Permitir para este site."
-                  : "Toque em Ativar para receber alertas de Shabat, Festas e mais."}
+                  ? t("notifStatusOffDesc")
+                  : t("notifStatusAskDesc")}
               </div>
             </div>
             {permPending && (
               <PButton onClick={requestPerm} disabled={requesting} icon="bell">
-                {requesting ? "Aguarde…" : "Ativar"}
+                {requesting ? t("pleaseWait") : t("activate")}
               </PButton>
             )}
           </div>
@@ -4547,7 +4785,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                 display:"flex", justifyContent:"space-between",
                 fontSize:10, color:S.textMuted, marginBottom:5,
               }}>
-                <span>Tipos habilitados</span>
+                <span>{t("typesEnabled")}</span>
                 <span>{activeCount}/{NOTIF_DEFS.length}</span>
               </div>
               <div style={{ height:5, borderRadius:5, background:"rgba(255,255,255,0.07)", overflow:"hidden" }}>
@@ -4611,7 +4849,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                         fontWeight:700, fontSize:14, letterSpacing:"0.01em",
                         color: isOn && canAct ? S.text : S.textSub,
                         transition:"color 0.2s",
-                      }}>{item.label}</span>
+                      }}>{t(`notif_${item.key}_label`)}</span>
                       <span className="hebrew" style={{
                         fontSize:15,
                         color: isOn && canAct ? item.color : S.textMuted,
@@ -4623,10 +4861,10 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                           background:"rgba(52,211,153,0.12)", border:"1px solid rgba(52,211,153,0.3)",
                           color:"#34d399", fontSize:9, fontWeight:700,
                           padding:"1px 7px", borderRadius:20,
-                        }}>Salvo ✓</span>
+                        }}>{t("savedBadge")} ✓</span>
                       )}
                     </div>
-                    <div style={{ color:S.textMuted, fontSize:11, lineHeight:1.4 }}>{item.when}</div>
+                    <div style={{ color:S.textMuted, fontSize:11, lineHeight:1.4 }}>{t(`notif_${item.key}_when`)}</div>
                   </div>
 
                   {/* Toggle */}
@@ -4645,7 +4883,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                     padding:"12px 16px 14px",
                   }}>
                     <p style={{ color:S.textSub, fontSize:12, lineHeight:1.65, marginBottom:10 }}>
-                      {item.detail}
+                      {t(`notif_${item.key}_detail`)}
                     </p>
                     <div style={{
                       display:"flex", justifyContent:"space-between",
@@ -4656,10 +4894,10 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                         display:"flex", alignItems:"center", gap:5,
                       }}>
                         <Icon name="scroll" size={12} color={`${item.color}99`} />
-                        {item.verse}
+                        {t(`notif_${item.key}_verse`)}
                       </div>
                       <button
-                        onClick={e => { e.stopPropagation(); testNotif(item.key, item.label); }}
+                        onClick={e => { e.stopPropagation(); testNotif(item.key, t(`notif_${item.key}_label`)); }}
                         style={{
                           background: fb === "tested"
                             ? "rgba(52,211,153,0.12)"
@@ -4673,8 +4911,8 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                         }}
                       >
                         {fb === "tested"
-                          ? <><Icon name="check" size={11} color="#34d399" strokeWidth={2.5}/>Enviada!</>
-                          : <><Icon name="bell" size={11} color={item.color}/>Testar agora</>
+                          ? <><Icon name="check" size={11} color="#34d399" strokeWidth={2.5}/>{t("sentBadge")}</>
+                          : <><Icon name="bell" size={11} color={item.color}/>{t("testNowBtn")}</>
                         }
                       </button>
                     </div>
@@ -4691,8 +4929,8 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
                   }}>
                     <Icon name="bell" size={12} color={S.textMuted} />
                     {permDenied
-                      ? "Bloqueado — habilite nas configurações do navegador"
-                      : "Ative as notificações acima para configurar"}
+                      ? t("blockedHint")
+                      : t("enableAboveHint")}
                   </div>
                 )}
               </div>
@@ -4704,10 +4942,10 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
         {permGranted && (
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginTop:16 }}>
             <PButton variant="ghost" icon="bell" onClick={enableAll} fullWidth>
-              Ativar todas
+              {t("enableAllBtn")}
             </PButton>
             <PButton variant="danger" onClick={disableAll} fullWidth>
-              Desativar todas
+              {t("disableAllBtn")}
             </PButton>
           </div>
         )}
@@ -4724,7 +4962,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
               Moedim — Calendário Bíblico
             </div>
             <div className="hebrew" style={{ color:S.gold, fontSize:18 }}>מוֹעֲדִים</div>
-            <div style={{ color:S.textMuted, fontSize:11 }}>Encontros Marcados pelo Eterno</div>
+            <div style={{ color:S.textMuted, fontSize:11 }}>{t("encountersEternal")}</div>
           </div>
         </div>
 
@@ -4732,14 +4970,14 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
 
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:14 }}>
           {[
-            { icon:"calendar", label:"Calendário", desc:"Hebraico + gregoriano" },
-            { icon:"convert",  label:"Conversor",  desc:"Com tribos de Israel" },
-            { icon:"scroll",   label:"Parashah",   desc:"Ciclo real 5786" },
-            { icon:"candle",   label:"Shabat",     desc:"Horários por GPS" },
-            { icon:"star",     label:"Festas",     desc:"Moadim messiânicos" },
-            { icon:"moon",     label:"Rosh Chodesh",desc:"Fase lunar real" },
-            { icon:"book",     label:"Versículo",  desc:"30 versos em Heb+PT" },
-            { icon:"settings", label:"Configurações",desc:"Tema + notificações" },
+            { icon:"calendar", label:t("nav_calendar"), desc:t("featCalendar") },
+            { icon:"convert",  label:t("nav_converter"),  desc:t("featConverter") },
+            { icon:"scroll",   label:t("nav_parasha"),   desc:t("featParashah") },
+            { icon:"candle",   label:t("nav_shabat"),     desc:t("featShabat") },
+            { icon:"star",     label:t("nav_feasts"),     desc:t("featFeasts") },
+            { icon:"moon",     label:t("nav_moon"),desc:t("featRosh") },
+            { icon:"book",     label:t("nav_verse"),  desc:t("featVerse") },
+            { icon:"settings", label:t("nav_settings"),desc:t("featSettings") },
           ].map(f => (
             <div key={f.label} style={{
               background: S.isDark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.03)",
