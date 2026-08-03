@@ -1,6 +1,98 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
 
+// ─── CAMADA DE NOTIFICAÇÕES (Web + Capacitor nativo) ──────────────────────────
+// A Web Notification API (Notification.requestPermission / new Notification)
+// NÃO funciona dentro do WebView do Android (Capacitor). Para funcionar no
+// app publicado, é preciso usar o plugin @capacitor/local-notifications.
+// Este módulo detecta o ambiente e usa a API certa automaticamente,
+// sem precisar mudar o resto do código do app.
+
+const isNativeApp = () =>
+  typeof window !== "undefined" &&
+  !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+
+// Referência preguiçosa ao plugin nativo (só existe dentro do app Android/iOS)
+function getLocalNotificationsPlugin() {
+  try {
+    return window?.Capacitor?.Plugins?.LocalNotifications || null;
+  } catch (_) {
+    return null;
+  }
+}
+
+// Estado de permissão unificado: "granted" | "denied" | "default"
+async function notifGetPermission() {
+  if (isNativeApp()) {
+    const plugin = getLocalNotificationsPlugin();
+    if (!plugin) return "denied";
+    try {
+      const { display } = await plugin.checkPermissions();
+      // display pode ser "granted" | "denied" | "prompt" | "prompt-with-rationale"
+      if (display === "granted") return "granted";
+      if (display === "denied")  return "denied";
+      return "default";
+    } catch (_) {
+      return "default";
+    }
+  }
+  // Ambiente navegador / PWA
+  if (typeof Notification === "undefined") return "denied";
+  return Notification.permission; // "granted" | "denied" | "default"
+}
+
+// Solicitar permissão — funciona nos dois ambientes
+async function notifRequestPermission() {
+  if (isNativeApp()) {
+    const plugin = getLocalNotificationsPlugin();
+    if (!plugin) return "denied";
+    try {
+      const { display } = await plugin.requestPermissions();
+      return display === "granted" ? "granted" : "denied";
+    } catch (_) {
+      return "denied";
+    }
+  }
+  if (typeof Notification === "undefined") return "denied";
+  try {
+    return await Notification.requestPermission();
+  } catch (_) {
+    return "denied";
+  }
+}
+
+// Disparar uma notificação imediatamente — funciona nos dois ambientes
+let _notifIdCounter = 1000;
+async function notifShow(title, body, opts = {}) {
+  if (isNativeApp()) {
+    const plugin = getLocalNotificationsPlugin();
+    if (!plugin) return;
+    try {
+      await plugin.schedule({
+        notifications: [{
+          id: _notifIdCounter++,
+          title,
+          body,
+          smallIcon: "ic_stat_icon",
+          iconColor: "#D4AF37",
+          schedule: opts.delayMs ? { at: new Date(Date.now() + opts.delayMs) } : undefined,
+        }],
+      });
+    } catch (_) { /* silencioso — não travar a UI por falha de notificação */ }
+    return;
+  }
+  // Navegador / PWA
+  if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
+  const fire = () => {
+    try {
+      new Notification(title, { body, tag: opts.tag, icon: opts.icon || "/icon-192.png" });
+    } catch (_) {}
+  };
+  if (opts.delayMs) setTimeout(fire, opts.delayMs);
+  else fire();
+}
+
+
 
 // ─── HEBREW CALENDAR DATA ────────────────────────────────────────────────────
 
@@ -62,15 +154,14 @@ const BIBLICAL_FEASTS = [
     sig: "Demonstra a providência divina e proteção do povo de Deus.",
     scripture: "Ester 9:20-28" },
   { name: "Tisha B'Av", heb: "תִּשְׁעָה בְּאָב", date: "9 Av", month: 5, day: 9, dur: 1, cat: "other", emoji: "🕯️",
-    desc: "Dia de jejum e luto pela destruição do Primeiro e do Segundo Templo em Jerusalém.",
-    sig: "Dia de lamento e arrependimento, com esperança na restauração e na consolação prometida pelo Eterno.",
-    scripture: "Zacarias 7:3-5; Lamentações 1:1-5" },
-  { name: "Tu B'Av", heb: "טוּ בְּאָב", date: "15 Av", month: 5, day: 15, dur: 1, cat: "other", emoji: "💞",
-    desc: "Dia de alegria e reconciliação, celebrado seis dias após Tisha B'Av — festa do amor e da união em Israel.",
-    sig: "Representa a passagem do luto para a alegria e a restauração das relações no povo do Eterno.",
-    scripture: "Juízes 21:19-23; Jeremias 31:13" },
+    desc: "O dia mais triste do calendário judaico. Jejum que relembra a destruição do Primeiro e do Segundo Templo de Jerusalém, além de outras tragédias históricas do povo judeu.",
+    sig: "Assim como o Templo foi destruído, Yeshua chorou sobre Jerusalém (Lucas 19:41-44) e é Ele quem reconstrói o verdadeiro templo — Seu próprio corpo (João 2:19-21) e a Igreja como templo do Espírito.",
+    scripture: "Lamentações 1:1-3; Lucas 19:41-44; João 2:19-21" },
+  { name: "Tu B'Av", heb: "ט״ו בְּאָב", date: "15 Av", month: 5, day: 15, dur: 1, cat: "other", emoji: "💐",
+    desc: "Conhecido como o 'Dia do Amor' judaico. Uma festa de alegria e renovação que celebra o amor, os casamentos e a colheita das uvas, marcando a transição da tristeza de Tisha B'Av para a esperança.",
+    sig: "Representa a restauração da alegria após o luto — um retrato profético da transformação do pranto em dança (Salmos 30:11) e do relacionamento de amor entre Yeshua e Sua noiva, a Igreja.",
+    scripture: "Salmos 30:11; Cantares 3:11; Efésios 5:25-27" },
 ];
-
 
 // ─── PARASHAT HASHAVUA 5786 — CALENDÁRIO REAL (Hebcal / Shivim Panim L'Torah)
 // Cada entrada: dataDiaspora = data do Shabat na Diáspora (fora de Israel)
@@ -83,6 +174,7 @@ const PARASHOT_5786 = [
   {
     num: 1, name: "Bereshit", heb: "בְּרֵאשִׁית", ref: "Gn 1:1–6:8",
     haftara: "Isaías 42:5-21",
+    brit: "João 1:1-18",
     theme: "A criação do mundo e da humanidade",
     dataDiaspora: "2025-10-18", dataIsrael: null,
     hebrewDate: "26 Tishrei 5786", book: "Bereshit",
@@ -90,6 +182,7 @@ const PARASHOT_5786 = [
   {
     num: 2, name: "Noach", heb: "נֹחַ", ref: "Gn 6:9–11:32",
     haftara: "Isaías 54:1-10",
+    brit: "Mateus 24:36-44",
     theme: "O dilúvio, a arca e a aliança do arco-íris",
     dataDiaspora: "2025-10-25", dataIsrael: null,
     hebrewDate: "3 Cheshvan 5786", book: "Bereshit",
@@ -97,6 +190,7 @@ const PARASHOT_5786 = [
   {
     num: 3, name: "Lech Lecha", heb: "לֶךְ-לְךָ", ref: "Gn 12:1–17:27",
     haftara: "Isaías 40:27–41:16",
+    brit: "Romanos 4:1-25",
     theme: "A chamada de Avraham e a aliança da circuncisão",
     dataDiaspora: "2025-11-01", dataIsrael: null,
     hebrewDate: "10 Cheshvan 5786", book: "Bereshit",
@@ -104,6 +198,7 @@ const PARASHOT_5786 = [
   {
     num: 4, name: "Vayera", heb: "וַיֵּרָא", ref: "Gn 18:1–22:24",
     haftara: "2 Reis 4:1-37",
+    brit: "Hebreus 11:8-19",
     theme: "Os três visitantes, Sodoma e a provação de Avraham",
     dataDiaspora: "2025-11-08", dataIsrael: null,
     hebrewDate: "17 Cheshvan 5786", book: "Bereshit",
@@ -111,6 +206,7 @@ const PARASHOT_5786 = [
   {
     num: 5, name: "Chayei Sarah", heb: "חַיֵּי שָׂרָה", ref: "Gn 23:1–25:18",
     haftara: "1 Reis 1:1-31",
+    brit: "1 Pedro 3:1-6",
     theme: "A morte de Sara e o casamento de Yitzchak com Rivka",
     dataDiaspora: "2025-11-15", dataIsrael: null,
     hebrewDate: "24 Cheshvan 5786", book: "Bereshit",
@@ -118,6 +214,7 @@ const PARASHOT_5786 = [
   {
     num: 6, name: "Toldot", heb: "תּוֹלְדֹת", ref: "Gn 25:19–28:9",
     haftara: "Malaquias 1:1–2:7",
+    brit: "Romanos 9:1-16",
     theme: "Esav e Yaakov — as duas nações no ventre de Rivka",
     dataDiaspora: "2025-11-22", dataIsrael: null,
     hebrewDate: "2 Kislev 5786", book: "Bereshit",
@@ -125,6 +222,7 @@ const PARASHOT_5786 = [
   {
     num: 7, name: "Vayetze", heb: "וַיֵּצֵא", ref: "Gn 28:10–32:3",
     haftara: "Oséias 11:7–12:14",
+    brit: "João 1:43-51",
     theme: "A escada de Yaakov, Laban e o nascimento das tribos",
     dataDiaspora: "2025-11-29", dataIsrael: null,
     hebrewDate: "9 Kislev 5786", book: "Bereshit",
@@ -132,6 +230,7 @@ const PARASHOT_5786 = [
   {
     num: 8, name: "Vayishlach", heb: "וַיִּשְׁלַח", ref: "Gn 32:4–36:43",
     haftara: "Obadias 1:1-21",
+    brit: "Hebreus 12:3-15",
     theme: "Yaakov luta com o anjo, se reconcilia com Esav e recebe o nome Israel",
     dataDiaspora: "2025-12-06", dataIsrael: null,
     hebrewDate: "16 Kislev 5786", book: "Bereshit",
@@ -139,6 +238,7 @@ const PARASHOT_5786 = [
   {
     num: 9, name: "Vayeshev", heb: "וַיֵּשֶׁב", ref: "Gn 37:1–40:23",
     haftara: "Amós 2:6–3:8",
+    brit: "Atos 7:9-16",
     theme: "Yosef é vendido pelos irmãos e interpreta sonhos na prisão",
     dataDiaspora: "2025-12-13", dataIsrael: null,
     hebrewDate: "23 Kislev 5786", book: "Bereshit",
@@ -146,6 +246,7 @@ const PARASHOT_5786 = [
   {
     num: 10, name: "Miketz", heb: "מִקֵּץ", ref: "Gn 41:1–44:17",
     haftara: "Zacarias 2:14–4:7",
+    brit: "João 6:1-14",
     theme: "Yosef interpreta os sonhos do Faraó e se torna governador do Egito",
     dataDiaspora: "2025-12-20", dataIsrael: null,
     hebrewDate: "30 Kislev 5786", book: "Bereshit",
@@ -154,6 +255,7 @@ const PARASHOT_5786 = [
   {
     num: 11, name: "Vayigash", heb: "וַיִּגַּשׁ", ref: "Gn 44:18–47:27",
     haftara: "Ezequiel 37:15-28",
+    brit: "Efésios 2:11-18",
     theme: "Yosef se revela aos irmãos; Yaakov desce ao Egito",
     dataDiaspora: "2025-12-27", dataIsrael: null,
     hebrewDate: "7 Tevet 5786", book: "Bereshit",
@@ -161,6 +263,7 @@ const PARASHOT_5786 = [
   {
     num: 12, name: "Vayechi", heb: "וַיְחִי", ref: "Gn 47:28–50:26",
     haftara: "1 Reis 2:1-12",
+    brit: "Hebreus 11:21-22",
     theme: "As bênçãos finais de Yaakov às doze tribos e sua morte",
     dataDiaspora: "2026-01-03", dataIsrael: null,
     hebrewDate: "14 Tevet 5786", book: "Bereshit",
@@ -169,6 +272,7 @@ const PARASHOT_5786 = [
   {
     num: 13, name: "Shemot", heb: "שְׁמוֹת", ref: "Êx 1:1–6:1",
     haftara: "Isaías 27:6–28:13; 29:22-23",
+    brit: "Atos 7:17-36",
     theme: "O nascimento de Moshe, a sarça ardente e o chamado de Deus",
     dataDiaspora: "2026-01-10", dataIsrael: null,
     hebrewDate: "21 Tevet 5786", book: "Shemot",
@@ -176,6 +280,7 @@ const PARASHOT_5786 = [
   {
     num: 14, name: "Va'era", heb: "וָאֵרָא", ref: "Êx 6:2–9:35",
     haftara: "Ezequiel 28:25–29:21",
+    brit: "Romanos 9:14-18",
     theme: "Deus revela Seu nome e envia as primeiras sete pragas ao Egito",
     dataDiaspora: "2026-01-17", dataIsrael: null,
     hebrewDate: "28 Tevet 5786", book: "Shemot",
@@ -183,6 +288,7 @@ const PARASHOT_5786 = [
   {
     num: 15, name: "Bo", heb: "בֹּא", ref: "Êx 10:1–13:16",
     haftara: "Jeremias 46:13-28",
+    brit: "1 Coríntios 5:6-8",
     theme: "As últimas três pragas, o Pessach e a saída do Egito",
     dataDiaspora: "2026-01-24", dataIsrael: null,
     hebrewDate: "6 Shevat 5786", book: "Shemot",
@@ -190,6 +296,7 @@ const PARASHOT_5786 = [
   {
     num: 16, name: "Beshalach", heb: "בְּשַׁלַּח", ref: "Êx 13:17–17:16",
     haftara: "Juízes 4:4–5:31",
+    brit: "1 Coríntios 10:1-4",
     theme: "A travessia do Mar Vermelho e o Cântico de Moshe",
     dataDiaspora: "2026-01-31", dataIsrael: null,
     hebrewDate: "13 Shevat 5786", book: "Shemot",
@@ -198,6 +305,7 @@ const PARASHOT_5786 = [
   {
     num: 17, name: "Yitro", heb: "יִתְרוֹ", ref: "Êx 18:1–20:23",
     haftara: "Isaías 6:1-13",
+    brit: "Hebreus 12:18-29",
     theme: "Yitro visita Moshe; Os Dez Mandamentos são dados no Monte Sinai",
     dataDiaspora: "2026-02-07", dataIsrael: null,
     hebrewDate: "20 Shevat 5786", book: "Shemot",
@@ -205,6 +313,7 @@ const PARASHOT_5786 = [
   {
     num: 18, name: "Mishpatim", heb: "מִשְׁפָּטִים", ref: "Êx 21:1–24:18",
     haftara: "2 Reis 11:17–12:17",
+    brit: "Mateus 5:38-42",
     theme: "As leis civis e sociais da aliança no Sinai",
     dataDiaspora: "2026-02-14", dataIsrael: null,
     hebrewDate: "27 Shevat 5786", book: "Shemot",
@@ -213,6 +322,7 @@ const PARASHOT_5786 = [
   {
     num: 19, name: "Terumah", heb: "תְּרוּמָה", ref: "Êx 25:1–27:19",
     haftara: "1 Reis 5:26–6:13",
+    brit: "Hebreus 9:1-14",
     theme: "As instruções detalhadas para a construção do Mishkan (Tabernáculo)",
     dataDiaspora: "2026-02-21", dataIsrael: null,
     hebrewDate: "4 Adar 5786", book: "Shemot",
@@ -220,6 +330,7 @@ const PARASHOT_5786 = [
   {
     num: 20, name: "Tetzaveh", heb: "תְּצַוֶּה", ref: "Êx 27:20–30:10",
     haftara: "1 Samuel 15:1-34",
+    brit: "Hebreus 7:23-28",
     theme: "As vestes sagradas dos sacerdotes e a consagração de Aharon",
     dataDiaspora: "2026-02-28", dataIsrael: null,
     hebrewDate: "11 Adar 5786", book: "Shemot",
@@ -228,6 +339,7 @@ const PARASHOT_5786 = [
   {
     num: 21, name: "Ki Tisa", heb: "כִּי תִשָּׂא", ref: "Êx 30:11–34:35",
     haftara: "Ezequiel 36:16-36",
+    brit: "2 Coríntios 3:7-18",
     theme: "O Censo, o Shabat, o Bezerro de Ouro e a renovação da aliança",
     dataDiaspora: "2026-03-07", dataIsrael: null,
     hebrewDate: "18 Adar 5786", book: "Shemot",
@@ -236,6 +348,7 @@ const PARASHOT_5786 = [
   {
     num: 22, name: "Vayakhel-Pekudei", heb: "וַיַּקְהֵל-פְּקוּדֵי", ref: "Êx 35:1–40:38",
     haftara: "2 Reis 11:17–12:17 + 1 Reis 7:51–8:21",
+    brit: "João 1:14-18",
     theme: "A construção, conclusão e dedicação do Mishkan",
     dataDiaspora: "2026-03-14", dataIsrael: null,
     hebrewDate: "25 Adar 5786", book: "Shemot",
@@ -245,6 +358,7 @@ const PARASHOT_5786 = [
   {
     num: 24, name: "Vayikra", heb: "וַיִּקְרָא", ref: "Lv 1:1–5:26",
     haftara: "Isaías 43:21–44:23",
+    brit: "Hebreus 10:1-14",
     theme: "Deus chama Moshe e instrui sobre os sacrifícios e ofrendas",
     dataDiaspora: "2026-03-21", dataIsrael: null,
     hebrewDate: "3 Nissan 5786", book: "Vayikra",
@@ -253,6 +367,7 @@ const PARASHOT_5786 = [
   {
     num: 25, name: "Tzav", heb: "צַו", ref: "Lv 6:1–8:36",
     haftara: "Jeremias 7:21–8:3; 9:22-23",
+    brit: "Hebreus 13:10-16",
     theme: "Leis dos sacerdotes, o fogo perpétuo e a consagração de Aharon",
     dataDiaspora: "2026-03-28", dataIsrael: null,
     hebrewDate: "10 Nissan 5786", book: "Vayikra",
@@ -260,6 +375,7 @@ const PARASHOT_5786 = [
   {
     num: 26, name: "Shemini", heb: "שְּׁמִינִי", ref: "Lv 9:1–11:47",
     haftara: "2 Samuel 6:1–7:17",
+    brit: "Atos 10:9-16",
     theme: "A inauguração do Tabernáculo, a morte de Nadav e Avihu, as leis alimentares",
     dataDiaspora: "2026-04-11", dataIsrael: null,
     hebrewDate: "24 Nissan 5786", book: "Vayikra",
@@ -268,6 +384,7 @@ const PARASHOT_5786 = [
   {
     num: 27, name: "Tazria-Metzora", heb: "תַזְרִיעַ-מְּצֹרָע", ref: "Lv 12:1–15:33",
     haftara: "2 Reis 4:42–5:19 + 2 Reis 7:3-20",
+    brit: "Marcos 1:40-45",
     theme: "Leis de pureza após o parto, tsaraat (lepra) e sua purificação",
     dataDiaspora: "2026-04-18", dataIsrael: null,
     hebrewDate: "1 Iyar 5786", book: "Vayikra",
@@ -276,6 +393,7 @@ const PARASHOT_5786 = [
   {
     num: 29, name: "Acharei Mot-Kedoshim", heb: "אַחֲרֵי מוֹת-קְדֹשִׁים", ref: "Lv 16:1–20:27",
     haftara: "Ezequiel 22:1-16 + Amós 9:7-15",
+    brit: "Hebreus 9:23-28; 1 Pedro 1:13-16",
     theme: "O serviço de Yom Kippur e a lei da santidade: \"Sede santos!\"",
     dataDiaspora: "2026-04-25", dataIsrael: null,
     hebrewDate: "8 Iyar 5786", book: "Vayikra",
@@ -284,6 +402,7 @@ const PARASHOT_5786 = [
   {
     num: 31, name: "Emor", heb: "אֱמֹר", ref: "Lv 21:1–24:23",
     haftara: "Ezequiel 44:15-31",
+    brit: "Colossenses 2:16-17",
     theme: "Leis dos sacerdotes e as festas do Senhor (Moadim)",
     dataDiaspora: "2026-05-02", dataIsrael: null,
     hebrewDate: "15 Iyar 5786", book: "Vayikra",
@@ -291,6 +410,7 @@ const PARASHOT_5786 = [
   {
     num: 32, name: "Behar-Bechukotai", heb: "בְּהַר-בְּחֻקֹּתַי", ref: "Lv 25:1–27:34",
     haftara: "Jeremias 32:6-27 + Jeremias 16:19–17:14",
+    brit: "Lucas 4:16-21",
     theme: "O Shemitá, o Jubileu e as bênçãos e maldições da aliança",
     dataDiaspora: "2026-05-09", dataIsrael: null,
     hebrewDate: "22 Iyar 5786", book: "Vayikra",
@@ -300,6 +420,7 @@ const PARASHOT_5786 = [
   {
     num: 34, name: "Bamidbar", heb: "בְּמִדְבַּר", ref: "Nm 1:1–4:20",
     haftara: "Oséias 2:1-22",
+    brit: "1 Coríntios 12:12-27",
     theme: "O censo das doze tribos no deserto do Sinai",
     dataDiaspora: "2026-05-16", dataIsrael: null,
     hebrewDate: "29 Iyar 5786", book: "Bamidbar",
@@ -308,6 +429,7 @@ const PARASHOT_5786 = [
   {
     num: 35, name: "Nasso", heb: "נָשֹׂא", ref: "Nm 4:21–7:89",
     haftara: "Juízes 13:2-25",
+    brit: "João 14:15-27",
     theme: "Deveres dos Levitas, a lei da Sotá, o Nazireu e a bênção sacerdotal",
     dataDiaspora: "2026-05-30", dataIsrael: null,
     hebrewDate: "14 Sivan 5786", book: "Bamidbar",
@@ -316,6 +438,7 @@ const PARASHOT_5786 = [
   {
     num: 36, name: "Beha'alotcha", heb: "בְּהַעֲלֹתְךָ", ref: "Nm 8:1–12:16",
     haftara: "Zacarias 2:14–4:7",
+    brit: "João 8:12",
     theme: "A Menorá, a partida do Sinai, as codornizes e a lepra de Miriam",
     dataDiaspora: "2026-06-06", dataIsrael: null,
     hebrewDate: "21 Sivan 5786", book: "Bamidbar",
@@ -323,6 +446,7 @@ const PARASHOT_5786 = [
   {
     num: 37, name: "Shelach", heb: "שְׁלַח", ref: "Nm 13:1–15:41",
     haftara: "Josué 2:1-24",
+    brit: "Hebreus 3:7-19",
     theme: "Os doze espias, o relatório negativo e 40 anos no deserto",
     dataDiaspora: "2026-06-13", dataIsrael: null,
     hebrewDate: "28 Sivan 5786", book: "Bamidbar",
@@ -331,6 +455,7 @@ const PARASHOT_5786 = [
     // Diáspora: Korach sozinho em 20/06 | Israel: Korach em 13/06
     num: 38, name: "Korach", heb: "קֹרַח", ref: "Nm 16:1–18:32",
     haftara: "1 Samuel 11:14–12:22",
+    brit: "Judas 1:8-11",
     theme: "A rebelião de Korach e dos 250 líderes contra Moshe e Aharon",
     dataDiaspora: "2026-06-20", dataIsrael: "2026-06-13",
     hebrewDate: "5 Tamuz 5786", book: "Bamidbar",
@@ -340,6 +465,7 @@ const PARASHOT_5786 = [
     // Diáspora: Chukat-Balak juntos em 27/06 | Israel: Chukat em 20/06, Balak em 27/06
     num: 39, name: "Chukat-Balak", heb: "חֻקַּת-בָּלָק", ref: "Nm 19:1–25:9",
     haftara: "Juízes 11:1-33 + Miquéias 5:6–6:8",
+    brit: "João 3:14-15",
     theme: "A vaca vermelha, morte de Miriam, a cobra de bronze e a história de Bileão",
     dataDiaspora: "2026-06-27", dataIsrael: null,
     hebrewDate: "12 Tamuz 5786", book: "Bamidbar",
@@ -352,6 +478,7 @@ const PARASHOT_5786 = [
   {
     num: 41, name: "Pinchas", heb: "פִּינְחָס", ref: "Nm 25:10–30:1",
     haftara: "1 Reis 18:46–19:21",
+    brit: "João 2:13-17",
     theme: "O zelo de Pinchas, novo censo e as festas do calendário sagrado",
     dataDiaspora: "2026-07-04", dataIsrael: null,
     hebrewDate: "19 Tamuz 5786", book: "Bamidbar",
@@ -359,6 +486,7 @@ const PARASHOT_5786 = [
   {
     num: 42, name: "Matot-Masei", heb: "מַּטּוֹת-מַסְעֵי", ref: "Nm 30:2–36:13",
     haftara: "Jeremias 1:1–2:3 + Jeremias 2:4–28; 3:4",
+    brit: "Mateus 5:33-37",
     theme: "Os votos, as guerras e as 42 etapas da jornada no deserto",
     dataDiaspora: "2026-07-11", dataIsrael: null,
     hebrewDate: "26 Tamuz 5786", book: "Bamidbar",
@@ -368,6 +496,7 @@ const PARASHOT_5786 = [
   {
     num: 44, name: "Devarim", heb: "דְּבָרִים", ref: "Dt 1:1–3:22",
     haftara: "Isaías 1:1-27",
+    brit: "Atos 7:44-50",
     theme: "O discurso final de Moshe começa — revisão da história de Israel",
     dataDiaspora: "2026-07-18", dataIsrael: null,
     hebrewDate: "4 Av 5786", book: "Devarim",
@@ -376,6 +505,7 @@ const PARASHOT_5786 = [
   {
     num: 45, name: "Va'etchanan", heb: "וָאֶתְחַנַּן", ref: "Dt 3:23–7:11",
     haftara: "Isaías 40:1-26",
+    brit: "Marcos 12:28-34",
     theme: "Moshe ora para entrar na terra; o Shema e os Dez Mandamentos repetidos",
     dataDiaspora: "2026-07-25", dataIsrael: null,
     hebrewDate: "11 Av 5786", book: "Devarim",
@@ -384,6 +514,7 @@ const PARASHOT_5786 = [
   {
     num: 46, name: "Eikev", heb: "עֵקֶב", ref: "Dt 7:12–11:25",
     haftara: "Isaías 49:14–51:3",
+    brit: "Mateus 4:1-11",
     theme: "A recompensa da obediência e o perigo do orgulho",
     dataDiaspora: "2026-08-01", dataIsrael: null,
     hebrewDate: "18 Av 5786", book: "Devarim",
@@ -391,6 +522,7 @@ const PARASHOT_5786 = [
   {
     num: 47, name: "Re'eh", heb: "רְאֵה", ref: "Dt 11:26–16:17",
     haftara: "Isaías 54:11–55:5",
+    brit: "Mateus 7:13-14",
     theme: "\"Vê! Ponho diante de ti bênção e maldição\" — lei do lugar central",
     dataDiaspora: "2026-08-08", dataIsrael: null,
     hebrewDate: "25 Av 5786", book: "Devarim",
@@ -398,6 +530,7 @@ const PARASHOT_5786 = [
   {
     num: 48, name: "Shoftim", heb: "שֹׁפְטִים", ref: "Dt 16:18–21:9",
     haftara: "Isaías 51:12–52:12",
+    brit: "Atos 3:19-23",
     theme: "Juízes, reis, sacerdotes, profetas e as leis de guerra",
     dataDiaspora: "2026-08-15", dataIsrael: null,
     hebrewDate: "2 Elul 5786", book: "Devarim",
@@ -405,6 +538,7 @@ const PARASHOT_5786 = [
   {
     num: 49, name: "Ki Teitzei", heb: "כִּי-תֵצֵא", ref: "Dt 21:10–25:19",
     haftara: "Isaías 54:1-10",
+    brit: "Gálatas 3:10-14",
     theme: "74 mitzvot sobre família, propriedade e vida em comunidade",
     dataDiaspora: "2026-08-22", dataIsrael: null,
     hebrewDate: "9 Elul 5786", book: "Devarim",
@@ -412,6 +546,7 @@ const PARASHOT_5786 = [
   {
     num: 50, name: "Ki Tavo", heb: "כִּי-תָבוֹא", ref: "Dt 26:1–29:8",
     haftara: "Isaías 60:1-22",
+    brit: "Romanos 10:6-10",
     theme: "As primícias, a Vidui Bikkurim e as bênçãos e maldições na terra",
     dataDiaspora: "2026-08-29", dataIsrael: null,
     hebrewDate: "16 Elul 5786", book: "Devarim",
@@ -419,6 +554,7 @@ const PARASHOT_5786 = [
   {
     num: 51, name: "Nitzavim-Vayelech", heb: "נִצָּבִים-וַיֵּלֶךְ", ref: "Dt 29:9–31:30",
     haftara: "Isaías 61:10–63:9 + Oséias 14:2-10; Joel 2:15-27",
+    brit: "Romanos 10:1-13",
     theme: "\"Escolhe a vida!\" — Moshe encoraja o povo e escreve a Torá",
     dataDiaspora: "2026-09-05", dataIsrael: null,
     hebrewDate: "23 Elul 5786", book: "Devarim",
@@ -428,6 +564,7 @@ const PARASHOT_5786 = [
   {
     num: 53, name: "Ha'azinu", heb: "הַאֲזִינוּ", ref: "Dt 32:1–52",
     haftara: "2 Samuel 22:1-51",
+    brit: "Apocalipse 15:1-4",
     theme: "O grande cântico de Moshe — testemunho poético da história de Israel",
     dataDiaspora: "2026-09-19", dataIsrael: null,
     hebrewDate: "4 Tishrei 5787", book: "Devarim",
@@ -436,6 +573,7 @@ const PARASHOT_5786 = [
   {
     num: 54, name: "V'Zot HaBracha", heb: "וְזֹאת הַבְּרָכָה", ref: "Dt 33:1–34:12",
     haftara: "Josué 1:1-18",
+    brit: "Mateus 17:1-9",
     theme: "A última bênção de Moshe às tribos e sua morte no Monte Nebo",
     dataDiaspora: "2026-10-03", dataIsrael: null,
     hebrewDate: "23 Tishrei 5787", book: "Devarim",
@@ -469,6 +607,15 @@ function getParashaByDate(dateStr) {
     }
   }
   return best;
+}
+
+// Aproxima a Parashat correspondente a uma data de nascimento (qualquer ano),
+// mapeando o mês/dia gregoriano para o ciclo de leituras do ano 5786 (2025-2026),
+// já que o calendário de Parashot só está disponível para esse ciclo.
+function getParashaForBirthday(month, day) {
+  const year = month >= 10 ? 2025 : 2026; // cobre Out/Nov/Dez 2025 e Jan-Set 2026
+  const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  return getParashaByDate(dateStr);
 }
 
 function getCurrentParasha() {
@@ -801,13 +948,13 @@ const DARK_THEME = {
   blueMid:      "#1E2865",
   blueLight:    "rgba(124,92,255,0.16)",
   accent:       "#7C5CFF",
-  // Semantic
+  // Feast categories
   spring:       "rgba(52,211,153,0.14)",
   fall:         "rgba(251,146,60,0.14)",
   other:        "rgba(167,139,250,0.16)",
   shabat:       "rgba(233,196,106,0.09)",
   today:        "#E9C46A",
-  // Nav
+  // UI
   navBg:        "rgba(6,9,24,0.92)",
   navBorder:    "rgba(233,196,106,0.14)",
   inputBg:      "rgba(10,14,35,0.72)",
@@ -816,31 +963,30 @@ const DARK_THEME = {
   isDark:       true,
 };
 
-
 const LIGHT_THEME = {
   bg:           "#F8F4ED",       // warm parchment cream
   bgDeep:       "#EDE6D8",       // deeper parchment
   bgCard:       "rgba(255,252,247,0.98)",
-  bgCardHover:  "rgba(255,255,255,1.0)",
+  bgCardHover:  "rgba(255,255,255,1)",
   bgGlass:      "rgba(248,244,237,0.88)",
   bgSection:    "rgba(255,250,243,0.96)",
-  gold:         "#C9A227",       // rich gold
+  gold:         "#C9A227",
   goldLight:    "#E8C96A",
   goldPale:     "#F8E9B8",
   goldBg:       "rgba(201,162,39,0.10)",
   goldBorder:   "rgba(201,162,39,0.24)",
   goldGlow:     "rgba(201,162,39,0.22)",
-  emerald:      "#0D9488",       // elegant teal-emerald
+  emerald:      "#0D9488",
   emeraldLight: "#14B8A6",
   emeraldGlow:  "rgba(13,148,136,0.20)",
-  orange:       "#D97706",       // warm amber
+  orange:       "#D97706",
   orangeLight:  "#F59E0B",
   orangeGlow:   "rgba(217,119,6,0.20)",
-  text:         "#1E293B",       // deep navy slate
+  text:         "#1E293B",
   textSub:      "rgba(30,41,59,0.78)",
   textMuted:    "rgba(30,41,59,0.55)",
   textFaint:    "rgba(30,41,59,0.30)",
-  blue:         "#1E3A5F",       // deep navy blue
+  blue:         "#1E3A5F",
   blueMid:      "#2E6FA8",
   blueLight:    "rgba(30,58,95,0.08)",
   accent:       "#2E6FA8",
@@ -857,8 +1003,19 @@ const LIGHT_THEME = {
   isDark:       false,
 };
 
-
 let S = { ...DARK_THEME };
+
+// ─── HELPERS DE COR REATIVOS AO TEMA ───────────────────────────────────────
+// Vários painéis internos usavam fundos "tinta profunda" (azul-marinho) fixos,
+// que não mudavam no tema claro — resultando em texto escuro sobre fundo
+// escuro (baixo contraste). Estas funções resolvem isso, adaptando o tom de
+// fundo conforme o tema ativo, preservando a legibilidade em ambos os modos.
+function ink(alpha = 1) {
+  return S.isDark ? `rgba(4,16,46,${alpha})` : `rgba(255,253,248,${alpha})`;
+}
+function inkMid(alpha = 1) {
+  return S.isDark ? `rgba(22,39,84,${alpha})` : `rgba(234,226,212,${alpha})`;
+}
 
 function buildCSS(theme) {
   const isDark = theme.isDark;
@@ -876,7 +1033,6 @@ function buildCSS(theme) {
       transition: background 0.4s ease, color 0.4s ease;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      line-height: 1.55;
     }
 
     /* Scrollbar */
@@ -886,10 +1042,9 @@ function buildCSS(theme) {
 
     /* Font classes */
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
-    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
-
+    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
 
     /* Animations */
     @keyframes fadeUp {
@@ -961,7 +1116,6 @@ function buildCSS(theme) {
     @media (min-width: 1100px) {
       .mobile-bottom-nav { display: none !important; }
     }
-
 
     /* Date input */
     input[type="date"] { color-scheme: ${isDark ? "dark" : "light"}; }
@@ -1068,19 +1222,18 @@ function PageTitle({ icon, title, heb, sub }) {
           </div>
         </div>
       )}
-      <h1 className="jakarta" style={{
-        fontSize: 30, fontWeight: 800, letterSpacing: "-0.025em",
-        color: S.isDark ? S.goldLight : S.text, marginBottom: heb ? 6 : 4,
-        lineHeight: 1.15,
+      <h1 className="cinzel" style={{
+        fontSize: 22, fontWeight: 700, letterSpacing: "0.05em",
+        color: S.goldLight, marginBottom: heb ? 4 : 0,
+        textShadow: `0 0 30px ${S.goldGlow}`,
       }}>{title}</h1>
       {heb && (
-        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 6 }}>{heb}</div>
+        <div className="hebrew" style={{ fontSize: 20, color: S.gold, opacity: 0.85, marginBottom: 4 }}>{heb}</div>
       )}
-      {sub && <p style={{ color: S.textMuted, fontSize: 14, lineHeight: 1.6, maxWidth: 460, margin: "0 auto" }}>{sub}</p>}
+      {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5, maxWidth: 400, margin: "0 auto" }}>{sub}</p>}
     </div>
   );
 }
-
 
 // Glass card
 function GlassCard({ children, style = {}, onClick, noPad }) {
@@ -1092,12 +1245,12 @@ function GlassCard({ children, style = {}, onClick, noPad }) {
         background: S.bgCard,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`,
-        borderRadius: 24,
-        padding: noPad ? 0 : 24,
+        border: `1px solid ${S.goldBorder}`,
+        borderRadius: 20,
+        padding: noPad ? 0 : 20,
         boxShadow: S.isDark
-          ? "0 10px 30px -12px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)"
-          : "0 10px 30px -14px rgba(15,23,42,0.18), 0 2px 6px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.9)",
+          ? "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
+          : "0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
         overflow: "hidden",
         ...style,
       }}
@@ -1111,16 +1264,13 @@ function StatTile({ label, value, sub, color, icon }) {
   return (
     <div style={{
       background: S.bgGlass, border: `1px solid ${S.divider}`,
-      borderRadius: 18, padding: "18px 18px", textAlign: "center",
-      boxShadow: S.isDark
-        ? "0 4px 14px rgba(0,0,0,0.25)"
-        : "0 4px 14px rgba(15,23,42,0.06)",
+      borderRadius: 16, padding: "14px 16px", textAlign: "center",
     }}>
-      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-        <Icon name={icon} size={20} color={c} />
+      {icon && <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
+        <Icon name={icon} size={18} color={c} />
       </div>}
-      <div className="jakarta" style={{ fontSize: 28, fontWeight: 800, color: c, lineHeight: 1, letterSpacing: "-0.02em" }}>{value}</div>
-      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 600, marginTop: 6, letterSpacing: "0.01em" }}>{label}</div>
+      <div className="cinzel" style={{ fontSize: 28, fontWeight: 700, color: c, lineHeight: 1 }}>{value}</div>
+      <div style={{ color: S.textSub, fontSize: 12, fontWeight: 500, marginTop: 4 }}>{label}</div>
       {sub && <div style={{ color: S.textMuted, fontSize: 11, marginTop: 2 }}>{sub}</div>}
     </div>
   );
@@ -1136,13 +1286,13 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
       placeholder={placeholder}
       style={{
         width: "100%", background: S.inputBg,
-        border: `1px solid ${S.isDark ? S.goldBorder : S.divider}`, borderRadius: 14,
-        padding: "13px 16px", color: S.text, fontSize: 14,
-        outline: "none", fontFamily: "'Space Grotesk', 'Inter', sans-serif",
+        border: `1px solid ${S.goldBorder}`, borderRadius: 12,
+        padding: "12px 16px", color: S.text, fontSize: 14,
+        outline: "none", fontFamily: "'Inter', sans-serif",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
-      onFocus={e => { e.target.style.borderColor = S.emerald; e.target.style.boxShadow = `0 0 0 3px ${S.emeraldGlow}`; }}
-      onBlur={e  => { e.target.style.borderColor = S.isDark ? S.goldBorder : S.divider; e.target.style.boxShadow = "none"; }}
+      onFocus={e => { e.target.style.borderColor = S.gold; e.target.style.boxShadow = `0 0 0 3px ${S.goldBorder}`; }}
+      onBlur={e  => { e.target.style.borderColor = S.goldBorder; e.target.style.boxShadow = "none"; }}
     />
   );
 }
@@ -1151,51 +1301,38 @@ function PInput({ value, onChange, placeholder, type = "text" }) {
 function PButton({ children, onClick, disabled, variant = "primary", icon, fullWidth }) {
   const styles = {
     primary: {
-      background: `linear-gradient(135deg, ${S.emerald} 0%, ${S.emeraldLight} 100%)`,
-      color: "#FFFFFF", border: "none",
-      boxShadow: `0 8px 24px -6px ${S.emeraldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
-    },
-    accent: {
-      background: `linear-gradient(135deg, ${S.orange} 0%, ${S.orangeLight} 100%)`,
-      color: "#FFFFFF", border: "none",
-      boxShadow: `0 8px 24px -6px ${S.orangeGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
-    },
-    gold: {
       background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
       color: "#0A1B45", border: "none",
-      boxShadow: `0 8px 24px -6px ${S.goldGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+      boxShadow: `0 4px 20px ${S.goldGlow}`,
     },
     ghost: {
-      background: S.goldBg, color: S.isDark ? S.goldLight : S.goldLight,
+      background: S.goldBg, color: S.goldLight,
       border: `1px solid ${S.goldBorder}`,
       boxShadow: "none",
     },
     danger: {
-      background: "rgba(239,68,68,0.12)", color: "#ef4444",
+      background: "rgba(239,68,68,0.12)", color: "#f87171",
       border: "1px solid rgba(239,68,68,0.3)",
       boxShadow: "none",
     },
   };
-  const iconColor = variant === "primary" || variant === "accent" ? "#FFFFFF"
-                  : variant === "gold" ? "#0A1B45"
-                  : variant === "danger" ? "#ef4444" : S.goldLight;
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       style={{
         ...styles[variant],
-        borderRadius: 14, padding: "12px 24px",
-        fontSize: 13.5, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
+        borderRadius: 12, padding: "11px 22px",
+        fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all 0.2s ease", opacity: disabled ? 0.6 : 1,
-        fontFamily: "'Space Grotesk', 'Inter', sans-serif", letterSpacing: "0.01em",
+        fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
         width: fullWidth ? "100%" : "auto",
       }}
-      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.filter = "brightness(1.05)"; } }}
-      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.filter = "none"; }}
+      onMouseEnter={e => { if (!disabled) e.currentTarget.style.transform = "translateY(-1px)"; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = "none"; }}
     >
-      {icon && <Icon name={icon} size={15} color={iconColor} strokeWidth={2.2} />}
+      {icon && <Icon name={icon} size={15} color={variant === "primary" ? "#0A1B45" : S.goldLight} strokeWidth={2} />}
       {children}
     </button>
   );
@@ -1203,12 +1340,11 @@ function PButton({ children, onClick, disabled, variant = "primary", icon, fullW
 
 function SectionTitle({ children, sub }) {
   return (
-    <div style={{ textAlign: "center", marginBottom: 32 }}>
-      <h2 className="jakarta" style={{ fontSize: 26, fontWeight: 800, color: S.isDark ? S.goldLight : S.text,
-        marginBottom: 8, letterSpacing: "-0.02em" }}>
+    <div style={{ textAlign: "center", marginBottom: 28 }}>
+      <h2 className="cinzel" style={{ fontSize: 22, fontWeight: 700, color: S.goldLight,
+        marginBottom: 6, letterSpacing: "0.04em", textShadow: `0 0 24px ${S.goldGlow}` }}>
         {children}
       </h2>
-
       {sub && <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.5 }}>{sub}</p>}
     </div>
   );
@@ -1220,7 +1356,6 @@ function Card({ children, style = {}, onClick }) {
 }
 
 // ─── MENORAH LOGO ─────────────────────────────────────────────────────────────
-
 
 function MenorahLogo({ size = 44, glow = true }) {
   return (
@@ -1243,7 +1378,6 @@ function MenorahLogo({ size = 44, glow = true }) {
     />
   );
 }
-
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
 
@@ -1270,7 +1404,6 @@ const T = {
   nav_verse:      { pt:"Versículo",    en:"Verse",      es:"Versículo",   fr:"Verset",      de:"Vers",        he:"פָּסוּק",        ru:"Стих" },
   nav_learn:      { pt:"Aprender",     en:"Learn",      es:"Aprender",    fr:"Apprendre",   de:"Lernen",      he:"לִלְמֹד",       ru:"Учиться" },
   nav_settings:   { pt:"Config.",      en:"Settings",   es:"Config.",     fr:"Paramètres",  de:"Einstellungen",he:"הגדרות",       ru:"Настройки" },
-  nav_more:       { pt:"Mais",         en:"More",       es:"Más",         fr:"Plus",        de:"Mehr",        he:"עוד",          ru:"Ещё" },
   // ── Geral ──────────────────────────────────────────
   today:          { pt:"Hoje",         en:"Today",      es:"Hoy",         fr:"Aujourd'hui", de:"Heute",       he:"הַיּוֹם",        ru:"Сегодня" },
   next:           { pt:"Próximo",      en:"Next",       es:"Próximo",     fr:"Prochain",    de:"Nächste",     he:"הַבָּא",         ru:"Следующий" },
@@ -1392,43 +1525,40 @@ function Navigation({ active, setActive, lang, setLang }) {
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px",
           display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, height: 64 }}>
           {/* Brand */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer", flexShrink: 0, minWidth: 0 }}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
             onClick={() => setActive("calendar")}>
-            <MenorahLogo size={36} />
-            <div style={{ minWidth: 0 }}>
-              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 14, lineHeight: 1, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
-                Moedim
+            <MenorahLogo size={40} />
+            <div>
+              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, lineHeight: 1, letterSpacing: "0.06em" }}>
+                Moedim — Calendário Bíblico
               </div>
-              <div className="hebrew" style={{ color: S.gold, fontSize: 11, opacity: 0.8, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
+              <div className="hebrew" style={{ color: S.gold, fontSize: 12, opacity: 0.8, letterSpacing: "0.06em" }}>
                 מוֹעֲדִים
               </div>
             </div>
           </div>
           {/* Desktop tabs */}
-          <div style={{ display: "flex", gap: 2, flex: "1 1 auto", justifyContent: "flex-end", overflowX: "auto", minWidth: 0 }}>
-            {TABS.map(tab => {
-              const isActive = active === tab.id;
-              const label = tx(tab.tKey);
+          <div style={{ display: "flex", gap: 2, overflowX: "auto", minWidth: 0 }}>
+            {TABS.map(t => {
+              const isActive = active === t.id;
               return (
-                <button key={tab.id} onClick={() => setActive(tab.id)} style={{
+                <button key={t.id} onClick={() => setActive(t.id)} style={{
                   background: isActive ? S.goldBg : "transparent",
                   border: `1px solid ${isActive ? S.goldBorder : "transparent"}`,
                   color: isActive ? S.goldLight : S.textMuted,
-                  borderRadius: 10, padding: "7px 11px",
+                  borderRadius: 10, padding: "7px 13px",
                   fontSize: 12, fontWeight: 600, cursor: "pointer",
                   display: "flex", alignItems: "center", gap: 6,
                   transition: "all 0.18s ease", letterSpacing: "0.01em",
                   fontFamily: "'Inter', sans-serif",
-                  whiteSpace: "nowrap", flexShrink: 0,
                 }}>
-                  <Icon name={tab.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
-                  {label}
+                  <Icon name={t.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
+                  {tx(t.tKey)}
                 </button>
               );
             })}
           </div>
         </div>
-
       </nav>
 
       {/* ── MOBILE BOTTOM NAV ── */}
@@ -1444,11 +1574,10 @@ function Navigation({ active, setActive, lang, setLang }) {
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1,
           background: `linear-gradient(90deg, transparent, ${S.gold}88, ${S.goldLight}88, ${S.gold}88, transparent)` }} />
 
-        {visibleTabs.map(tab => {
-          const isActive = active === tab.id;
-          const label = tx(tab.tKey);
+        {visibleTabs.map(t => {
+          const isActive = active === t.id;
           return (
-            <button key={tab.id} onClick={() => setActive(tab.id)} style={{
+            <button key={t.id} onClick={() => setActive(t.id)} style={{
               flex: 1, background: "none", border: "none",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               gap: 3, padding: "10px 2px 8px", cursor: "pointer",
@@ -1469,7 +1598,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.18s ease",
               }}>
-                <Icon name={tab.icon} size={18}
+                <Icon name={t.icon} size={18}
                   color={isActive ? S.goldLight : S.textMuted}
                   strokeWidth={isActive ? 2 : 1.5} />
               </div>
@@ -1478,7 +1607,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 color: isActive ? S.goldLight : S.textMuted,
                 fontFamily: "'Inter', sans-serif",
                 textTransform: "uppercase",
-              }}>{label}</span>
+              }}>{tx(t.tKey)}</span>
             </button>
           );
         })}
@@ -1500,7 +1629,7 @@ function Navigation({ active, setActive, lang, setLang }) {
               strokeWidth={1.5} />
           </div>
           <span style={{ fontSize: 9, fontWeight: 700, color: S.textMuted,
-            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>{tx("nav_more") || "Mais"}</span>
+            fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>Mais</span>
         </button>
 
         {/* More menu popup */}
@@ -1511,19 +1640,18 @@ function Navigation({ active, setActive, lang, setLang }) {
             border: `1px solid ${S.goldBorder}`, borderRadius: 20,
             padding: 8, boxShadow: `0 -8px 40px rgba(0,0,0,0.4)`,
           }}>
-            {moreTabs.map(tab => {
-              const isActive = active === tab.id;
-              const label = tx(tab.tKey);
+            {moreTabs.map(t => {
+              const isActive = active === t.id;
               return (
-                <button key={tab.id} onClick={() => { setActive(tab.id); setMenuOpen(false); }} style={{
+                <button key={t.id} onClick={() => { setActive(t.id); setMenuOpen(false); }} style={{
                   width: "100%", background: isActive ? S.goldBg : "transparent",
                   border: "none", borderRadius: 12, padding: "12px 16px",
                   display: "flex", alignItems: "center", gap: 12,
                   color: isActive ? S.goldLight : S.textSub,
                   cursor: "pointer", transition: "all 0.15s",
                 }}>
-                  <Icon name={tab.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
-                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{label}</span>
+                  <Icon name={t.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
+                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{tx(t.tKey)}</span>
                   {isActive && <Icon name="check" size={16} color={S.gold} style={{ marginLeft: "auto" }} />}
                 </button>
               );
@@ -1648,14 +1776,19 @@ function CalendarPage() {
           <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
             {/* Parasha */}
             <div style={{ background:S.bgGlass, border:`1px solid ${S.goldBorder}`,
-              borderRadius:16, padding:"12px 16px", minWidth:160 }}>
+              borderRadius:16, padding:"12px 16px", minWidth:180 }}>
               <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
                 <Icon name="scroll" size={13} color={S.gold} />
-                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>Parashah</span>
+                <span style={{ color:S.textMuted, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase" }}>Parashat do Dia</span>
               </div>
               <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14 }}>{parasha?.name}</div>
               <div className="hebrew" style={{ color:S.gold, fontSize:17, lineHeight:1 }}>{parasha?.heb}</div>
               <div style={{ color:S.textMuted, fontSize:10, marginTop:2 }}>{parasha?.ref}</div>
+              {parasha?.haftara && (
+                <div style={{ color:S.textMuted, fontSize:9, marginTop:4, paddingTop:4, borderTop:`1px solid ${S.goldBorder}` }}>
+                  🎵 {parasha.haftara}
+                </div>
+              )}
             </div>
 
             {/* Moon */}
@@ -1777,7 +1910,7 @@ function CalendarPage() {
                 }}>{di.gregorianDate.getDate()}</span>
                 <span style={{
                   fontSize: 8, lineHeight: 1, marginTop: 2,
-                  color: isToday ? "rgba(10,27,69,0.75)" : S.gold,
+                  color: isToday ? inkMid(0.75) : S.gold,
                   fontFamily: "'Inter', sans-serif",
                 }}>
                   {di.hebrewDate.day} {di.hebrewDate.monthName.slice(0,3)}
@@ -1889,7 +2022,8 @@ function ParashaPage() {
   const filtered = PARASHOT_5786.filter(p => {
     const q = search.toLowerCase();
     const matchSearch = !q || p.name.toLowerCase().includes(q) || p.ref.toLowerCase().includes(q)
-      || p.theme.toLowerCase().includes(q) || (p.haftara || "").toLowerCase().includes(q);
+      || p.theme.toLowerCase().includes(q) || (p.haftara || "").toLowerCase().includes(q)
+      || (p.brit || "").toLowerCase().includes(q);
     const matchBook = bookFilter === "Todos" || p.book === bookFilter;
     return matchSearch && matchBook;
   });
@@ -1910,7 +2044,7 @@ function ParashaPage() {
       {/* ── HERO: porção atual ── */}
       {current && (
         <div className="fade-up" style={{
-          background: "linear-gradient(135deg, rgba(26,43,107,0.85) 0%, rgba(212,168,67,0.08) 100%)",
+          background: `linear-gradient(135deg, ${inkMid(0.85)} 0%, rgba(212,168,67,0.08) 100%)`,
           border: `1px solid ${S.gold}66`, borderRadius: 20, padding: "24px 28px",
           marginBottom: 16, position: "relative", overflow: "hidden",
         }}>
@@ -1945,6 +2079,11 @@ function ParashaPage() {
                 <div style={{ color:S.textMuted, fontSize:13 }}>
                   🎵 Haftará: <strong style={{color:S.text}}>{current.haftara}</strong>
                 </div>
+                {current.brit && (
+                  <div style={{ color:S.textMuted, fontSize:13 }}>
+                    ✡ B'rit Chadashá: <strong style={{color:S.text}}>{current.brit}</strong>
+                  </div>
+                )}
                 <div style={{ color:S.textMuted, fontSize:12, marginTop:4 }}>
                   📅 Shabat: <strong style={{color:S.gold}}>{fmtDate(current.dataDiaspora)}</strong>
                   {" "}• {current.hebrewDate}
@@ -1960,7 +2099,7 @@ function ParashaPage() {
                   🌍 DIFERENÇA ISRAEL × DIÁSPORA
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
-                  <div style={{ background:"rgba(4,16,46,0.4)", borderRadius:8, padding:"8px 12px" }}>
+                  <div style={{ background:ink(0.4), borderRadius:8, padding:"8px 12px" }}>
                     <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:3 }}>🇮🇱 ISRAEL</div>
                     {current.israelReading && <>
                       <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{current.israelReading.name}</div>
@@ -1975,7 +2114,7 @@ function ParashaPage() {
                       <div style={{ color:S.gold, fontSize:11 }}>📅 {fmtDate(current.israelReading2.date)}</div>
                     </div>}
                   </div>
-                  <div style={{ background:"rgba(4,16,46,0.4)", borderRadius:8, padding:"8px 12px" }}>
+                  <div style={{ background:ink(0.4), borderRadius:8, padding:"8px 12px" }}>
                     <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:3 }}>🌎 DIÁSPORA</div>
                     <div style={{ color:S.text, fontWeight:600, fontSize:13 }}>{current.name}</div>
                     <div style={{ color:S.textMuted, fontSize:11 }}>{current.ref}</div>
@@ -1996,7 +2135,7 @@ function ParashaPage() {
             )}
 
             {/* Next shabat countdown */}
-            <div style={{ background:"rgba(4,16,46,0.5)", borderRadius:10, padding:"10px 14px",
+            <div style={{ background:ink(0.5), borderRadius:10, padding:"10px 14px",
               fontSize:12, color:S.textMuted, display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
               <span>🕯️</span>
               <span>Próximo Shabat: <strong style={{color:S.gold}}>{nextShabatStr}</strong></span>
@@ -2022,6 +2161,11 @@ function ParashaPage() {
             <div style={{ color:S.textMuted, fontSize:12, marginTop:2 }}>
               📚 {nextP.ref} &nbsp;•&nbsp; 🎵 {nextP.haftara}
             </div>
+            {nextP.brit && (
+              <div style={{ color:S.textMuted, fontSize:12 }}>
+                ✡ B'rit Chadashá: {nextP.brit}
+              </div>
+            )}
             <div style={{ color:S.textMuted, fontSize:12 }}>{nextP.theme}</div>
           </div>
         </div>
@@ -2121,17 +2265,24 @@ function ParashaPage() {
                   {/* Grid leitura */}
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:10, marginBottom:12 }}>
                     {/* Torá */}
-                    <div style={{ background:"rgba(4,16,46,0.45)", borderRadius:10, padding:"10px 14px" }}>
+                    <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
                       <div style={{ color:S.gold, fontSize:10, fontWeight:700, marginBottom:4 }}>📚 TORÁ</div>
                       <div style={{ color:S.text, fontWeight:600, fontSize:14 }}>{p.name}</div>
                       <div className="hebrew" style={{ color:S.gold, fontSize:18 }}>{p.heb}</div>
                       <div style={{ color:S.textMuted, fontSize:12, marginTop:2 }}>{p.ref}</div>
                     </div>
                     {/* Haftará */}
-                    <div style={{ background:"rgba(4,16,46,0.45)", borderRadius:10, padding:"10px 14px" }}>
+                    <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
                       <div style={{ color:"#60a5fa", fontSize:10, fontWeight:700, marginBottom:4 }}>🎵 HAFTARÁ</div>
                       <div style={{ color:S.text, fontSize:13, lineHeight:1.5 }}>{p.haftara}</div>
                     </div>
+                    {/* B'rit Chadashá */}
+                    {p.brit && (
+                      <div style={{ background:ink(0.45), borderRadius:10, padding:"10px 14px" }}>
+                        <div style={{ color:"#4ade80", fontSize:10, fontWeight:700, marginBottom:4 }}>✡ B'RIT CHADASHÁ</div>
+                        <div style={{ color:S.text, fontSize:13, lineHeight:1.5 }}>{p.brit}</div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Datas Israel vs Diáspora */}
@@ -2369,8 +2520,8 @@ function ShabatPage({ lang = "pt" }) {
       {/* ── HERO: Contagem Regressiva ── */}
       <div className="fade-up" style={{
         background: isShabatNow
-          ? `linear-gradient(145deg, rgba(212,175,55,0.18), rgba(26,43,107,0.6))`
-          : `linear-gradient(145deg, rgba(10,27,69,0.9), rgba(22,39,84,0.8))`,
+          ? `linear-gradient(145deg, rgba(212,175,55,0.18), ${inkMid(0.6)})`
+          : `linear-gradient(145deg, ${inkMid(0.9)}, ${inkMid(0.8)})`,
         border: `1.5px solid ${isShabatNow ? S.gold : S.goldBorder}`,
         borderRadius: 20, padding: "28px 24px", marginBottom: 16,
         textAlign: "center", position: "relative", overflow: "hidden",
@@ -2612,7 +2763,7 @@ function ShabatPage({ lang = "pt" }) {
                     borderTop: `1px solid ${t.color}22`,
                   }}>
                     <div style={{
-                      background: "rgba(4,16,46,0.35)", borderRadius: 10,
+                      background: ink(0.35), borderRadius: 10,
                       padding: "10px 14px", marginBottom: 10, marginTop: 10,
                     }}>
                       <div className="hebrew" style={{
@@ -2676,7 +2827,7 @@ function ShabatPage({ lang = "pt" }) {
 
       {/* ── Bênção do Shabat ── */}
       <div style={{
-        background: `linear-gradient(135deg, rgba(10,27,69,0.8), rgba(22,39,84,0.6))`,
+        background: `linear-gradient(135deg, ${inkMid(0.8)}, ${inkMid(0.6)})`,
         border: `1px solid ${S.goldBorder}`, borderRadius: 20,
         padding: "24px", textAlign: "center",
       }}>
@@ -2780,7 +2931,7 @@ function FeastsPage() {
           <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13, marginBottom: 10 }}>⭐ Festas Próximas (próximos 365 dias)</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {upcoming.map(({ feast, date, daysAway }) => (
-              <div key={feast.name} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", background: "rgba(4,16,46,0.4)", borderRadius: 10 }}>
+              <div key={feast.name} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", background: ink(0.4), borderRadius: 10 }}>
                 <span style={{ fontSize: 22 }}>{feast.emoji}</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ color: S.text, fontWeight: 600, fontSize: 13 }}>{feast.name}</div>
@@ -2818,7 +2969,7 @@ function LearnPage() {
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px 100px" }}>
       <SectionTitle sub="Os 13 meses do calendário bíblico hebraico">Os Meses Hebraicos</SectionTitle>
 
-      <Card style={{ marginBottom: 24, background: "rgba(26,43,107,0.4)" }}>
+      <Card style={{ marginBottom: 24, background: inkMid(0.4) }}>
         <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 10 }}>📖 O Calendário Lunissolar</div>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.7 }}>
           O calendário hebraico é <strong style={{ color: S.text }}>lunissolar</strong> — baseado nos ciclos da lua e do sol.
@@ -2864,7 +3015,7 @@ function LearnPage() {
         })}
       </div>
 
-      <Card style={{ marginTop: 24, background: "rgba(26,43,107,0.4)" }}>
+      <Card style={{ marginTop: 24, background: inkMid(0.4) }}>
         <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, marginBottom: 8 }}>✡ Conexão Messiânica</div>
         <p style={{ color: S.textMuted, fontSize: 13, lineHeight: 1.7 }}>
           Para os crentes messiânicos, o calendário bíblico revela o plano redentor de Deus através de Yeshua.
@@ -2900,7 +3051,7 @@ function InstallBanner() {
   return (
     <div style={{
       position: "fixed", bottom: 80, left: 16, right: 16, zIndex: 200,
-      background: `linear-gradient(135deg, rgba(26,43,107,0.98), rgba(4,16,46,0.98))`,
+      background: `linear-gradient(135deg, ${inkMid(0.98)}, ${ink(0.98)})`,
       border: `1px solid ${S.gold}`, borderRadius: 16, padding: 16,
       display: "flex", alignItems: "center", gap: 12,
       boxShadow: `0 8px 32px rgba(212,168,67,0.2)`,
@@ -2919,31 +3070,40 @@ function InstallBanner() {
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 
 function NotificationManager() {
-  const [permission, setPermission] = useState(
-    typeof Notification !== "undefined" ? Notification.permission : "denied"
-  );
+  const [permission, setPermission] = useState("default");
   const [enabled, setEnabled] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // Verifica a permissão atual ao montar (funciona em web e no app nativo)
+  useEffect(() => {
+    let mounted = true;
+    notifGetPermission().then(p => {
+      if (!mounted) return;
+      setPermission(p);
+      setEnabled(p === "granted");
+      setChecking(false);
+    });
+    return () => { mounted = false; };
+  }, []);
 
   const requestPermission = async () => {
-    if (typeof Notification === "undefined") return;
-    const perm = await Notification.requestPermission();
+    const perm = await notifRequestPermission();
     setPermission(perm);
     if (perm === "granted") {
       setEnabled(true);
-      // Notify about upcoming feasts
+      // Notifica sobre festas próximas
       const upcoming = getUpcomingFeasts(7);
       upcoming.forEach(({ feast, daysAway }) => {
-        const delay = daysAway === 0 ? 0 : 1000;
-        setTimeout(() => {
-          new Notification(`${feast.emoji} ${feast.name} se aproxima!`, {
-            body: daysAway === 0 ? "Esta festa é hoje! " + feast.desc : `Em ${daysAway} dias: ${feast.desc}`,
-            icon: "/icon-192.png",
-          });
-        }, delay);
+        notifShow(
+          `${feast.emoji} ${feast.name} se aproxima!`,
+          daysAway === 0 ? "Esta festa é hoje! " + feast.desc : `Em ${daysAway} dias: ${feast.desc}`,
+          { delayMs: daysAway === 0 ? 0 : 1000, tag: `feast-${feast.name}` }
+        );
       });
     }
   };
 
+  if (checking) return null;
   if (permission === "granted" && enabled) return null;
 
   return (
@@ -3147,8 +3307,9 @@ function ConverterPage() {
     const tribe = TRIBE_BY_MONTH[hd.month] || null;
     const feast = BIBLICAL_FEASTS.find(f => f.month===hd.month && hd.day>=f.day && hd.day<f.day+f.dur) || null;
     const weekday = new Date(y,m-1,d).toLocaleDateString("pt-BR",{weekday:"long"});
+    const parasha = getParashaForBirthday(m, d);
     // Próximo aniversário hebraico (ano corrente gregoriano)
-    setBirthResult({ hd, tribe, feast, weekday, gDate: new Date(y,m-1,d) });
+    setBirthResult({ hd, tribe, feast, weekday, parasha, gDate: new Date(y,m-1,d) });
   }
 
   function doConvert() {
@@ -3159,7 +3320,8 @@ function ConverterPage() {
     const feast = BIBLICAL_FEASTS.find(f => f.month===hd.month && hd.day>=f.day && hd.day<f.day+f.dur) || null;
     const weekdayHeb = ["Yom Rishon","Yom Sheni","Yom Shlishi","Yom Revi'i","Yom Chamishi","Yom Shishi","Shabat"];
     const wday = new Date(y,m-1,d).getDay();
-    setConvResult({ hd, tribe, feast, weekdayHeb: weekdayHeb[wday], wday });
+    const parasha = getParashaForBirthday(m, d);
+    setConvResult({ hd, tribe, feast, weekdayHeb: weekdayHeb[wday], wday, parasha });
   }
 
   // ── sub-components ──
@@ -3201,7 +3363,7 @@ function ConverterPage() {
         </div>
 
         {/* bênção */}
-        <div style={{background:"rgba(4,16,46,0.5)",borderRadius:10,padding:"10px 14px",marginBottom:12}}>
+        <div style={{background:ink(0.5),borderRadius:10,padding:"10px 14px",marginBottom:12}}>
           <div style={{color:S.gold,fontSize:10,fontWeight:700,marginBottom:4}}>📜 BÊNÇÃO DE YAAKOV</div>
           <p style={{color:S.text,fontSize:12,fontStyle:"italic",lineHeight:1.6}}>{tribe.blessing}</p>
         </div>
@@ -3244,7 +3406,7 @@ function ConverterPage() {
   };
 
   const HebrewDateDisplay = ({ hd, label, sub }) => (
-    <div style={{background:"rgba(4,16,46,0.5)",borderRadius:14,padding:18,textAlign:"center"}}>
+    <div style={{background:ink(0.5),borderRadius:14,padding:18,textAlign:"center"}}>
       <div style={{color:S.textMuted,fontSize:11,marginBottom:8}}>{label}</div>
       <div className="display-font" style={{fontSize:52,fontWeight:900,color:S.goldLight,lineHeight:1}}>{hd.day}</div>
       <div style={{color:S.text,fontWeight:600,fontSize:18,marginTop:4}}>{hd.monthName}</div>
@@ -3288,7 +3450,7 @@ function ConverterPage() {
             <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
               <input type="date" value={birthDate}
                 onChange={e => setBirthDate(e.target.value)}
-                style={{flex:1,minWidth:160,background:"rgba(4,16,46,0.6)",
+                style={{flex:1,minWidth:160,background:ink(0.6),
                   border:`1px solid ${S.goldBorder}`,borderRadius:10,padding:"10px 14px",
                   color:S.text,fontSize:15,outline:"none",colorScheme:"dark"}}
               />
@@ -3306,7 +3468,7 @@ function ConverterPage() {
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:12,marginBottom:20}}>
                 <HebrewDateDisplay hd={birthResult.hd} label="Seu nascimento no calendário hebraico"
                   sub={`Nasceu numa ${birthResult.weekday}`}/>
-                <div style={{background:"rgba(26,43,107,0.5)",borderRadius:14,padding:18}}>
+                <div style={{background:inkMid(0.5),borderRadius:14,padding:18}}>
                   <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>RESUMO BÍBLICO</div>
                   <div style={{display:"flex",flexDirection:"column",gap:8}}>
                     <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
@@ -3333,6 +3495,12 @@ function ConverterPage() {
                       <span style={{color:S.textMuted}}>Pedra</span>
                       <span style={{color:S.gold,fontWeight:600}}>💎 {birthResult.tribe?.stone || "—"}</span>
                     </div>
+                    {birthResult.parasha && (
+                      <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}>
+                        <span style={{color:S.textMuted}}>Parashat</span>
+                        <span style={{color:S.goldLight,fontWeight:700}}>{birthResult.parasha.name}</span>
+                      </div>
+                    )}
                     {birthResult.feast && (
                       <div style={{marginTop:6,padding:"8px 10px",background:S.goldBg,borderRadius:8,
                         border:`1px solid ${S.goldBorder}`}}>
@@ -3360,6 +3528,46 @@ function ConverterPage() {
                   <TribeCard tribe={birthResult.tribe} hd={birthResult.hd} />
                 </>
               )}
+
+              {/* Banner da Parashat do nascimento */}
+              {birthResult.parasha && (
+                <>
+                  <div style={{textAlign:"center",margin:"24px 0 16px"}}>
+                    <div className="display-font" style={{color:S.goldLight,fontSize:18,fontWeight:700}}>
+                      📖 Sua Parashat de Nascimento
+                    </div>
+                    <p style={{color:S.textMuted,fontSize:12,marginTop:4}}>
+                      A porção da Torá lida na semana correspondente ao seu nascimento
+                    </p>
+                  </div>
+                  <div style={{
+                    background:inkMid(0.35), border:`1px solid ${S.goldBorder}`,
+                    borderRadius:16, padding:20,
+                  }}>
+                    <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12,flexWrap:"wrap"}}>
+                      <div style={{
+                        width:52,height:52,borderRadius:14,flexShrink:0,
+                        background:S.goldBg,border:`2px solid ${S.goldBorder}`,
+                        display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,
+                      }}>📜</div>
+                      <div>
+                        <div style={{color:S.text,fontWeight:700,fontSize:18}}>{birthResult.parasha.name}</div>
+                        <div className="hebrew" style={{color:S.gold,fontSize:22}}>{birthResult.parasha.heb}</div>
+                      </div>
+                    </div>
+                    <div style={{color:S.textMuted,fontSize:13,marginBottom:8}}>{birthResult.parasha.theme}</div>
+                    <div style={{background:ink(0.4),borderRadius:10,padding:"10px 14px",display:"flex",flexDirection:"column",gap:4}}>
+                      <div style={{color:S.text,fontSize:12}}>📚 Torá: <strong>{birthResult.parasha.ref}</strong></div>
+                      {birthResult.parasha.haftara && (
+                        <div style={{color:S.text,fontSize:12}}>🎵 Haftará: <strong>{birthResult.parasha.haftara}</strong></div>
+                      )}
+                      {birthResult.parasha.brit && (
+                        <div style={{color:S.text,fontSize:12}}>✡ B'rit Chadashá: <strong>{birthResult.parasha.brit}</strong></div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -3377,7 +3585,7 @@ function ConverterPage() {
             <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
               <input type="date" value={convertDate}
                 onChange={e => setConvertDate(e.target.value)}
-                style={{flex:1,minWidth:160,background:"rgba(4,16,46,0.6)",
+                style={{flex:1,minWidth:160,background:ink(0.6),
                   border:`1px solid ${S.goldBorder}`,borderRadius:10,padding:"10px 14px",
                   color:S.text,fontSize:15,outline:"none",colorScheme:"dark"}}
               />
@@ -3396,10 +3604,10 @@ function ConverterPage() {
                 <HebrewDateDisplay hd={convResult.hd} label="Data no Calendário Hebraico"
                   sub={convResult.weekdayHeb}/>
                 {/* Conversão dupla */}
-                <div style={{background:"rgba(26,43,107,0.5)",borderRadius:14,padding:18}}>
+                <div style={{background:inkMid(0.5),borderRadius:14,padding:18}}>
                   <div style={{color:S.textMuted,fontSize:11,marginBottom:10}}>EQUIVALÊNCIA</div>
                   <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                    <div style={{background:"rgba(4,16,46,0.5)",borderRadius:10,padding:"10px 12px"}}>
+                    <div style={{background:ink(0.5),borderRadius:10,padding:"10px 12px"}}>
                       <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>GREGORIANO</div>
                       <div style={{color:S.text,fontWeight:600,fontSize:14}}>
                         {new Date(convertDate+"T12:00:00").toLocaleDateString("pt-BR",
@@ -3416,7 +3624,7 @@ function ConverterPage() {
                       <div style={{color:S.textMuted,fontSize:12}}>{convResult.hd.year} Anno Mundi</div>
                     </div>
                     {/* dia da semana hebraico */}
-                    <div style={{background:"rgba(4,16,46,0.5)",borderRadius:10,padding:"10px 12px"}}>
+                    <div style={{background:ink(0.5),borderRadius:10,padding:"10px 12px"}}>
                       <div style={{color:S.textMuted,fontSize:10,marginBottom:3}}>DIA DA SEMANA HEBRAICO</div>
                       <div style={{color:convResult.wday===6?S.goldLight:S.text,fontWeight:600,fontSize:13}}>
                         {convResult.weekdayHeb}
@@ -3437,6 +3645,23 @@ function ConverterPage() {
                   <p style={{color:S.text,fontSize:13,lineHeight:1.6,marginBottom:6}}>{convResult.feast.desc}</p>
                   <p style={{color:S.textMuted,fontSize:12,fontStyle:"italic"}}>{convResult.feast.sig}</p>
                   <div style={{color:S.gold,fontSize:12,marginTop:6}}>📖 {convResult.feast.scripture}</div>
+                </div>
+              )}
+
+              {/* Parashat correspondente à data */}
+              {convResult.parasha && (
+                <div style={{background:inkMid(0.35),border:`1px solid ${S.goldBorder}`,
+                  borderRadius:14,padding:16,marginBottom:20}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,flexWrap:"wrap"}}>
+                    <span style={{fontSize:18}}>📜</span>
+                    <span style={{color:S.goldLight,fontWeight:700,fontSize:15}}>{convResult.parasha.name}</span>
+                    <span className="hebrew" style={{color:S.gold,fontSize:18}}>{convResult.parasha.heb}</span>
+                  </div>
+                  <p style={{color:S.textMuted,fontSize:12,marginBottom:6}}>{convResult.parasha.theme}</p>
+                  <div style={{color:S.text,fontSize:12}}>📚 {convResult.parasha.ref}</div>
+                  {convResult.parasha.brit && (
+                    <div style={{color:S.text,fontSize:12,marginTop:2}}>✡ B'rit Chadashá: {convResult.parasha.brit}</div>
+                  )}
                 </div>
               )}
 
@@ -3735,7 +3960,7 @@ ${verse.heb}
 
       {/* Hero card */}
       <div className="fade-up" style={{
-        background: "linear-gradient(160deg, rgba(26,43,107,0.9) 0%, rgba(212,168,67,0.08) 100%)",
+        background: `linear-gradient(160deg, ${inkMid(0.9)} 0%, rgba(212,168,67,0.08) 100%)`,
         border: `2px solid ${S.goldBorder}`, borderRadius: 24,
         padding: 32, marginBottom: 20, position: "relative", overflow: "hidden",
       }}>
@@ -3891,12 +4116,9 @@ function getNotifBody(key) {
 }
 
 function fireTestNotif(key, label) {
-  if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
   const icons = { shabat:"🕯️", feasts:"⭐", parasha:"📖", rosh:"🌙" };
-  new Notification(`${icons[key] || "✡"} ${label} — Moedim`, {
-    body: getNotifBody(key),
+  notifShow(`${icons[key] || "✡"} ${label} — Moedim`, getNotifBody(key), {
     tag: `moedim-test-${key}`,
-    renotify: true,
   });
 }
 
@@ -3990,13 +4212,21 @@ const NOTIF_DEFS = [
 // ─── SETTINGS PAGE ────────────────────────────────────────────────────────────
 
 function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLang }) {
-  const [perm,       setPerm]       = useState(
-    typeof Notification !== "undefined" ? Notification.permission : "default"
-  );
+  const [perm,       setPerm]       = useState("default");
+  const [permChecked, setPermChecked] = useState(false);
   const [requesting, setRequesting] = useState(false);
   const [feedback,   setFeedback]   = useState({});   // { key: "saved"|"tested" }
   const [saved,      setSaved]      = useState(false);
   const isDark = theme.isDark;
+
+  // Verificar permissão atual (funciona em web e no app nativo Android/iOS)
+  useEffect(() => {
+    let mounted = true;
+    notifGetPermission().then(p => {
+      if (mounted) { setPerm(p); setPermChecked(true); }
+    });
+    return () => { mounted = false; };
+  }, []);
 
   // Persistir prefs
   useEffect(() => {
@@ -4017,18 +4247,16 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
   const permPending = perm === "default";
 
   async function requestPerm() {
-    if (typeof Notification === "undefined") return;
     setRequesting(true);
-    const p = await Notification.requestPermission();
+    const p = await notifRequestPermission();
     setPerm(p);
     setRequesting(false);
     if (p === "granted") {
-      setTimeout(() => {
-        new Notification("✡ Moedim ativado!", {
-          body: "Você receberá alertas de Shabat, Festas, Parashah e Rosh Chodesh.",
-          tag: "moedin-welcome",
-        });
-      }, 600);
+      notifShow(
+        "✡ Moedim ativado!",
+        "Você receberá alertas de Shabat, Festas, Parashah e Rosh Chodesh.",
+        { delayMs: 600, tag: "moedin-welcome" }
+      );
     }
   }
 
@@ -4101,8 +4329,8 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
             },
             {
               t: LIGHT_THEME, name:"Claro", desc:"Pergaminho da Torá",
-              preview: "linear-gradient(135deg,#EDE6D8,#F8F4ED,#FFFDF9)",
-              active: !isDark, accentActive:"#C9A227",
+              preview: "linear-gradient(135deg,#EAE2D4,#F4EFE6,#FFF8EE)",
+              active: !isDark, accentActive:"#B8960C",
               stars: false,
             },
           ].map(opt => (
@@ -4608,10 +4836,10 @@ export default function App() {
         <div className="hebrew" style={{ color:S.gold, fontSize:17, marginBottom:6, opacity:0.9 }}>
           שַׁבָּת שָׁלוֹם
         </div>
-        <div className="cinzel" style={{ color:S.textFaint, fontSize:11, letterSpacing:"0.08em" }}>
+        <div className="cinzel" style={{ color:S.textMuted, fontSize:11, letterSpacing:"0.08em" }}>
           MOEDIM — CALENDÁRIO BÍBLICO • מוֹעֲדִים
         </div>
-        <div style={{ color:S.textFaint, fontSize:10, marginTop:4, fontFamily:"'Inter',sans-serif" }}>
+        <div style={{ color:S.textMuted, fontSize:10, marginTop:4, fontFamily:"'Inter',sans-serif" }}>
           Encontros Marcados pelo Eterno
         </div>
       </footer>
