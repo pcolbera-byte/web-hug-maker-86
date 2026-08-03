@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import moedimLogoAsset from "../assets/moedim-logo.png.asset.json";
 
 // ─── CAMADA DE NOTIFICAÇÕES (Web + Capacitor nativo) ──────────────────────────
 // A Web Notification API (Notification.requestPermission / new Notification)
@@ -916,76 +917,89 @@ function getUpcomingFeasts(daysAhead = 60) {
 // App Store / Google Play quality — Cinzel + Inter + Noto Serif Hebrew
 
 const DARK_THEME = {
-  // Backgrounds
-  bg:           "#0A1B45",       // Jerusalem night sky
-  bgDeep:       "#060F2A",       // deepest layer
-  bgCard:       "rgba(22,39,84,0.75)",
-  bgCardHover:  "rgba(26,46,98,0.90)",
-  bgGlass:      "rgba(10,27,69,0.60)",
-  bgSection:    "rgba(15,30,72,0.85)",
-  // Gold palette — Davidic royalty
-  gold:         "#D4AF37",       // classic gold
-  goldLight:    "#F2D16B",       // soft gold
-  goldPale:     "#FBF0C4",       // pearl gold
-  goldBg:       "rgba(212,175,55,0.10)",
-  goldBorder:   "rgba(212,175,55,0.22)",
-  goldGlow:     "rgba(212,175,55,0.35)",
+  // Backgrounds — modern deep indigo
+  bg:           "#080B1F",
+  bgDeep:       "#050716",
+  bgCard:       "rgba(22,28,58,0.72)",
+  bgCardHover:  "rgba(30,38,78,0.88)",
+  bgGlass:      "rgba(10,14,35,0.55)",
+  bgSection:    "rgba(16,22,48,0.82)",
+  // Gold — heritage accent
+  gold:         "#E9C46A",
+  goldLight:    "#F6D98A",
+  goldPale:     "#FBEBB8",
+  goldBg:       "rgba(233,196,106,0.10)",
+  goldBorder:   "rgba(233,196,106,0.24)",
+  goldGlow:     "rgba(233,196,106,0.35)",
+  // Modern CTA — vibrant indigo/violet
+  emerald:      "#7C5CFF",
+  emeraldLight: "#9C7BFF",
+  emeraldGlow:  "rgba(124,92,255,0.38)",
+  orange:       "#F59E0B",
+  orangeLight:  "#FBBF24",
+  orangeGlow:   "rgba(245,158,11,0.32)",
   // Text
-  text:         "#F8F6F0",       // white pearl
-  textSub:      "rgba(248,246,240,0.75)",
-  textMuted:    "rgba(248,246,240,0.45)",
-  textFaint:    "rgba(248,246,240,0.25)",
+  text:         "#F5F3EE",
+  textSub:      "rgba(245,243,238,0.76)",
+  textMuted:    "rgba(245,243,238,0.50)",
+  textFaint:    "rgba(245,243,238,0.28)",
   // Accents
-  blue:         "#162754",
-  blueMid:      "#1E3570",
-  blueLight:    "rgba(99,131,255,0.15)",
-  accent:       "#4A90D9",       // sapphire
-  // Semantic
-  spring:       "rgba(74,222,128,0.12)",
-  fall:         "rgba(251,146,60,0.12)",
-  other:        "rgba(167,139,250,0.12)",
-  shabat:       "rgba(212,175,55,0.07)",
-  today:        "#D4AF37",
-  // Nav
-  navBg:        "rgba(6,15,42,0.97)",
-  navBorder:    "rgba(212,175,55,0.15)",
-  inputBg:      "rgba(6,15,42,0.70)",
-  cardAlt:      "rgba(22,39,84,0.50)",
-  divider:      "rgba(212,175,55,0.12)",
+  blue:         "#141B44",
+  blueMid:      "#1E2865",
+  blueLight:    "rgba(124,92,255,0.16)",
+  accent:       "#7C5CFF",
+  // Feast categories
+  spring:       "rgba(52,211,153,0.14)",
+  fall:         "rgba(251,146,60,0.14)",
+  other:        "rgba(167,139,250,0.16)",
+  shabat:       "rgba(233,196,106,0.09)",
+  today:        "#E9C46A",
+  // UI
+  navBg:        "rgba(6,9,24,0.92)",
+  navBorder:    "rgba(233,196,106,0.14)",
+  inputBg:      "rgba(10,14,35,0.72)",
+  cardAlt:      "rgba(22,28,58,0.55)",
+  divider:      "rgba(233,196,106,0.12)",
   isDark:       true,
 };
 
 const LIGHT_THEME = {
-  bg:           "#F4EFE6",       // aged parchment
-  bgDeep:       "#EAE2D4",
-  bgCard:       "rgba(255,253,248,0.92)",
-  bgCardHover:  "rgba(255,255,255,1.0)",
-  bgGlass:      "rgba(244,239,230,0.80)",
-  bgSection:    "rgba(255,253,248,0.95)",
-  gold:         "#B8960C",
-  goldLight:    "#9A7A08",
-  goldPale:     "#5C4800",
-  goldBg:       "rgba(184,150,12,0.09)",
-  goldBorder:   "rgba(184,150,12,0.28)",
-  goldGlow:     "rgba(184,150,12,0.25)",
-  text:         "#1A1205",
-  textSub:      "rgba(26,18,5,0.72)",
-  textMuted:    "rgba(26,18,5,0.48)",
-  textFaint:    "rgba(26,18,5,0.25)",
-  blue:         "#162754",
-  blueMid:      "#1E3570",
-  blueLight:    "rgba(22,39,84,0.08)",
-  accent:       "#1A4FA0",
-  spring:       "rgba(22,163,74,0.10)",
-  fall:         "rgba(194,65,12,0.10)",
-  other:        "rgba(109,40,217,0.09)",
-  shabat:       "rgba(184,150,12,0.07)",
-  today:        "#B8960C",
-  navBg:        "rgba(244,239,230,0.97)",
-  navBorder:    "rgba(184,150,12,0.18)",
-  inputBg:      "rgba(255,253,248,0.90)",
-  cardAlt:      "rgba(234,226,212,0.70)",
-  divider:      "rgba(184,150,12,0.14)",
+  bg:           "#F8F4ED",       // warm parchment cream
+  bgDeep:       "#EDE6D8",       // deeper parchment
+  bgCard:       "rgba(255,252,247,0.98)",
+  bgCardHover:  "rgba(255,255,255,1)",
+  bgGlass:      "rgba(248,244,237,0.88)",
+  bgSection:    "rgba(255,250,243,0.96)",
+  gold:         "#C9A227",
+  goldLight:    "#E8C96A",
+  goldPale:     "#F8E9B8",
+  goldBg:       "rgba(201,162,39,0.10)",
+  goldBorder:   "rgba(201,162,39,0.24)",
+  goldGlow:     "rgba(201,162,39,0.22)",
+  emerald:      "#0D9488",
+  emeraldLight: "#14B8A6",
+  emeraldGlow:  "rgba(13,148,136,0.20)",
+  orange:       "#D97706",
+  orangeLight:  "#F59E0B",
+  orangeGlow:   "rgba(217,119,6,0.20)",
+  text:         "#1E293B",
+  textSub:      "rgba(30,41,59,0.78)",
+  textMuted:    "rgba(30,41,59,0.55)",
+  textFaint:    "rgba(30,41,59,0.30)",
+  blue:         "#1E3A5F",
+  blueMid:      "#2E6FA8",
+  blueLight:    "rgba(30,58,95,0.08)",
+  accent:       "#2E6FA8",
+  spring:       "rgba(13,148,136,0.10)",
+  fall:         "rgba(217,119,6,0.10)",
+  other:        "rgba(124,58,237,0.09)",
+  shabat:       "rgba(201,162,39,0.07)",
+  today:        "#C9A227",
+  navBg:        "rgba(255,252,247,0.97)",
+  navBorder:    "rgba(201,162,39,0.12)",
+  inputBg:      "rgba(255,252,247,0.98)",
+  cardAlt:      "rgba(237,230,216,0.75)",
+  divider:      "rgba(30,41,59,0.08)",
   isDark:       false,
 };
 
@@ -1006,7 +1020,7 @@ function inkMid(alpha = 1) {
 function buildCSS(theme) {
   const isDark = theme.isDark;
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -1014,7 +1028,7 @@ function buildCSS(theme) {
     body {
       background: ${theme.bg};
       color: ${theme.text};
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       transition: background 0.4s ease, color 0.4s ease;
       -webkit-font-smoothing: antialiased;
@@ -1030,6 +1044,7 @@ function buildCSS(theme) {
     .cinzel    { font-family: 'Cinzel', Georgia, serif; }
     .hebrew    { font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif; direction: rtl; }
     .inter     { font-family: 'Inter', sans-serif; }
+    .jakarta   { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; }
 
     /* Animations */
     @keyframes fadeUp {
@@ -1093,12 +1108,12 @@ function buildCSS(theme) {
     .flame { animation: flameDance 1.8s ease-in-out infinite; transform-origin: bottom center; }
 
     /* Mobile bottom nav */
-    @media (max-width: 768px) {
+    @media (max-width: 1099px) {
       .desktop-nav { display: none !important; }
       .mobile-bottom-nav { display: flex !important; }
       body { padding-bottom: 76px; }
     }
-    @media (min-width: 769px) {
+    @media (min-width: 1100px) {
       .mobile-bottom-nav { display: none !important; }
     }
 
@@ -1343,42 +1358,24 @@ function Card({ children, style = {}, onClick }) {
 // ─── MENORAH LOGO ─────────────────────────────────────────────────────────────
 
 function MenorahLogo({ size = 44, glow = true }) {
-  const gold  = "#D4AF37";
-  const goldL = "#F2D16B";
-  const sw    = Math.max(2, size / 16);
   return (
-    <svg width={size} height={size} viewBox="0 0 100 110"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: glow ? `drop-shadow(0 0 8px rgba(212,175,55,0.6))` : "none", flexShrink: 0 }}>
-      {/* base */}
-      <rect x="16" y="96" width="68" height="6" rx="3" fill={gold} opacity="0.9"/>
-      <rect x="18" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      <rect x="72" y="90" width="10" height="10" rx="2.5" fill={gold} opacity="0.8"/>
-      {/* central shaft */}
-      <rect x="48" y="34" width="4" height="62" rx="2" fill={goldL}/>
-      {/* arms — left */}
-      <path d="M50 72 C50 72 24 72 24 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 33 64 33 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 56 C50 56 41 56 41 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* arms — right */}
-      <path d="M50 56 C50 56 59 56 59 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 64 C50 64 67 64 67 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      <path d="M50 72 C50 72 76 72 76 50" fill="none" stroke={gold} strokeWidth={sw} strokeLinecap="round"/>
-      {/* vertical candle shafts */}
-      {[[22,27],[31,30],[39,33],[48,34],[57,33],[65,30],[74,27]].map(([x,y],i)=>(
-        <rect key={i} x={x} y={y} width={4} height={50-y+12} rx="2" fill={i===3?goldL:gold} opacity={i===3?1:0.85}/>
-      ))}
-      {/* flames */}
-      {[24,33,41,50,59,67,76].map((cx,i)=>(
-        <g key={i} className={i===3?"flame":""}>
-          <ellipse cx={cx} cy={22} rx={5} ry={7} fill="rgba(255,210,60,0.15)"/>
-          <path d={`M${cx} 31 C${cx-3.5} 26 ${cx-3} 18 ${cx} 15 C${cx+3} 18 ${cx+3.5} 26 ${cx} 31 Z`}
-            fill={i===3?"#FFF5AA":goldL} opacity={i===3?1:0.9}/>
-          <ellipse cx={cx} cy={23} rx={1.6} ry={2.5}
-            fill={i===3?"white":"rgba(255,255,255,0.75)"}/>
-        </g>
-      ))}
-    </svg>
+    <img
+      src={moedimLogoAsset.url}
+      alt="Moedim"
+      width={size}
+      height={size}
+      style={{
+        width: size,
+        height: size,
+        borderRadius: Math.max(6, size * 0.22),
+        objectFit: "cover",
+        flexShrink: 0,
+        display: "block",
+        filter: glow
+          ? "drop-shadow(0 6px 18px rgba(212,175,55,0.35)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))"
+          : "drop-shadow(0 2px 6px rgba(0,0,0,0.25))",
+      }}
+    />
   );
 }
 
@@ -1509,7 +1506,7 @@ const TABS = [
 ];
 
 function Navigation({ active, setActive, lang, setLang }) {
-  const t = useT(lang);
+  const tx = useT(lang);
   const [menuOpen, setMenuOpen] = useState(false);
   const visibleTabs = TABS.slice(0, 5);   // bottom nav shows first 5
   const moreTabs    = TABS.slice(5);       // rest in "More" menu
@@ -1525,8 +1522,8 @@ function Navigation({ active, setActive, lang, setLang }) {
       }}>
         {/* gold accent line top */}
         <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${S.gold}, ${S.goldLight}, ${S.gold}, transparent)` }} />
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, height: 64 }}>
           {/* Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
             onClick={() => setActive("calendar")}>
@@ -1541,7 +1538,7 @@ function Navigation({ active, setActive, lang, setLang }) {
             </div>
           </div>
           {/* Desktop tabs */}
-          <div style={{ display: "flex", gap: 2 }}>
+          <div style={{ display: "flex", gap: 2, overflowX: "auto", minWidth: 0 }}>
             {TABS.map(t => {
               const isActive = active === t.id;
               return (
@@ -1556,7 +1553,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                   fontFamily: "'Inter', sans-serif",
                 }}>
                   <Icon name={t.icon} size={14} color={isActive ? S.goldLight : S.textMuted} strokeWidth={isActive ? 2 : 1.5} />
-                  {t.label}
+                  {tx(t.tKey)}
                 </button>
               );
             })}
@@ -1610,7 +1607,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 color: isActive ? S.goldLight : S.textMuted,
                 fontFamily: "'Inter', sans-serif",
                 textTransform: "uppercase",
-              }}>{t.label}</span>
+              }}>{tx(t.tKey)}</span>
             </button>
           );
         })}
@@ -1654,7 +1651,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                   cursor: "pointer", transition: "all 0.15s",
                 }}>
                   <Icon name={t.icon} size={20} color={isActive ? S.goldLight : S.textMuted} />
-                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{t.label}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{tx(t.tKey)}</span>
                   {isActive && <Icon name="check" size={16} color={S.gold} style={{ marginLeft: "auto" }} />}
                 </button>
               );
