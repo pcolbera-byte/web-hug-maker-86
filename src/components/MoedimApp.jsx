@@ -96,69 +96,82 @@ async function notifShow(title, body, opts = {}) {
 // ─── HEBREW CALENDAR DATA ────────────────────────────────────────────────────
 
 const HEBREW_MONTHS = [
-  { id: 1, name: "Nissan", heb: "נִיסָן", approx: "Mar-Abr", desc: "Mês da redenção" },
-  { id: 2, name: "Iyar", heb: "אִיָּר", approx: "Abr-Mai", desc: "Mês da cura" },
-  { id: 3, name: "Sivan", heb: "סִיוָן", approx: "Mai-Jun", desc: "Mês da revelação" },
-  { id: 4, name: "Tammuz", heb: "תַּמּוּז", approx: "Jun-Jul", desc: "Mês da visão" },
-  { id: 5, name: "Av", heb: "אָב", approx: "Jul-Ago", desc: "Mês da consolação" },
-  { id: 6, name: "Elul", heb: "אֱלוּל", approx: "Ago-Set", desc: "Mês do arrependimento" },
-  { id: 7, name: "Tishrei", heb: "תִּשְׁרֵי", approx: "Set-Out", desc: "Mês das festas" },
-  { id: 8, name: "Cheshvan", heb: "חֶשְׁוָן", approx: "Out-Nov", desc: "Mês da chuva" },
-  { id: 9, name: "Kislev", heb: "כִּסְלֵו", approx: "Nov-Dez", desc: "Mês da luz" },
-  { id: 10, name: "Tevet", heb: "טֵבֵת", approx: "Dez-Jan", desc: "Mês da ira santa" },
-  { id: 11, name: "Shevat", heb: "שְׁבָט", approx: "Jan-Fev", desc: "Mês da renovação" },
-  { id: 12, name: "Adar", heb: "אֲדָר", approx: "Fev-Mar", desc: "Mês da alegria" },
-  { id: 13, name: "Adar II", heb: "אֲדָר ב׳", approx: "Mar-Abr", desc: "Segundo Adar" },
+  { id: 1, name: "Nissan", heb: "נִיסָן", approx: "Mar-Abr",
+    desc: { pt:"Mês da redenção", en:"Month of redemption", es:"Mes de la redención", fr:"Mois de la rédemption", de:"Monat der Erlösung", he:"חֹדֶשׁ הַגְּאֻלָּה", ru:"Месяц искупления" } },
+  { id: 2, name: "Iyar", heb: "אִיָּר", approx: "Abr-Mai",
+    desc: { pt:"Mês da cura", en:"Month of healing", es:"Mes de la sanidad", fr:"Mois de la guérison", de:"Monat der Heilung", he:"חֹדֶשׁ הָרְפוּאָה", ru:"Месяц исцеления" } },
+  { id: 3, name: "Sivan", heb: "סִיוָן", approx: "Mai-Jun",
+    desc: { pt:"Mês da revelação", en:"Month of revelation", es:"Mes de la revelación", fr:"Mois de la révélation", de:"Monat der Offenbarung", he:"חֹדֶשׁ הַהִתְגַּלּוּת", ru:"Месяц откровения" } },
+  { id: 4, name: "Tammuz", heb: "תַּמּוּז", approx: "Jun-Jul",
+    desc: { pt:"Mês da visão", en:"Month of vision", es:"Mes de la visión", fr:"Mois de la vision", de:"Monat der Vision", he:"חֹדֶשׁ הֶחָזוֹן", ru:"Месяц видения" } },
+  { id: 5, name: "Av", heb: "אָב", approx: "Jul-Ago",
+    desc: { pt:"Mês da consolação", en:"Month of consolation", es:"Mes de la consolación", fr:"Mois de la consolation", de:"Monat des Trostes", he:"חֹדֶשׁ הַנֶּחָמָה", ru:"Месяц утешения" } },
+  { id: 6, name: "Elul", heb: "אֱלוּל", approx: "Ago-Set",
+    desc: { pt:"Mês do arrependimento", en:"Month of repentance", es:"Mes del arrepentimiento", fr:"Mois du repentir", de:"Monat der Buße", he:"חֹדֶשׁ הַתְּשׁוּבָה", ru:"Месяц покаяния" } },
+  { id: 7, name: "Tishrei", heb: "תִּשְׁרֵי", approx: "Set-Out",
+    desc: { pt:"Mês das festas", en:"Month of feasts", es:"Mes de las fiestas", fr:"Mois des fêtes", de:"Monat der Feste", he:"חֹדֶשׁ הַמּוֹעֲדִים", ru:"Месяц праздников" } },
+  { id: 8, name: "Cheshvan", heb: "חֶשְׁוָן", approx: "Out-Nov",
+    desc: { pt:"Mês da chuva", en:"Month of rain", es:"Mes de la lluvia", fr:"Mois de la pluie", de:"Monat des Regens", he:"חֹדֶשׁ הַגֶּשֶׁם", ru:"Месяц дождя" } },
+  { id: 9, name: "Kislev", heb: "כִּסְלֵו", approx: "Nov-Dez",
+    desc: { pt:"Mês da luz", en:"Month of light", es:"Mes de la luz", fr:"Mois de la lumière", de:"Monat des Lichts", he:"חֹדֶשׁ הָאוֹר", ru:"Месяц света" } },
+  { id: 10, name: "Tevet", heb: "טֵבֵת", approx: "Dez-Jan",
+    desc: { pt:"Mês da ira santa", en:"Month of holy anger", es:"Mes de la ira santa", fr:"Mois de la colère sainte", de:"Monat des heiligen Zorns", he:"חֹדֶשׁ הַזַּעַם הַקָּדוֹשׁ", ru:"Месяц святого гнева" } },
+  { id: 11, name: "Shevat", heb: "שְׁבָט", approx: "Jan-Fev",
+    desc: { pt:"Mês da renovação", en:"Month of renewal", es:"Mes de la renovación", fr:"Mois du renouveau", de:"Monat der Erneuerung", he:"חֹדֶשׁ הַהִתְחַדְּשׁוּת", ru:"Месяц обновления" } },
+  { id: 12, name: "Adar", heb: "אֲדָר", approx: "Fev-Mar",
+    desc: { pt:"Mês da alegria", en:"Month of joy", es:"Mes de la alegría", fr:"Mois de la joie", de:"Monat der Freude", he:"חֹדֶשׁ הַשִּׂמְחָה", ru:"Месяц радости" } },
+  { id: 13, name: "Adar II", heb: "אֲדָר ב׳", approx: "Mar-Abr",
+    desc: { pt:"Segundo Adar", en:"Second Adar", es:"Segundo Adar", fr:"Second Adar", de:"Zweiter Adar", he:"אֲדָר שֵׁנִי", ru:"Второй Адар" } },
 ];
 
 const BIBLICAL_FEASTS = [
   { name: "Pessach", heb: "פֶּסַח", date: "15 Nissan", month: 1, day: 15, dur: 7, cat: "spring", emoji: "🐑",
-    desc: "Celebra a libertação do povo de Israel da escravidão no Egito.",
-    sig: "Yeshua é o Cordeiro Pascal sacrificado por nós. A última ceia foi um Seder de Pessach.",
+    desc: { pt:"Celebra a libertação do povo de Israel da escravidão no Egito.", en:"Celebrates the liberation of the people of Israel from slavery in Egypt.", es:"Celebra la liberación del pueblo de Israel de la esclavitud en Egipto.", fr:"Célèbre la libération du peuple d'Israël de l'esclavage en Égypte.", de:"Feiert die Befreiung des Volkes Israel aus der Sklaverei in Ägypten.", he:"חוֹגֵג אֶת שִׁחְרוּר עַם יִשְׂרָאֵל מֵעַבְדוּת מִצְרַיִם.", ru:"Празднует освобождение народа Израиля от рабства в Египте." },
+    sig: { pt:"Yeshua é o Cordeiro Pascal sacrificado por nós. A última ceia foi um Seder de Pessach.", en:"Yeshua is the Passover Lamb sacrificed for us. The Last Supper was a Passover Seder.", es:"Yeshúa es el Cordero Pascual sacrificado por nosotros. La última cena fue un Séder de Pésaj.", fr:"Yeshua est l'Agneau pascal sacrifié pour nous. La Cène était un Seder de Pessah.", de:"Jeschua ist das Passahlamm, das für uns geopfert wurde. Das letzte Abendmahl war ein Pessach-Seder.", he:"יֵשׁוּעַ הוּא שֵׂה הַפֶּסַח שֶׁנִּזְבַּח בַּעֲדֵנוּ. הַסְּעֻדָּה הָאַחֲרוֹנָה הָיְתָה סֵדֶר פֶּסַח.", ru:"Йешуа — пасхальный Агнец, принесённый в жертву за нас. Тайная вечеря была седером Песаха." },
     scripture: "Êxodo 12:1-14; 1 Coríntios 5:7" },
   { name: "Pães Ázimos", heb: "חַג הַמַּצּוֹת", date: "15-21 Nissan", month: 1, day: 15, dur: 7, cat: "spring", emoji: "🫓",
-    desc: "Sete dias comendo pão sem fermento, lembrando a pressa da saída do Egito.",
-    sig: "O fermento representa o pecado. Yeshua é o Pão da Vida sem pecado.",
+    desc: { pt:"Sete dias comendo pão sem fermento, lembrando a pressa da saída do Egito.", en:"Seven days eating unleavened bread, remembering the haste of the exodus from Egypt.", es:"Siete días comiendo pan sin levadura, recordando la prisa de la salida de Egipto.", fr:"Sept jours à manger du pain sans levain, se souvenant de la hâte de la sortie d'Égypte.", de:"Sieben Tage ungesäuertes Brot essen, in Erinnerung an die Eile des Auszugs aus Ägypten.", he:"שִׁבְעָה יָמִים אוֹכְלִים מַצּוֹת, לְזֵכֶר הַחִפָּזוֹן שֶׁל יְצִיאַת מִצְרַיִם.", ru:"Семь дней едят пресный хлеб, вспоминая поспешность исхода из Египта." },
+    sig: { pt:"O fermento representa o pecado. Yeshua é o Pão da Vida sem pecado.", en:"Leaven represents sin. Yeshua is the Bread of Life without sin.", es:"La levadura representa el pecado. Yeshúa es el Pan de Vida sin pecado.", fr:"Le levain représente le péché. Yeshua est le Pain de Vie sans péché.", de:"Sauerteig steht für Sünde. Jeschua ist das Brot des Lebens ohne Sünde.", he:"הַחָמֵץ מְסַמֵּל אֶת הַחֵטְא. יֵשׁוּעַ הוּא לֶחֶם הַחַיִּים לְלֹא חֵטְא.", ru:"Закваска символизирует грех. Йешуа — безгрешный Хлеб жизни." },
     scripture: "Levítico 23:6-8; João 6:35" },
   { name: "Primícias", heb: "יוֹם הַבִּכּוּרִים", date: "16 Nissan", month: 1, day: 16, dur: 1, cat: "spring", emoji: "🌾",
-    desc: "Oferenda dos primeiros frutos da colheita da cevada.",
-    sig: "Yeshua ressuscitou neste dia, sendo as primícias dos que dormem.",
+    desc: { pt:"Oferenda dos primeiros frutos da colheita da cevada.", en:"Offering of the first fruits of the barley harvest.", es:"Ofrenda de los primeros frutos de la cosecha de cebada.", fr:"Offrande des premiers fruits de la récolte d'orge.", de:"Opfergabe der Erstlingsfrüchte der Gerstenernte.", he:"קָרְבַּן בִּכּוּרֵי קְצִיר הַשְּׂעוֹרָה.", ru:"Приношение первых плодов урожая ячменя." },
+    sig: { pt:"Yeshua ressuscitou neste dia, sendo as primícias dos que dormem.", en:"Yeshua rose on this day, being the firstfruits of those who sleep.", es:"Yeshúa resucitó este día, siendo las primicias de los que duermen.", fr:"Yeshua est ressuscité ce jour-là, étant les prémices de ceux qui dorment.", de:"Jeschua ist an diesem Tag auferstanden, als Erstling der Entschlafenen.", he:"יֵשׁוּעַ קָם לִתְחִיָּה בַּיּוֹם הַזֶּה, בְּכוֹרֵי הַיְּשֵׁנִים.", ru:"Йешуа воскрес в этот день, будучи первенцем из умерших." },
     scripture: "Levítico 23:9-14; 1 Coríntios 15:20-23" },
   { name: "Shavuot", heb: "שָׁבוּעוֹת", date: "6 Sivan", month: 3, day: 6, dur: 2, cat: "spring", emoji: "🔥",
-    desc: "Festa das Semanas, 50 dias após Pessach. Celebra a entrega da Torá no Sinai.",
-    sig: "O Espírito Santo foi derramado em Shavuot (Atos 2). A Lei escrita no coração.",
+    desc: { pt:"Festa das Semanas, 50 dias após Pessach. Celebra a entrega da Torá no Sinai.", en:"Feast of Weeks, 50 days after Passover. Celebrates the giving of the Torah at Sinai.", es:"Fiesta de las Semanas, 50 días después de Pésaj. Celebra la entrega de la Torá en el Sinaí.", fr:"Fête des Semaines, 50 jours après Pessah. Célèbre le don de la Torah au Sinaï.", de:"Wochenfest, 50 Tage nach Pessach. Feiert die Übergabe der Tora am Sinai.", he:"חַג הַשָּׁבוּעוֹת, 50 יוֹם אַחֲרֵי פֶּסַח. חוֹגֵג אֶת מַתַּן תּוֹרָה בְּסִינַי.", ru:"Праздник Недель, через 50 дней после Песаха. Празднует дарование Торы на Синае." },
+    sig: { pt:"O Espírito Santo foi derramado em Shavuot (Atos 2). A Lei escrita no coração.", en:"The Holy Spirit was poured out on Shavuot (Acts 2). The Law written on the heart.", es:"El Espíritu Santo fue derramado en Shavuot (Hechos 2). La Ley escrita en el corazón.", fr:"Le Saint-Esprit a été répandu à Chavouot (Actes 2). La Loi écrite dans le cœur.", de:"Der Heilige Geist wurde an Schawuot ausgegossen (Apg 2). Das Gesetz ins Herz geschrieben.", he:"רוּחַ הַקֹּדֶשׁ נִשְׁפְּכָה בְּשָׁבוּעוֹת (מַעֲשֵׂי הַשְּׁלִיחִים ב). הַתּוֹרָה כְּתוּבָה עַל הַלֵּב.", ru:"Святой Дух излился в Шавуот (Деяния 2). Закон, написанный на сердце." },
     scripture: "Levítico 23:15-21; Atos 2:1-4" },
   { name: "Yom Teruah", heb: "יוֹם תְּרוּעָה", date: "1 Tishrei", month: 7, day: 1, dur: 2, cat: "fall", emoji: "🎺",
-    desc: "Dia do Toque do Shofar. Marca o início do ano civil judaico.",
-    sig: "Simboliza o retorno do Messias com som de trombeta.",
+    desc: { pt:"Dia do Toque do Shofar. Marca o início do ano civil judaico.", en:"Day of the Sounding of the Shofar. Marks the start of the Jewish civil year.", es:"Día del Toque del Shofar. Marca el inicio del año civil judío.", fr:"Jour de la Sonnerie du Shofar. Marque le début de l'année civile juive.", de:"Tag des Schofarblasens. Markiert den Beginn des jüdischen bürgerlichen Jahres.", he:"יוֹם תְּקִיעַת הַשּׁוֹפָר. מְצַיֵּן אֶת תְּחִלַּת הַשָּׁנָה הָאֶזְרָחִית הַיְּהוּדִית.", ru:"День трубного звука шофара. Отмечает начало еврейского гражданского года." },
+    sig: { pt:"Simboliza o retorno do Messias com som de trombeta.", en:"Symbolizes the return of the Messiah with the sound of a trumpet.", es:"Simboliza el regreso del Mesías con sonido de trompeta.", fr:"Symbolise le retour du Messie au son de la trompette.", de:"Symbolisiert die Rückkehr des Messias mit Posaunenschall.", he:"מְסַמֵּל אֶת שִׁיבַת הַמָּשִׁיחַ בְּקוֹל שׁוֹפָר.", ru:"Символизирует возвращение Мессии со звуком трубы." },
     scripture: "Levítico 23:23-25; 1 Tessalonicenses 4:16-17" },
   { name: "Yom Kippur", heb: "יוֹם כִּפּוּר", date: "10 Tishrei", month: 7, day: 10, dur: 1, cat: "fall", emoji: "✨",
-    desc: "O dia mais sagrado do ano. Dia de jejum, arrependimento e expiação.",
-    sig: "Yeshua é nosso Sumo Sacerdote que entrou no Santo dos Santos com Seu próprio sangue.",
+    desc: { pt:"O dia mais sagrado do ano. Dia de jejum, arrependimento e expiação.", en:"The holiest day of the year. A day of fasting, repentance and atonement.", es:"El día más sagrado del año. Día de ayuno, arrepentimiento y expiación.", fr:"Le jour le plus saint de l'année. Jour de jeûne, de repentance et d'expiation.", de:"Der heiligste Tag des Jahres. Ein Tag des Fastens, der Buße und der Versöhnung.", he:"הַיּוֹם הַקָּדוֹשׁ בְּיוֹתֵר בַּשָּׁנָה. יוֹם צוֹם, תְּשׁוּבָה וְכַפָּרָה.", ru:"Самый святой день года. День поста, покаяния и искупления." },
+    sig: { pt:"Yeshua é nosso Sumo Sacerdote que entrou no Santo dos Santos com Seu próprio sangue.", en:"Yeshua is our High Priest who entered the Holy of Holies with His own blood.", es:"Yeshúa es nuestro Sumo Sacerdote que entró en el Lugar Santísimo con Su propia sangre.", fr:"Yeshua est notre Souverain Sacrificateur qui est entré dans le Lieu Très Saint avec Son propre sang.", de:"Jeschua ist unser Hohepriester, der mit Seinem eigenen Blut ins Allerheiligste eintrat.", he:"יֵשׁוּעַ הוּא כֹּהֲנֵנוּ הַגָּדוֹל שֶׁנִּכְנַס לְקֹדֶשׁ הַקֳּדָשִׁים בְּדָמוֹ שֶׁלּוֹ.", ru:"Йешуа — наш Первосвященник, вошедший во Святое Святых со Своей собственной кровью." },
     scripture: "Levítico 23:26-32; Hebreus 9:11-12" },
   { name: "Sukkot", heb: "סוּכּוֹת", date: "15 Tishrei", month: 7, day: 15, dur: 7, cat: "fall", emoji: "🌿",
-    desc: "Festa das Cabanas. Sete dias lembrando a peregrinação no deserto.",
-    sig: "Deus tabernaculou entre nós em Yeshua (João 1:14).",
+    desc: { pt:"Festa das Cabanas. Sete dias lembrando a peregrinação no deserto.", en:"Feast of Tabernacles. Seven days remembering the wilderness journey.", es:"Fiesta de los Tabernáculos. Siete días recordando la peregrinación en el desierto.", fr:"Fête des Tabernacles. Sept jours en souvenir du voyage dans le désert.", de:"Laubhüttenfest. Sieben Tage in Erinnerung an die Wüstenwanderung.", he:"חַג הַסֻּכּוֹת. שִׁבְעָה יָמִים לְזֵכֶר הַמַּסָּע בַּמִּדְבָּר.", ru:"Праздник Кущей. Семь дней в память о странствии в пустыне." },
+    sig: { pt:"Deus tabernaculou entre nós em Yeshua (João 1:14).", en:"God tabernacled among us in Yeshua (John 1:14).", es:"Dios tabernaculizó entre nosotros en Yeshúa (Juan 1:14).", fr:"Dieu a habité parmi nous en Yeshua (Jean 1:14).", de:"Gott wohnte unter uns in Jeschua (Johannes 1:14).", he:"אֱלֹהִים שָׁכַן בְּתוֹכֵנוּ בְּיֵשׁוּעַ (יוֹחָנָן א:יד).", ru:"Бог обитал среди нас в Йешуа (Иоанна 1:14)." },
     scripture: "Levítico 23:33-43; João 1:14; 7:37-38" },
   { name: "Shemini Atzeret", heb: "שְׁמִינִי עֲצֶרֶת", date: "22 Tishrei", month: 7, day: 22, dur: 1, cat: "fall", emoji: "🕊️",
-    desc: "O Oitavo Dia de Assembleia. Conclusão festiva de Sukkot.",
-    sig: "Representa a eternidade com Deus, o \"oitavo dia\" além do ciclo de sete.",
+    desc: { pt:"O Oitavo Dia de Assembleia. Conclusão festiva de Sukkot.", en:"The Eighth Day of Assembly. Festive conclusion of Sukkot.", es:"El Octavo Día de Asamblea. Conclusión festiva de Sucot.", fr:"Le Huitième Jour d'Assemblée. Conclusion festive de Souccot.", de:"Der achte Versammlungstag. Festlicher Abschluss von Sukkot.", he:"יוֹם הָעֲצֶרֶת הַשְּׁמִינִי. סִיּוּם חֲגִיגִי שֶׁל סֻכּוֹת.", ru:"Восьмой день собрания. Праздничное завершение Суккота." },
+    sig: { pt:"Representa a eternidade com Deus, o \"oitavo dia\" além do ciclo de sete.", en:"Represents eternity with God, the \"eighth day\" beyond the cycle of seven.", es:"Representa la eternidad con Dios, el \"octavo día\" más allá del ciclo de siete.", fr:"Représente l'éternité avec Dieu, le \"huitième jour\" au-delà du cycle de sept.", de:"Steht für die Ewigkeit mit Gott, den \"achten Tag\" jenseits des Sieben-Zyklus.", he:"מְיַצֵּג אֶת הַנֶּצַח עִם אֱלֹהִים, \"הַיּוֹם הַשְּׁמִינִי\" מֵעֵבֶר לְמַחְזוֹר הַשִּׁבְעָה.", ru:"Представляет вечность с Богом, «восьмой день» за пределами цикла семи." },
     scripture: "Levítico 23:36; Números 29:35" },
   { name: "Chanukah", heb: "חֲנוּכָּה", date: "25 Kislev", month: 9, day: 25, dur: 8, cat: "other", emoji: "🕎",
-    desc: "Festa das Luzes. Celebra a rededicação do Templo.",
-    sig: "Yeshua é a Luz do Mundo. Ele celebrou Chanukah (João 10:22-23).",
+    desc: { pt:"Festa das Luzes. Celebra a rededicação do Templo.", en:"Feast of Lights. Celebrates the rededication of the Temple.", es:"Fiesta de las Luces. Celebra la rededicación del Templo.", fr:"Fête des Lumières. Célèbre la rededication du Temple.", de:"Lichterfest. Feiert die Neuweihe des Tempels.", he:"חַג הָאוֹרִים. חוֹגֵג אֶת חֲנֻכַּת הַמִּקְדָּשׁ מֵחָדָשׁ.", ru:"Праздник Огней. Празднует повторное освящение Храма." },
+    sig: { pt:"Yeshua é a Luz do Mundo. Ele celebrou Chanukah (João 10:22-23).", en:"Yeshua is the Light of the World. He celebrated Chanukah (John 10:22-23).", es:"Yeshúa es la Luz del Mundo. Él celebró Janucá (Juan 10:22-23).", fr:"Yeshua est la Lumière du Monde. Il a célébré Hanoucca (Jean 10:22-23).", de:"Jeschua ist das Licht der Welt. Er feierte Chanukka (Johannes 10:22-23).", he:"יֵשׁוּעַ הוּא אוֹר הָעוֹלָם. הוּא חָגַג אֶת חֲנֻכָּה (יוֹחָנָן י:כב-כג).", ru:"Йешуа — Свет миру. Он праздновал Хануку (Иоанна 10:22-23)." },
     scripture: "João 10:22-23; Daniel 8:9-14" },
   { name: "Purim", heb: "פּוּרִים", date: "14 Adar", month: 12, day: 14, dur: 2, cat: "other", emoji: "🎭",
-    desc: "Celebra a salvação dos judeus na Pérsia através da rainha Ester.",
-    sig: "Demonstra a providência divina e proteção do povo de Deus.",
+    desc: { pt:"Celebra a salvação dos judeus na Pérsia através da rainha Ester.", en:"Celebrates the salvation of the Jews in Persia through Queen Esther.", es:"Celebra la salvación de los judíos en Persia a través de la reina Ester.", fr:"Célèbre le salut des Juifs en Perse par la reine Esther.", de:"Feiert die Rettung der Juden in Persien durch Königin Ester.", he:"חוֹגֵג אֶת יְשׁוּעַת הַיְּהוּדִים בְּפָרַס עַל יְדֵי אֶסְתֵּר הַמַּלְכָּה.", ru:"Празднует спасение евреев в Персии через царицу Есфирь." },
+    sig: { pt:"Demonstra a providência divina e proteção do povo de Deus.", en:"Demonstrates divine providence and protection of God's people.", es:"Demuestra la providencia divina y protección del pueblo de Dios.", fr:"Démontre la providence divine et la protection du peuple de Dieu.", de:"Zeigt die göttliche Vorsehung und den Schutz von Gottes Volk.", he:"מַדְגִּים אֶת הַהַשְׁגָּחָה הָאֱלֹהִית וְהָגָנָה עַל עַם ה'.", ru:"Демонстрирует божественное провидение и защиту народа Божьего." },
     scripture: "Ester 9:20-28" },
   { name: "Tisha B'Av", heb: "תִּשְׁעָה בְּאָב", date: "9 Av", month: 5, day: 9, dur: 1, cat: "other", emoji: "🕯️",
-    desc: "O dia mais triste do calendário judaico. Jejum que relembra a destruição do Primeiro e do Segundo Templo de Jerusalém, além de outras tragédias históricas do povo judeu.",
-    sig: "Assim como o Templo foi destruído, Yeshua chorou sobre Jerusalém (Lucas 19:41-44) e é Ele quem reconstrói o verdadeiro templo — Seu próprio corpo (João 2:19-21) e a Igreja como templo do Espírito.",
+    desc: { pt:"O dia mais triste do calendário judaico. Jejum que relembra a destruição do Primeiro e do Segundo Templo de Jerusalém, além de outras tragédias históricas do povo judeu.", en:"The saddest day of the Jewish calendar. A fast recalling the destruction of the First and Second Temple of Jerusalem, and other historical tragedies of the Jewish people.", es:"El día más triste del calendario judío. Ayuno que recuerda la destrucción del Primer y Segundo Templo de Jerusalén, además de otras tragedias históricas del pueblo judío.", fr:"Le jour le plus triste du calendrier juif. Un jeûne rappelant la destruction du Premier et du Second Temple de Jérusalem, et d'autres tragédies historiques du peuple juif.", de:"Der traurigste Tag des jüdischen Kalenders. Ein Fasten zur Erinnerung an die Zerstörung des Ersten und Zweiten Tempels in Jerusalem sowie andere historische Tragödien des jüdischen Volkes.", he:"הַיּוֹם הָעָצוּב בְּיוֹתֵר בַּלּוּחַ הַיְּהוּדִי. צוֹם לְזֵכֶר חֻרְבַּן בֵּית הַמִּקְדָּשׁ הָרִאשׁוֹן וְהַשֵּׁנִי.", ru:"Самый печальный день еврейского календаря. Пост в память о разрушении Первого и Второго Храма в Иерусалиме и других исторических трагедиях еврейского народа." },
+    sig: { pt:"Assim como o Templo foi destruído, Yeshua chorou sobre Jerusalém (Lucas 19:41-44) e é Ele quem reconstrói o verdadeiro templo — Seu próprio corpo (João 2:19-21) e a Igreja como templo do Espírito.", en:"Just as the Temple was destroyed, Yeshua wept over Jerusalem (Luke 19:41-44) and it is He who rebuilds the true temple — His own body (John 2:19-21) and the Church as temple of the Spirit.", es:"Así como el Templo fue destruido, Yeshúa lloró sobre Jerusalén (Lucas 19:41-44) y es Él quien reconstruye el verdadero templo — Su propio cuerpo (Juan 2:19-21) y la Iglesia como templo del Espíritu.", fr:"Tout comme le Temple a été détruit, Yeshua a pleuré sur Jérusalem (Luc 19:41-44) et c'est Lui qui reconstruit le vrai temple — Son propre corps (Jean 2:19-21) et l'Église comme temple de l'Esprit.", de:"So wie der Tempel zerstört wurde, weinte Jeschua über Jerusalem (Lukas 19:41-44), und Er ist es, der den wahren Tempel wiederaufbaut — Seinen eigenen Körper (Johannes 2:19-21) und die Gemeinde als Tempel des Geistes.", he:"כְּשֵׁם שֶׁבֵּית הַמִּקְדָּשׁ נֶחֱרַב, יֵשׁוּעַ בָּכָה עַל יְרוּשָׁלַיִם (לוּקָס יט:מא-מד) וְהוּא זֶה שֶׁבּוֹנֶה מֵחָדָשׁ אֶת הַמִּקְדָּשׁ הָאֲמִתִּי.", ru:"Как и Храм был разрушен, Йешуа плакал об Иерусалиме (Луки 19:41-44), и именно Он восстанавливает истинный храм — Своё собственное тело (Иоанна 2:19-21) и Церковь как храм Духа." },
     scripture: "Lamentações 1:1-3; Lucas 19:41-44; João 2:19-21" },
   { name: "Tu B'Av", heb: "ט״ו בְּאָב", date: "15 Av", month: 5, day: 15, dur: 1, cat: "other", emoji: "💐",
-    desc: "Conhecido como o 'Dia do Amor' judaico. Uma festa de alegria e renovação que celebra o amor, os casamentos e a colheita das uvas, marcando a transição da tristeza de Tisha B'Av para a esperança.",
-    sig: "Representa a restauração da alegria após o luto — um retrato profético da transformação do pranto em dança (Salmos 30:11) e do relacionamento de amor entre Yeshua e Sua noiva, a Igreja.",
+    desc: { pt:"Conhecido como o 'Dia do Amor' judaico. Uma festa de alegria e renovação que celebra o amor, os casamentos e a colheita das uvas, marcando a transição da tristeza de Tisha B'Av para a esperança.", en:"Known as the Jewish 'Day of Love'. A feast of joy and renewal celebrating love, marriages and the grape harvest, marking the transition from the sorrow of Tisha B'Av to hope.", es:"Conocido como el 'Día del Amor' judío. Una fiesta de alegría y renovación que celebra el amor, los matrimonios y la cosecha de uvas, marcando la transición de la tristeza de Tisha B'Av a la esperanza.", fr:"Connu comme le 'Jour de l'Amour' juif. Une fête de joie et de renouveau célébrant l'amour, les mariages et la récolte des raisins, marquant la transition de la tristesse de Tisha B'Av vers l'espoir.", de:"Bekannt als der jüdische 'Tag der Liebe'. Ein Fest der Freude und Erneuerung, das die Liebe, Ehen und die Traubenernte feiert und den Übergang von der Trauer des Tisha B'Av zur Hoffnung markiert.", he:"יָדוּעַ כְּ'יוֹם הָאַהֲבָה' הַיְּהוּדִי. חַג שִׂמְחָה וְהִתְחַדְּשׁוּת הַחוֹגֵג אֶת הָאַהֲבָה, נִשּׂוּאִים וּבְצִיר הָעֲנָבִים.", ru:"Известен как еврейский «День любви». Праздник радости и обновления, празднующий любовь, браки и сбор винограда, знаменующий переход от скорби Тиша бе-Ав к надежде." },
+    sig: { pt:"Representa a restauração da alegria após o luto — um retrato profético da transformação do pranto em dança (Salmos 30:11) e do relacionamento de amor entre Yeshua e Sua noiva, a Igreja.", en:"Represents the restoration of joy after mourning — a prophetic picture of turning mourning into dancing (Psalm 30:11) and the love relationship between Yeshua and His bride, the Church.", es:"Representa la restauración de la alegría después del luto — un retrato profético de la transformación del llanto en danza (Salmos 30:11) y de la relación de amor entre Yeshúa y Su novia, la Iglesia.", fr:"Représente la restauration de la joie après le deuil — un tableau prophétique de la transformation du deuil en danse (Psaume 30:11) et de la relation d'amour entre Yeshua et Son épouse, l'Église.", de:"Steht für die Wiederherstellung der Freude nach der Trauer — ein prophetisches Bild der Verwandlung von Klage in Tanz (Psalm 30:11) und der Liebesbeziehung zwischen Jeschua und Seiner Braut, der Gemeinde.", he:"מְיַצֵּג אֶת שִׁחְזוּר הַשִּׂמְחָה אַחֲרֵי הָאֵבֶל — תְּמוּנָה נְבוּאִית שֶׁל הֲפִיכַת מִסְפֵּד לְמָחוֹל (תְּהִלִּים ל:יב).", ru:"Представляет восстановление радости после траура — пророческий образ превращения плача в танец (Псалом 30:11) и отношений любви между Йешуа и Его невестой, Церковью." },
     scripture: "Salmos 30:11; Cantares 3:11; Efésios 5:25-27" },
 ];
 
@@ -1695,6 +1708,28 @@ const T = {
   featRosh:          { pt:"Fase lunar real", en:"Real moon phase", es:"Fase lunar real", fr:"Phase lunaire réelle", de:"Echte Mondphase", he:"שְׁלַב יָרֵחַ אֲמִתִּי", ru:"Настоящая фаза луны" },
   featVerse:         { pt:"30 versos em Heb+PT", en:"30 verses in Heb+PT", es:"30 versos en Heb+PT", fr:"30 versets en Héb+PT", de:"30 Verse auf Hebr+PT", he:"30 פְּסוּקִים בְּעִבְרִית וּפוֹרְטוּגֶזִית", ru:"30 стихов на иврите и португальском" },
   featSettings:      { pt:"Tema + notificações", en:"Theme + notifications", es:"Tema + notificaciones", fr:"Thème + notifications", de:"Thema + Benachrichtigungen", he:"נוֹשֵׂא + הוֹדָעוֹת", ru:"Тема + уведомления" },
+
+  close:             { pt:"Fechar", en:"Close", es:"Cerrar", fr:"Fermer", de:"Schließen", he:"סְגֹר", ru:"Закрыть" },
+  installApp:        { pt:"Instalar Moedim", en:"Install Moedim", es:"Instalar Moedim", fr:"Installer Moedim", de:"Moedim installieren", he:"הַתְקֵן אֶת מוֹעֲדִים", ru:"Установить Моэдим" },
+  offlineAccess:     { pt:"Acesse offline a qualquer momento", en:"Access offline anytime", es:"Accede sin conexión en cualquier momento", fr:"Accédez hors ligne à tout moment", de:"Jederzeit offline zugreifen", he:"גִּשׁ לְלֹא חִבּוּר בְּכָל עֵת", ru:"Доступ офлайн в любое время" },
+  installBtn:        { pt:"Instalar", en:"Install", es:"Instalar", fr:"Installer", de:"Installieren", he:"הַתְקֵן", ru:"Установить" },
+  notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים", ru:"Уведомления о праздниках" },
+  notifFeastsDesc:   { pt:"Receba alertas sobre as festas bíblicas próximas", en:"Get alerts about upcoming biblical feasts", es:"Recibe alertas sobre las próximas fiestas bíblicas", fr:"Recevez des alertes sur les fêtes bibliques à venir", de:"Erhalte Benachrichtigungen über bevorstehende biblische Feste", he:"קַבֵּל הַתְרָאוֹת עַל מוֹעֲדִים מִקְרָאִיִּים קְרוֹבִים", ru:"Получайте уведомления о предстоящих библейских праздниках" },
+  blockedInSettings: { pt:"Bloqueado nas configurações", en:"Blocked in settings", es:"Bloqueado en la configuración", fr:"Bloqué dans les paramètres", de:"In den Einstellungen blockiert", he:"חָסוּם בַּהַגְדָּרוֹת", ru:"Заблокировано в настройках" },
+  feastApproaching:  { pt:"se aproxima!", en:"is approaching!", es:"¡se acerca!", fr:"approche!", de:"naht!", he:"מִתְקָרֵב!", ru:"приближается!" },
+  feastTodayNotif:   { pt:"Esta festa é hoje! ", en:"This feast is today! ", es:"¡Esta fiesta es hoy! ", fr:"Cette fête est aujourd'hui! ", de:"Dieses Fest ist heute! ", he:"מוֹעֵד זֶה הַיּוֹם! ", ru:"Этот праздник сегодня! " },
+  inDaysNotif:       { pt:"Em {n} dias:", en:"In {n} days:", es:"En {n} días:", fr:"Dans {n} jours:", de:"In {n} Tagen:", he:"בְּעוֹד {n} יָמִים:", ru:"Через {n} дней:" },
+
+  shabatSectionSub:  { pt:"O sétimo dia é sagrado — um sinal eterno entre Deus e Seu povo", en:"The seventh day is holy — an eternal sign between God and His people", es:"El séptimo día es santo — una señal eterna entre Dios y Su pueblo", fr:"Le septième jour est saint — un signe éternel entre Dieu et Son peuple", de:"Der siebte Tag ist heilig — ein ewiges Zeichen zwischen Gott und Seinem Volk", he:"הַיּוֹם הַשְּׁבִיעִי קָדוֹשׁ — אוֹת עוֹלָם בֵּין אֱלֹהִים לְעַמּוֹ", ru:"Седьмой день свят — вечный знак между Богом и Его народом" },
+  tonightAtSunset:   { pt:"Esta noite ao pôr do sol — prepare seu coração!", en:"Tonight at sunset — prepare your heart!", es:"Esta noche al atardecer — ¡prepara tu corazón!", fr:"Ce soir au coucher du soleil — préparez votre cœur!", de:"Heute Abend bei Sonnenuntergang — bereite dein Herz vor!", he:"הַלַּיְלָה עִם הַשְּׁקִיעָה — הָכֵן אֶת לִבְּךָ!", ru:"Сегодня вечером на закате — приготовьте своё сердце!" },
+  untilShabatStart:  { pt:"até o início do Shabat", en:"until Shabbat begins", es:"hasta el inicio del Shabat", fr:"jusqu'au début du Chabbat", de:"bis der Sabbat beginnt", he:"עַד תְּחִלַּת הַשַּׁבָּת", ru:"до начала Шаббата" },
+  calcLocalTimes:    { pt:"Calcular horários locais de Shabat", en:"Calculate local Shabbat times", es:"Calcular horarios locales de Shabat", fr:"Calculer les horaires locaux du Chabbat", de:"Lokale Sabbatzeiten berechnen", he:"חַשֵּׁב זְמַנֵּי שַׁבָּת מְקוֹמִיִּים", ru:"Рассчитать местное время Шаббата" },
+  rememberShabatVerse:{ pt:"Lembra do dia do Shabat para santificá-lo.", en:"Remember the Sabbath day, to keep it holy.", es:"Acuérdate del día de reposo para santificarlo.", fr:"Souviens-toi du jour du repos, pour le sanctifier.", de:"Gedenke des Sabbattags, dass du ihn heiligest.", he:"זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ.", ru:"Помни день субботний, чтобы святить его." },
+  fourthCommandment: { pt:"O Quarto Mandamento", en:"The Fourth Commandment", es:"El Cuarto Mandamiento", fr:"Le Quatrième Commandement", de:"Das Vierte Gebot", he:"הַדִּבֵּר הָרְבִיעִי", ru:"Четвёртая заповедь" },
+  whatScriptureSays: { pt:"O QUE DIZ A ESCRITURA", en:"WHAT SCRIPTURE SAYS", es:"LO QUE DICE LA ESCRITURA", fr:"CE QUE DIT L'ÉCRITURE", de:"WAS DIE SCHRIFT SAGT", he:"מַה שֶׁהַכָּתוּב אוֹמֵר", ru:"ЧТО ГОВОРИТ ПИСАНИЕ" },
+  howToSanctify:     { pt:"COMO SANTIFICAR O SHABAT", en:"HOW TO SANCTIFY THE SABBATH", es:"CÓMO SANTIFICAR EL SHABAT", fr:"COMMENT SANCTIFIER LE CHABBAT", de:"WIE MAN DEN SABBAT HEILIGT", he:"כֵּיצַד לְקַדֵּשׁ אֶת הַשַּׁבָּת", ru:"КАК СВЯТИТЬ ШАББАТ" },
+  priestlyBlessing:  { pt:"Bênção Sacerdotal do Shabat", en:"Priestly Blessing of Shabbat", es:"Bendición Sacerdotal del Shabat", fr:"Bénédiction Sacerdotale du Chabbat", de:"Priestersegen des Sabbats", he:"בִּרְכַּת כֹּהֲנִים לַשַּׁבָּת", ru:"Священническое благословение Шаббата" },
+  priestlyBlessingText:{ pt:"O Senhor te abençoe e te guarde; o Senhor faça resplandecer o seu rosto sobre ti e te dê graça; o Senhor volte o seu rosto para ti e te dê paz.", en:"The LORD bless you and keep you; the LORD make His face shine upon you and be gracious to you; the LORD lift up His countenance upon you and give you peace.", es:"El Señor te bendiga y te guarde; el Señor haga resplandecer su rostro sobre ti y tenga de ti misericordia; el Señor alce sobre ti su rostro y ponga en ti paz.", fr:"Que l'Éternel te bénisse et te garde! Que l'Éternel fasse luire sa face sur toi et t'accorde sa grâce! Que l'Éternel tourne sa face vers toi et te donne la paix!", de:"Der HERR segne dich und behüte dich; der HERR lasse sein Angesicht leuchten über dir und sei dir gnädig; der HERR hebe sein Angesicht über dich und gebe dir Frieden.", he:"יְבָרֶכְךָ ה' וְיִשְׁמְרֶךָ. יָאֵר ה' פָּנָיו אֵלֶיךָ וִיחֻנֶּךָּ. יִשָּׂא ה' פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם.", ru:"Да благословит тебя Господь и сохранит тебя! Да призрит на тебя Господь светлым лицем Своим и помилует тебя! Да обратит Господь лице Своё на тебя и даст тебе мир!" },
 };
 
 // Hook de tradução
@@ -1882,7 +1917,7 @@ function Navigation({ active, setActive, lang, setLang }) {
                 width: "100%", background: "transparent", border: "none",
                 padding: "8px", color: S.textMuted, cursor: "pointer",
                 fontSize: 12, fontFamily: "'Inter', sans-serif",
-              }}>Fechar</button>
+              }}>{t("close")}</button>
             </div>
           </div>
         )}
@@ -2184,7 +2219,7 @@ function CalendarPage({ lang = "pt" }) {
                   {selDay.hasFeast.emoji} {selDay.hasFeast.name}
                 </div>
                 <div className="hebrew" style={{color:S.gold,fontSize:17,marginBottom:6}}>{selDay.hasFeast.heb}</div>
-                <div style={{color:S.textSub,fontSize:12,lineHeight:1.6}}>{selDay.hasFeast.desc}</div>
+                <div style={{color:S.textSub,fontSize:12,lineHeight:1.6}}>{selDay.hasFeast.desc[lang] || selDay.hasFeast.desc.pt}</div>
                 <div style={{color:S.gold,fontSize:11,marginTop:6,fontStyle:"italic"}}>📖 {selDay.hasFeast.scripture}</div>
               </div>
             )}
@@ -2582,55 +2617,103 @@ function ParashaPage({ lang = "pt" }) {
 
 const SHABAT_TEACHINGS = [
   {
-    title: "O Quarto Mandamento",
+    title: { pt:"O Quarto Mandamento", en:"The Fourth Commandment", es:"El Cuarto Mandamiento", fr:"Le Quatrième Commandement", de:"Das Vierte Gebot", he:"הַדִּבֵּר הָרְבִיעִי", ru:"Четвёртая заповедь" },
     heb: "זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ",
     hebTrans: "Zachor et yom haShabbat lekadsho",
-    text: "Lembra do dia do Shabat para santificá-lo. Seis dias trabalharás e farás toda a tua obra; mas o sétimo dia é o Shabat do Senhor teu Deus.",
+    text: {
+      pt:"Lembra do dia do Shabat para santificá-lo. Seis dias trabalharás e farás toda a tua obra; mas o sétimo dia é o Shabat do Senhor teu Deus.",
+      en:"Remember the Sabbath day, to keep it holy. Six days you shall labor and do all your work, but the seventh day is the Sabbath of the LORD your God.",
+      es:"Acuérdate del día de reposo para santificarlo. Seis días trabajarás y harás toda tu obra; mas el séptimo día es el reposo para el Señor tu Dios.",
+      fr:"Souviens-toi du jour du repos, pour le sanctifier. Tu travailleras six jours, et tu feras tout ton ouvrage. Mais le septième jour est le jour du repos de l'Éternel, ton Dieu.",
+      de:"Gedenke des Sabbattags, dass du ihn heiligest. Sechs Tage sollst du arbeiten und alle deine Werke tun; aber am siebenten Tage ist der Sabbat des HERRN, deines Gottes.",
+      he:"זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ. שֵׁשֶׁת יָמִים תַּעֲבֹד וְעָשִׂיתָ כָּל מְלַאכְתֶּךָ, וְיוֹם הַשְּׁבִיעִי שַׁבָּת לַה' אֱלֹהֶיךָ.",
+      ru:"Помни день субботний, чтобы святить его. Шесть дней работай и делай всякие дела твои, а день седьмой — суббота Господу Богу твоему.",
+    },
     ref: "Êxodo 20:8-10",
     icon: "📜",
     color: "#D4AF37",
   },
   {
-    title: "O Descanso de Deus",
+    title: { pt:"O Descanso de Deus", en:"God's Rest", es:"El Descanso de Dios", fr:"Le Repos de Dieu", de:"Gottes Ruhe", he:"מְנוּחַת הָאֱלֹהִים", ru:"Покой Бога" },
     heb: "וַיִּשְׁבֹּת בַּיּוֹם הַשְּׁבִיעִי",
     hebTrans: "Vayishbot bayom hashevi'i",
-    text: "E Deus abençoou o sétimo dia e o santificou; porque nele descansou de toda a sua obra que Deus criara e fizera.",
+    text: {
+      pt:"E Deus abençoou o sétimo dia e o santificou; porque nele descansou de toda a sua obra que Deus criara e fizera.",
+      en:"And God blessed the seventh day and sanctified it, because on it He rested from all His work which God had created and made.",
+      es:"Y bendijo Dios al día séptimo, y lo santificó, porque en él reposó de toda su obra que había creado y hecho.",
+      fr:"Dieu bénit le septième jour, et il le sanctifia, parce qu'en ce jour il se reposa de toute son œuvre qu'il avait créée en la faisant.",
+      de:"Und Gott segnete den siebenten Tag und heiligte ihn, weil er an ihm ruhte von allen seinen Werken, die Gott geschaffen und gemacht hatte.",
+      he:"וַיְבָרֶךְ אֱלֹהִים אֶת יוֹם הַשְּׁבִיעִי וַיְקַדֵּשׁ אֹתוֹ, כִּי בוֹ שָׁבַת מִכָּל מְלַאכְתּוֹ.",
+      ru:"И благословил Бог седьмой день, и освятил его, ибо в оный почил от всех дел Своих.",
+    },
     ref: "Gênesis 2:2-3",
     icon: "🌅",
     color: "#F2D16B",
   },
   {
-    title: "Sinal Eterno da Aliança",
+    title: { pt:"Sinal Eterno da Aliança", en:"Eternal Sign of the Covenant", es:"Señal Eterna del Pacto", fr:"Signe Éternel de l'Alliance", de:"Ewiges Zeichen des Bundes", he:"אוֹת בְּרִית עוֹלָם", ru:"Вечный знак завета" },
     heb: "בֵּינִי וּבֵין בְּנֵי יִשְׂרָאֵל אוֹת הִוא לְעֹלָם",
     hebTrans: "Beini uvein bnei Yisrael ot hi le'olam",
-    text: "É sinal entre mim e os filhos de Israel para sempre; porque em seis dias fez o Senhor os céus e a terra, e ao sétimo dia descansou e tomou fôlego.",
+    text: {
+      pt:"É sinal entre mim e os filhos de Israel para sempre; porque em seis dias fez o Senhor os céus e a terra, e ao sétimo dia descansou e tomou fôlego.",
+      en:"It is a sign between Me and the children of Israel forever; for in six days the LORD made the heavens and the earth, and on the seventh day He rested and was refreshed.",
+      es:"Señal es para siempre entre mí y los hijos de Israel; porque en seis días hizo el Señor los cielos y la tierra, y en el séptimo día cesó y reposó.",
+      fr:"Ce sera entre moi et les enfants d'Israël un signe à perpétuité; car en six jours l'Éternel a fait les cieux et la terre, et le septième jour il a cessé son œuvre et il s'est reposé.",
+      de:"Er ist ein ewiges Zeichen zwischen mir und den Israeliten; denn in sechs Tagen machte der HERR Himmel und Erde, aber am siebenten Tage ruhte er und erquickte sich.",
+      he:"בֵּינִי וּבֵין בְּנֵי יִשְׂרָאֵל אוֹת הִוא לְעֹלָם, כִּי שֵׁשֶׁת יָמִים עָשָׂה ה' אֶת הַשָּׁמַיִם וְאֶת הָאָרֶץ.",
+      ru:"Это — знамение между Мною и сынами Израилевыми на веки, потому что в шесть дней сотворил Господь небо и землю, а в день седьмой почил и покоился.",
+    },
     ref: "Êxodo 31:17",
     icon: "✡",
     color: "#6EA8FE",
   },
   {
-    title: "Descanso em Yeshua",
+    title: { pt:"Descanso em Yeshua", en:"Rest in Yeshua", es:"Descanso en Yeshúa", fr:"Repos en Yeshua", de:"Ruhe in Jeschua", he:"מְנוּחָה בְּיֵשׁוּעַ", ru:"Покой в Йешуа" },
     heb: "אָפוֹא שַׁבָּτισμός לְעַם הָאֱלֹהִים",
     hebTrans: "Apoa shabbatismos le'am haElohim",
-    text: "Portanto, fica em pé um repouso sabático para o povo de Deus. Pois aquele que entrou no seu repouso, ele mesmo também descansou das suas obras, como Deus das suas.",
+    text: {
+      pt:"Portanto, fica em pé um repouso sabático para o povo de Deus. Pois aquele que entrou no seu repouso, ele mesmo também descansou das suas obras, como Deus das suas.",
+      en:"There remains therefore a rest for the people of God. For he who has entered His rest has himself also ceased from his works as God did from His.",
+      es:"Por tanto, queda un reposo para el pueblo de Dios. Porque el que ha entrado en su reposo, también ha reposado de sus obras, como Dios de las suyas.",
+      fr:"Il y a donc un repos réservé au peuple de Dieu. Car celui qui entre dans le repos de Dieu se repose de ses œuvres, comme Dieu s'est reposé des siennes.",
+      de:"Es ist also noch eine Ruhe vorhanden dem Volk Gottes. Denn wer zu seiner Ruhe gekommen ist, der ruht auch von seinen Werken, gleichwie Gott von seinen.",
+      he:"עַל כֵּן נִשְׁאֲרָה מְנוּחַת שַׁבָּת לְעַם הָאֱלֹהִים, כִּי הַבָּא אֶל מְנוּחָתוֹ, גַּם הוּא שָׁבַת מִמַּעֲשָׂיו.",
+      ru:"Посему для народа Божия еще остается субботство. Ибо, кто вошел в покой Его, тот и сам успокоился от дел своих, как и Бог от Своих.",
+    },
     ref: "Hebreus 4:9-10",
     icon: "🕊️",
     color: "#A78BFA",
   },
   {
-    title: "Yeshua e o Shabat",
+    title: { pt:"Yeshua e o Shabat", en:"Yeshua and the Sabbath", es:"Yeshúa y el Shabat", fr:"Yeshua et le Chabbat", de:"Jeschua und der Sabbat", he:"יֵשׁוּעַ וְהַשַּׁבָּת", ru:"Йешуа и Шаббат" },
     heb: "כִּי קִרְיֵא כָּבוֹד הַשַּׁבָּת",
     hebTrans: "Ki kire kavod haShabbat",
-    text: "E entrou na sinagoga no dia do Shabat e se levantou para ler. E foi-lhe dado o rolo do profeta Isaías. Yeshua guardava e ensinava no Shabat.",
+    text: {
+      pt:"E entrou na sinagoga no dia do Shabat e se levantou para ler. E foi-lhe dado o rolo do profeta Isaías. Yeshua guardava e ensinava no Shabat.",
+      en:"And He entered the synagogue on the Sabbath day and stood up to read. And the scroll of the prophet Isaiah was given to Him. Yeshua kept and taught on the Sabbath.",
+      es:"Y entró en la sinagoga en el día de reposo, y se levantó a leer. Y se le dio el libro del profeta Isaías. Yeshúa guardaba y enseñaba en el Shabat.",
+      fr:"Il entra dans la synagogue au jour du sabbat, et se leva pour faire la lecture. On lui remit le livre du prophète Ésaïe. Yeshua gardait et enseignait le Chabbat.",
+      de:"Und er kam nach Nazareth und ging am Sabbat in die Synagoge und stand auf zu lesen. Und ihm wurde das Buch des Propheten Jesaja gereicht.",
+      he:"וַיָּבֹא אֶל בֵּית הַכְּנֶסֶת בְּיוֹם הַשַּׁבָּת וַיָּקָם לִקְרֹא, וַיִּנָּתֵן לוֹ סֵפֶר יְשַׁעְיָהוּ הַנָּבִיא.",
+      ru:"И пришел в синагогу в день субботний, и встал читать. Ему подали книгу пророка Исаии. Йешуа хранил и учил в субботу.",
+    },
     ref: "Lucas 4:16-17",
     icon: "📖",
     color: "#34D399",
   },
   {
-    title: "Como Santificar o Sétimo Dia",
+    title: { pt:"Como Santificar o Sétimo Dia", en:"How to Sanctify the Seventh Day", es:"Cómo Santificar el Séptimo Día", fr:"Comment Sanctifier le Septième Jour", de:"Wie man den siebten Tag heiligt", he:"כֵּיצַד לְקַדֵּשׁ אֶת הַיּוֹם הַשְּׁבִיעִי", ru:"Как святить седьмой день" },
     heb: "אִם תָּשִׁיב מִשַּׁבָּת רַגְלֶךָ",
     hebTrans: "Im tashiv miShabbat raglecha",
-    text: "Se no Shabat retiveres o teu pé, de fazeres o que apraz à tua alma no meu dia santo... então te deleitarás no Senhor, e te farei cavalgar sobre as alturas da terra.",
+    text: {
+      pt:"Se no Shabat retiveres o teu pé, de fazeres o que apraz à tua alma no meu dia santo... então te deleitarás no Senhor, e te farei cavalgar sobre as alturas da terra.",
+      en:"If you turn back your foot from the Sabbath, from doing your pleasure on My holy day... then you shall delight yourself in the LORD, and I will cause you to ride on the high hills of the earth.",
+      es:"Si retrajeres del día de reposo tu pie, de hacer tu voluntad en mi día santo... entonces te deleitarás en el Señor, y te haré subir sobre las alturas de la tierra.",
+      fr:"Si tu retiens ton pied pendant le sabbat, pour ne pas faire ta volonté en mon saint jour... alors tu mettras ton plaisir en l'Éternel, et je te ferai monter sur les hauteurs du pays.",
+      de:"Wenn du deinen Fuß von der Feier des Sabbats zurückhältst, dass du nicht tust, was dir gefällt an meinem heiligen Tage... dann wirst du Freude haben am HERRN.",
+      he:"אִם תָּשִׁיב מִשַּׁבָּת רַגְלֶךָ עֲשׂוֹת חֲפָצֶיךָ בְּיוֹם קָדְשִׁי... אָז תִּתְעַנַּג עַל ה' וְהִרְכַּבְתִּיךָ עַל בָּמֳתֵי אָרֶץ.",
+      ru:"Если ты удержишь ногу твою ради субботы от исполнения прихотей твоих в святый день Мой... то будешь иметь радость в Господе.",
+    },
     ref: "Isaías 58:13-14",
     icon: "🌿",
     color: "#FB923C",
@@ -2638,12 +2721,84 @@ const SHABAT_TEACHINGS = [
 ];
 
 const SHABAT_PRACTICES = [
-  { icon: "🕯️", title: "Acender as velas",        desc: "Ao pôr do sol da sexta-feira, duas velas são acesas marcando a entrada do Shabat. A mulher cobre os olhos e recita a bênção: Baruch Atah Adonai, Eloheinu Melech haolam, asher kidshanu bemitzvotav vetzivanu lehadlik ner shel Shabat." },
-  { icon: "🍷", title: "Kidush — Santificação",    desc: "Sobre uma taça de vinho (ou suco de uva), recita-se a oração de santificação do Shabat, lembrando tanto a criação quanto a saída do Egito." },
-  { icon: "🍞", title: "Chalá — Pão do Sábado",   desc: "Dois pães trançados (chalot) são cobertos com um pano durante o Kidush em memória do maná duplo que Deus proveu às sextas-feiras no deserto." },
-  { icon: "📖", title: "Estudo e Torá",             desc: "O Shabat é consagrado ao estudo das Escrituras, à leitura da Parashat HaShavua e à meditação na Palavra — o maior prazer espiritual do dia." },
-  { icon: "🤝", title: "Família e Comunidade",     desc: "Reunir família e amigos à mesa, cantar Zmirót (hinos do Shabat), orar juntos e descansar do trabalho cotidiano é parte essencial da santificação." },
-  { icon: "✨", title: "Havdalah — Separação",     desc: "Ao aparecerem três estrelas no sábado à noite, encerra-se o Shabat com o ritual de Havdalah: vinho, especiarias aromáticas e uma vela trançada, separando o sagrado do profano." },
+  {
+    icon: "🕯️",
+    title: { pt:"Acender as velas", en:"Lighting the Candles", es:"Encender las Velas", fr:"Allumer les Bougies", de:"Kerzen anzünden", he:"הַדְלָקַת נֵרוֹת", ru:"Зажигание свечей" },
+    desc: {
+      pt:"Ao pôr do sol da sexta-feira, duas velas são acesas marcando a entrada do Shabat. A mulher cobre os olhos e recita a bênção: Baruch Atah Adonai, Eloheinu Melech haolam, asher kidshanu bemitzvotav vetzivanu lehadlik ner shel Shabat.",
+      en:"At sunset on Friday, two candles are lit marking the entrance of Shabbat. The woman covers her eyes and recites the blessing: Baruch Atah Adonai, Eloheinu Melech haolam, asher kidshanu bemitzvotav vetzivanu lehadlik ner shel Shabat.",
+      es:"Al atardecer del viernes, se encienden dos velas marcando la entrada del Shabat. La mujer cubre sus ojos y recita la bendición: Baruch Atah Adonai, Eloheinu Melech haolam, asher kidshanu bemitzvotav vetzivanu lehadlik ner shel Shabat.",
+      fr:"Au coucher du soleil vendredi, deux bougies sont allumées marquant l'entrée du Chabbat. La femme se couvre les yeux et récite la bénédiction: Baruch Atah Adonai, Eloheinu Melech haolam.",
+      de:"Bei Sonnenuntergang am Freitag werden zwei Kerzen angezündet, die den Beginn des Sabbats markieren. Die Frau bedeckt ihre Augen und spricht den Segen: Baruch Atah Adonai, Eloheinu Melech haolam.",
+      he:"עִם שְׁקִיעַת הַחַמָּה בְּיוֹם שִׁישִׁי, מַדְלִיקִים שְׁנֵי נֵרוֹת הַמְּסַמְּנִים אֶת כְּנִיסַת הַשַּׁבָּת.",
+      ru:"На закате в пятницу зажигаются две свечи, отмечающие начало Шаббата. Женщина закрывает глаза и произносит благословение.",
+    },
+  },
+  {
+    icon: "🍷",
+    title: { pt:"Kidush — Santificação", en:"Kiddush — Sanctification", es:"Kidush — Santificación", fr:"Kiddouch — Sanctification", de:"Kiddusch — Heiligung", he:"קִדּוּשׁ", ru:"Кидуш — освящение" },
+    desc: {
+      pt:"Sobre uma taça de vinho (ou suco de uva), recita-se a oração de santificação do Shabat, lembrando tanto a criação quanto a saída do Egito.",
+      en:"Over a cup of wine (or grape juice), the prayer sanctifying Shabbat is recited, recalling both creation and the exodus from Egypt.",
+      es:"Sobre una copa de vino (o jugo de uva), se recita la oración de santificación del Shabat, recordando tanto la creación como la salida de Egipto.",
+      fr:"Sur une coupe de vin (ou de jus de raisin), on récite la prière de sanctification du Chabbat, rappelant à la fois la création et la sortie d'Égypte.",
+      de:"Über einem Becher Wein (oder Traubensaft) wird das Gebet zur Heiligung des Sabbats gesprochen, das sowohl an die Schöpfung als auch an den Auszug aus Ägypten erinnert.",
+      he:"עַל כּוֹס יַיִן מְבָרְכִים אֶת קִדּוּשׁ הַשַּׁבָּת, לְזֵכֶר מַעֲשֵׂה בְרֵאשִׁית וִיצִיאַת מִצְרַיִם.",
+      ru:"Над бокалом вина (или виноградного сока) произносится молитва освящения Шаббата, вспоминая как творение, так и исход из Египта.",
+    },
+  },
+  {
+    icon: "🍞",
+    title: { pt:"Chalá — Pão do Sábado", en:"Challah — Sabbath Bread", es:"Jalá — Pan del Sábado", fr:"Hallah — Pain du Chabbat", de:"Challa — Sabbatbrot", he:"חַלָּה", ru:"Хала — субботний хлеб" },
+    desc: {
+      pt:"Dois pães trançados (chalot) são cobertos com um pano durante o Kidush em memória do maná duplo que Deus proveu às sextas-feiras no deserto.",
+      en:"Two braided loaves (challot) are covered with a cloth during Kiddush, in memory of the double portion of manna God provided on Fridays in the desert.",
+      es:"Dos panes trenzados (jalot) se cubren con un paño durante el Kidush, en memoria del maná doble que Dios proveyó los viernes en el desierto.",
+      fr:"Deux pains tressés (hallot) sont couverts d'un tissu pendant le Kiddouch, en mémoire de la double portion de manne que Dieu a fournie le vendredi dans le désert.",
+      de:"Zwei geflochtene Brote (Challot) werden während des Kiddusch mit einem Tuch bedeckt, zur Erinnerung an die doppelte Portion Manna, die Gott freitags in der Wüste gab.",
+      he:"שְׁתֵּי חַלּוֹת מְכֻסּוֹת בְּמַפָּה בְּעֵת הַקִּדּוּשׁ, לְזֵכֶר לֶחֶם הַמִּשְׁנֶה שֶׁל הַמָּן בְּעֶרֶב שַׁבָּת בַּמִּדְבָּר.",
+      ru:"Два плетёных хлеба (халы) накрываются тканью во время Кидуша в память о двойной порции манны, которую Бог давал по пятницам в пустыне.",
+    },
+  },
+  {
+    icon: "📖",
+    title: { pt:"Estudo e Torá", en:"Study and Torah", es:"Estudio y Torá", fr:"Étude et Torah", de:"Studium und Tora", he:"לִמּוּד וְתוֹרָה", ru:"Изучение и Тора" },
+    desc: {
+      pt:"O Shabat é consagrado ao estudo das Escrituras, à leitura da Parashat HaShavua e à meditação na Palavra — o maior prazer espiritual do dia.",
+      en:"Shabbat is devoted to the study of Scripture, reading the Parashat HaShavua, and meditation on the Word — the greatest spiritual pleasure of the day.",
+      es:"El Shabat está consagrado al estudio de las Escrituras, a la lectura de la Parashat HaShavua y a la meditación en la Palabra — el mayor placer espiritual del día.",
+      fr:"Le Chabbat est consacré à l'étude des Écritures, à la lecture de la Parashat HaShavua et à la méditation de la Parole — le plus grand plaisir spirituel du jour.",
+      de:"Der Sabbat ist dem Studium der Schrift, dem Lesen der Parashat HaShavua und der Meditation über das Wort gewidmet — die größte geistliche Freude des Tages.",
+      he:"הַשַּׁבָּת מֻקְדֶּשֶׁת לְלִמּוּד הַכְּתוּבִים, לִקְרִיאַת הַפָּרָשָׁה וּלְהִרְהוּר בַּדָּבָר — הָעֹנֶג הָרוּחָנִי הַגָּדוֹל בְּיוֹתֵר שֶׁל הַיּוֹם.",
+      ru:"Шаббат посвящён изучению Писания, чтению недельной главы Торы и размышлению над Словом — величайшему духовному удовольствию дня.",
+    },
+  },
+  {
+    icon: "🤝",
+    title: { pt:"Família e Comunidade", en:"Family and Community", es:"Familia y Comunidad", fr:"Famille et Communauté", de:"Familie und Gemeinschaft", he:"מִשְׁפָּחָה וְקְהִלָּה", ru:"Семья и община" },
+    desc: {
+      pt:"Reunir família e amigos à mesa, cantar Zmirót (hinos do Shabat), orar juntos e descansar do trabalho cotidiano é parte essencial da santificação.",
+      en:"Gathering family and friends at the table, singing Zemirot (Shabbat hymns), praying together, and resting from daily work is an essential part of sanctification.",
+      es:"Reunir a la familia y amigos en la mesa, cantar Zemirot (himnos del Shabat), orar juntos y descansar del trabajo cotidiano es parte esencial de la santificación.",
+      fr:"Réunir famille et amis à table, chanter des Zemirot (hymnes du Chabbat), prier ensemble et se reposer du travail quotidien fait partie essentielle de la sanctification.",
+      de:"Familie und Freunde am Tisch zu versammeln, Zemirot (Sabbatlieder) zu singen, gemeinsam zu beten und von der täglichen Arbeit zu ruhen, ist wesentlicher Teil der Heiligung.",
+      he:"אִסּוּף מִשְׁפָּחָה וַחֲבֵרִים לַשֻּׁלְחָן, שִׁירַת זְמִירוֹת, תְּפִלָּה מְשֻׁתֶּפֶת וּמְנוּחָה מֵעֲבוֹדַת יוֹם יוֹם הֵם חֵלֶק חִיּוּנִי מֵהַקִּדּוּשׁ.",
+      ru:"Собрать семью и друзей за столом, петь Земирот (субботние гимны), молиться вместе и отдыхать от повседневной работы — существенная часть освящения.",
+    },
+  },
+  {
+    icon: "✨",
+    title: { pt:"Havdalah — Separação", en:"Havdalah — Separation", es:"Havdalá — Separación", fr:"Havdalah — Séparation", de:"Hawdalah — Trennung", he:"הַבְדָּלָה", ru:"Гавдала — разделение" },
+    desc: {
+      pt:"Ao aparecerem três estrelas no sábado à noite, encerra-se o Shabat com o ritual de Havdalah: vinho, especiarias aromáticas e uma vela trançada, separando o sagrado do profano.",
+      en:"When three stars appear on Saturday night, Shabbat is concluded with the Havdalah ritual: wine, fragrant spices, and a braided candle, separating the sacred from the profane.",
+      es:"Cuando aparecen tres estrellas el sábado por la noche, se concluye el Shabat con el ritual de Havdalá: vino, especias aromáticas y una vela trenzada, separando lo sagrado de lo profano.",
+      fr:"Quand trois étoiles apparaissent samedi soir, le Chabbat se termine par le rituel de la Havdalah: vin, épices parfumées et une bougie tressée, séparant le sacré du profane.",
+      de:"Wenn am Samstagabend drei Sterne erscheinen, wird der Sabbat mit dem Hawdalah-Ritual beendet: Wein, duftende Gewürze und eine geflochtene Kerze, die das Heilige vom Profanen trennt.",
+      he:"עִם הוֹפָעַת שְׁלוֹשָׁה כּוֹכָבִים בְּמוֹצָאֵי שַׁבָּת, מְסַיְּמִים אֶת הַשַּׁבָּת בְּטֶקֶס הַבְדָּלָה: יַיִן, בְּשָׂמִים וְנֵר הַבְדָּלָה.",
+      ru:"Когда в субботу вечером появляются три звезды, Шаббат завершается ритуалом Гавдалы: вино, ароматные специи и плетёная свеча, отделяющие святое от будничного.",
+    },
+  },
 ];
 
 function ShabatPage({ lang = "pt" }) {
@@ -2740,8 +2895,8 @@ function ShabatPage({ lang = "pt" }) {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub="O sétimo dia é sagrado — um sinal eterno entre Deus e Seu povo">
-        🕯️ Shabat — שַׁבָּת
+      <SectionTitle sub={t("shabatSectionSub")}>
+        🕯️ {t("nav_shabat")} — שַׁבָּת
       </SectionTitle>
 
       {/* ── HERO: Contagem Regressiva ── */}
@@ -2775,19 +2930,19 @@ function ShabatPage({ lang = "pt" }) {
           {isShabatNow ? (
             <>
               <div className="cinzel" style={{ color: S.goldLight, fontSize: 22, fontWeight: 700, marginBottom: 6 }}>
-                Shabat Shalom!
+                {t("shabatShalom")}
               </div>
               <div className="hebrew" style={{ color: S.gold, fontSize: 28, marginBottom: 10 }}>
                 שַׁבָּת שָׁלוֹם
               </div>
               <div style={{ color: S.textSub, fontSize: 13 }}>
-                O sétimo dia sagrado está acontecendo agora. Descanse em Deus.
+                {t("shabatHappening")}
               </div>
             </>
           ) : (
             <>
               <div style={{ color: S.textMuted, fontSize: 12, marginBottom: 6, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                {isFridayNow ? "O Shabat começa hoje ao entardecer" : "Próximo Shabat em"}
+                {isFridayNow ? t("shabatTonight") : t("nextShabat")}
               </div>
               <div className="cinzel" style={{
                 fontSize: daysUntilFriday <= 1 ? 42 : 36,
@@ -2800,8 +2955,8 @@ function ShabatPage({ lang = "pt" }) {
               </div>
               <div style={{ color: S.textMuted, fontSize: 12 }}>
                 {daysUntilFriday <= 1
-                  ? "Esta noite ao pôr do sol — prepare seu coração!"
-                  : `${daysUntilFriday} ${daysUntilFriday === 1 ? "dia" : "dias"} até o início do Shabat`}
+                  ? t("tonightAtSunset")
+                  : `${daysUntilFriday} ${daysUntilFriday === 1 ? t("dayWord") : t("daysWord")} ${t("untilShabatStart")}`}
               </div>
             </>
           )}
@@ -2812,7 +2967,7 @@ function ShabatPage({ lang = "pt" }) {
             background: "rgba(255,255,255,0.05)", borderRadius: 20,
             padding: "6px 16px", border: `1px solid ${S.goldBorder}`,
           }}>
-            <span style={{ color: S.textMuted, fontSize: 11 }}>Hoje:</span>
+            <span style={{ color: S.textMuted, fontSize: 11 }}>{t("todayLabel2")}</span>
             <span style={{ color: S.text, fontSize: 12, fontWeight: 600 }}>
               {todayHeb.day} de {todayHeb.monthName}
             </span>
@@ -2845,7 +3000,7 @@ function ShabatPage({ lang = "pt" }) {
               <div style={{ color: S.textMuted, fontSize: 11 }}>
                 {times
                   ? `🕯️ ${t("candleLighting")}: ${times.candles}  ✨ ${t("havdalah")}: ${times.havdalah}`
-                  : "Calcular horários locais de Shabat"}
+                  : t("calcLocalTimes")}
               </div>
             </div>
           </div>
@@ -2928,9 +3083,9 @@ function ShabatPage({ lang = "pt" }) {
           זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ
         </div>
         <div style={{ color: S.text, fontSize: 14, fontStyle: "italic", lineHeight: 1.7, marginBottom: 6 }}>
-          "Lembra do dia do Shabat para santificá-lo."
+          "{t("rememberShabatVerse")}"
         </div>
-        <div style={{ color: S.gold, fontSize: 12 }}>Êxodo 20:8 — O Quarto Mandamento</div>
+        <div style={{ color: S.gold, fontSize: 12 }}>Êxodo 20:8 — {t("fourthCommandment")}</div>
       </div>
 
       {/* ── Ensinamentos expandíveis ── */}
@@ -2939,16 +3094,18 @@ function ShabatPage({ lang = "pt" }) {
           color: S.goldLight, fontSize: 14, fontWeight: 700,
           letterSpacing: "0.05em", marginBottom: 12, textAlign: "center",
         }}>
-          O QUE DIZ A ESCRITURA
+          {t("whatScriptureSays")}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {SHABAT_TEACHINGS.map((t, i) => {
+          {SHABAT_TEACHINGS.map((teaching, i) => {
             const isOpen = expanded === i;
+            const teachTitle = teaching.title[lang] || teaching.title.pt;
+            const teachText  = teaching.text[lang]  || teaching.text.pt;
             return (
               <div key={i} style={{
-                background: isOpen ? `${t.color}0e` : S.bgCard,
-                border: `1.5px solid ${isOpen ? t.color + "44" : S.goldBorder}`,
+                background: isOpen ? `${teaching.color}0e` : S.bgCard,
+                border: `1.5px solid ${isOpen ? teaching.color + "44" : S.goldBorder}`,
                 borderRadius: 16, overflow: "hidden",
                 transition: "all 0.25s ease",
               }}>
@@ -2962,22 +3119,22 @@ function ShabatPage({ lang = "pt" }) {
                 >
                   <div style={{
                     width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                    background: `${t.color}18`, border: `1.5px solid ${t.color}44`,
+                    background: `${teaching.color}18`, border: `1.5px solid ${teaching.color}44`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 20,
-                  }}>{t.icon}</div>
+                  }}>{teaching.icon}</div>
 
                   <div style={{ flex: 1 }}>
-                    <div style={{ color: isOpen ? t.color : S.text, fontWeight: 700, fontSize: 14, marginBottom: 2 }}>
-                      {t.title}
+                    <div style={{ color: isOpen ? teaching.color : S.text, fontWeight: 700, fontSize: 14, marginBottom: 2 }}>
+                      {teachTitle}
                     </div>
-                    <div className="hebrew" style={{ color: `${t.color}99`, fontSize: 13 }}>
-                      {t.heb}
+                    <div className="hebrew" style={{ color: `${teaching.color}99`, fontSize: 13 }}>
+                      {teaching.heb}
                     </div>
                   </div>
 
                   <div style={{
-                    color: isOpen ? t.color : S.textMuted,
+                    color: isOpen ? teaching.color : S.textMuted,
                     fontSize: 18, lineHeight: 1, transition: "transform 0.25s",
                     transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                   }}>⌄</div>
@@ -2987,28 +3144,28 @@ function ShabatPage({ lang = "pt" }) {
                 {isOpen && (
                   <div className="fade-up" style={{
                     padding: "0 16px 16px",
-                    borderTop: `1px solid ${t.color}22`,
+                    borderTop: `1px solid ${teaching.color}22`,
                   }}>
                     <div style={{
                       background: ink(0.35), borderRadius: 10,
                       padding: "10px 14px", marginBottom: 10, marginTop: 10,
                     }}>
                       <div className="hebrew" style={{
-                        color: t.color, fontSize: 16, lineHeight: 1.8,
+                        color: teaching.color, fontSize: 16, lineHeight: 1.8,
                         marginBottom: 6, textAlign: "right",
-                      }}>{t.heb}</div>
+                      }}>{teaching.heb}</div>
                       <div style={{ color: S.textMuted, fontSize: 11, textAlign: "center", fontStyle: "italic" }}>
-                        {t.hebTrans}
+                        {teaching.hebTrans}
                       </div>
                     </div>
                     <p style={{ color: S.textSub, fontSize: 13, lineHeight: 1.75, marginBottom: 8 }}>
-                      {t.text}
+                      {teachText}
                     </p>
                     <div style={{
                       display: "flex", alignItems: "center", gap: 6,
-                      color: t.color, fontSize: 12, fontStyle: "italic",
+                      color: teaching.color, fontSize: 12, fontStyle: "italic",
                     }}>
-                      <span>📖</span> {t.ref}
+                      <span>📖</span> {teaching.ref}
                     </div>
                   </div>
                 )}
@@ -3024,11 +3181,11 @@ function ShabatPage({ lang = "pt" }) {
           color: S.goldLight, fontSize: 14, fontWeight: 700,
           letterSpacing: "0.05em", marginBottom: 12, textAlign: "center",
         }}>
-          COMO SANTIFICAR O SHABAT
+          {t("howToSanctify")}
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
-          {SHABAT_PRACTICES.map((p, i) => (
+          {SHABAT_PRACTICES.map((practice, i) => (
             <div key={i} style={{
               background: S.bgCard, border: `1px solid ${S.goldBorder}`,
               borderRadius: 16, padding: "14px 16px",
@@ -3043,10 +3200,10 @@ function ShabatPage({ lang = "pt" }) {
                   background: S.goldBg, border: `1px solid ${S.goldBorder}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 20,
-                }}>{p.icon}</div>
-                <div style={{ color: S.text, fontWeight: 700, fontSize: 13 }}>{p.title}</div>
+                }}>{practice.icon}</div>
+                <div style={{ color: S.text, fontWeight: 700, fontSize: 13 }}>{practice.title[lang] || practice.title.pt}</div>
               </div>
-              <p style={{ color: S.textMuted, fontSize: 12, lineHeight: 1.65 }}>{p.desc}</p>
+              <p style={{ color: S.textMuted, fontSize: 12, lineHeight: 1.65 }}>{practice.desc[lang] || practice.desc.pt}</p>
             </div>
           ))}
         </div>
@@ -3059,7 +3216,7 @@ function ShabatPage({ lang = "pt" }) {
         padding: "24px", textAlign: "center",
       }}>
         <div style={{ color: S.textMuted, fontSize: 11, letterSpacing: "0.08em", marginBottom: 10, textTransform: "uppercase" }}>
-          Bênção Sacerdotal do Shabat
+          {t("priestlyBlessing")}
         </div>
         <div className="hebrew" style={{ color: S.goldLight, fontSize: 20, lineHeight: 2, marginBottom: 8 }}>
           יְבָרֶכְךָ יְהוָה וְיִשְׁמְרֶךָ
@@ -3069,13 +3226,12 @@ function ShabatPage({ lang = "pt" }) {
           יִשָּׂא יְהוָה פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם
         </div>
         <div style={{ color: S.textSub, fontSize: 12, lineHeight: 1.8, fontStyle: "italic" }}>
-          "O Senhor te abençoe e te guarde; o Senhor faça resplandecer o seu rosto
-          <br/>sobre ti e te dê graça; o Senhor volte o seu rosto para ti e te dê paz."
+          "{t("priestlyBlessingText")}"
         </div>
         <div style={{ color: S.gold, fontSize: 11, marginTop: 8 }}>Números 6:24-26</div>
         <div style={{ marginTop: 14 }}>
           <span className="cinzel hebrew" style={{ color: S.gold, fontSize: 18 }}>שַׁבָּת שָׁלוֹם</span>
-          <span style={{ color: S.textMuted, fontSize: 13, marginLeft: 8 }}>— Shabat Shalom!</span>
+          <span style={{ color: S.textMuted, fontSize: 13, marginLeft: 8 }}>— {t("shabatShalom")}</span>
         </div>
       </div>
     </div>
@@ -3127,10 +3283,10 @@ function FeastsPage({ lang = "pt" }) {
 
         {isSel && (
           <div className="fade-up" style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${S.goldBorder}` }}>
-            <p style={{ color: S.text, fontSize: 13, lineHeight: 1.7, marginBottom: 10 }}>{feast.desc}</p>
+            <p style={{ color: S.text, fontSize: 13, lineHeight: 1.7, marginBottom: 10 }}>{feast.desc[lang] || feast.desc.pt}</p>
             <div style={{ background: S.goldBg, borderRadius: 10, padding: 12, marginBottom: 10 }}>
               <div style={{ color: S.goldLight, fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{t("messianicMeaning")}</div>
-              <p style={{ color: S.text, fontSize: 13, lineHeight: 1.6 }}>{feast.sig}</p>
+              <p style={{ color: S.text, fontSize: 13, lineHeight: 1.6 }}>{feast.sig[lang] || feast.sig.pt}</p>
             </div>
             <div style={{ color: S.gold, fontSize: 12, fontStyle: "italic" }}>📖 {feast.scripture}</div>
           </div>
@@ -3235,7 +3391,7 @@ function LearnPage({ lang = "pt" }) {
                   </div>
                   <div style={{ color: S.text, fontWeight: 700, fontSize: 16 }}>{m.name}</div>
                   <div className="hebrew" style={{ color: S.gold, fontSize: 22 }}>{m.heb}</div>
-                  <div style={{ color: S.textMuted, fontSize: 12, fontStyle: "italic" }}>"{m.desc}"</div>
+                  <div style={{ color: S.textMuted, fontSize: 12, fontStyle: "italic" }}>"{m.desc[lang] || m.desc.pt}"</div>
                 </div>
                 <span style={{ color: S.textMuted, fontSize: 16 }}>{isExp ? "▲" : "▼"}</span>
               </div>
@@ -3266,7 +3422,8 @@ function LearnPage({ lang = "pt" }) {
 
 // ─── PWA INSTALL BANNER ───────────────────────────────────────────────────────
 
-function InstallBanner() {
+function InstallBanner({ lang = "pt" }) {
+  const t = useT(lang);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -3295,10 +3452,10 @@ function InstallBanner() {
     }}>
       <span style={{ fontSize: 28 }}>✡</span>
       <div style={{ flex: 1 }}>
-        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13 }}>Instalar Moedim</div>
-        <div style={{ color: S.textMuted, fontSize: 11 }}>Acesse offline a qualquer momento</div>
+        <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13 }}>{t("installApp")}</div>
+        <div style={{ color: S.textMuted, fontSize: 11 }}>{t("offlineAccess")}</div>
       </div>
-      <button onClick={install} style={{ background: S.gold, border: "none", color: S.bg, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Instalar</button>
+      <button onClick={install} style={{ background: S.gold, border: "none", color: S.bg, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>{t("installBtn")}</button>
       <button onClick={() => setShow(false)} style={{ background: "none", border: "none", color: S.textMuted, cursor: "pointer", fontSize: 18 }}>×</button>
     </div>
   );
@@ -3306,7 +3463,8 @@ function InstallBanner() {
 
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 
-function NotificationManager() {
+function NotificationManager({ lang = "pt" }) {
+  const t = useT(lang);
   const [permission, setPermission] = useState("default");
   const [enabled, setEnabled] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -3332,8 +3490,8 @@ function NotificationManager() {
       const upcoming = getUpcomingFeasts(7);
       upcoming.forEach(({ feast, daysAway }) => {
         notifShow(
-          `${feast.emoji} ${feast.name} se aproxima!`,
-          daysAway === 0 ? "Esta festa é hoje! " + feast.desc : `Em ${daysAway} dias: ${feast.desc}`,
+          `${feast.emoji} ${feast.name} ${t("feastApproaching")}`,
+          daysAway === 0 ? t("feastTodayNotif") + (feast.desc[lang] || feast.desc.pt) : `${t("inDaysNotif").replace("{n}", daysAway)} ${feast.desc[lang] || feast.desc.pt}`,
           { delayMs: daysAway === 0 ? 0 : 1000, tag: `feast-${feast.name}` }
         );
       });
@@ -3351,16 +3509,16 @@ function NotificationManager() {
     }}>
       <span style={{ fontSize: 20 }}>🔔</span>
       <div style={{ flex: 1 }}>
-        <div style={{ color: S.text, fontWeight: 600, fontSize: 13 }}>Notificações de Festas</div>
-        <div style={{ color: S.textMuted, fontSize: 11 }}>Receba alertas sobre as festas bíblicas próximas</div>
+        <div style={{ color: S.text, fontWeight: 600, fontSize: 13 }}>{t("notifFeastsTitle")}</div>
+        <div style={{ color: S.textMuted, fontSize: 11 }}>{t("notifFeastsDesc")}</div>
       </div>
       {permission === "denied" ? (
-        <span style={{ color: "#f87171", fontSize: 11 }}>Bloqueado nas configurações</span>
+        <span style={{ color: "#f87171", fontSize: 11 }}>{t("blockedInSettings")}</span>
       ) : (
         <button onClick={requestPermission} style={{
           background: S.goldBg, border: `1px solid ${S.goldBorder}`,
           color: S.goldLight, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer",
-        }}>Ativar</button>
+        }}>{t("activate")}</button>
       )}
     </div>
   );
@@ -3377,10 +3535,18 @@ const TRIBES = [
     tribe: "Yehudá", heb: "יְהוּדָה", eng: "Judah",
     symbol: "🦁", mazal: "Áries ♈", stone: "Rubi",
     stoneHeb: "אֹדֶם", color: "#dc2626",
-    blessing: "Judá é um leãozinho… O cetro não se apartará de Judá. (Gn 49:9-10)",
-    desc: "A tribo dos reis e líderes. Yehudá marchava à frente de Israel, sendo a tribo do rei Davi e de Yeshua HaMashiach.",
-    qualities: ["Liderança", "Coragem", "Lealdade", "Realeza"],
-    challenge: "Orgulho e necessidade de controle",
+    blessing: { pt:"Judá é um leãozinho… O cetro não se apartará de Judá. (Gn 49:9-10)", en:"Judah is a lion's whelp… The scepter shall not depart from Judah. (Gen 49:9-10)", es:"Judá es un cachorro de león… El cetro no se apartará de Judá. (Gn 49:9-10)", fr:"Juda est un jeune lion… Le sceptre ne s'éloignera point de Juda. (Gn 49:9-10)", de:"Juda ist ein junger Löwe… Es wird das Zepter von Juda nicht entwendet werden. (1. Mose 49:9-10)", he:"גּוּר אַרְיֵה יְהוּדָה… לֹא יָסוּר שֵׁבֶט מִיהוּדָה. (בְּרֵאשִׁית מט:ט-י)", ru:"Иуда молодой лев… не отойдёт скипетр от Иуды. (Быт 49:9-10)" },
+    desc: { pt:"A tribo dos reis e líderes. Yehudá marchava à frente de Israel, sendo a tribo do rei Davi e de Yeshua HaMashiach.", en:"The tribe of kings and leaders. Yehudah marched at the front of Israel, being the tribe of King David and Yeshua HaMashiach.", es:"La tribu de los reyes y líderes. Yehudá marchaba al frente de Israel, siendo la tribu del rey David y de Yeshúa HaMashíaj.", fr:"La tribu des rois et des dirigeants. Yehuda marchait à l'avant d'Israël, étant la tribu du roi David et de Yeshua HaMashiach.", de:"Der Stamm der Könige und Führer. Jehuda marschierte an der Spitze Israels, der Stamm von König David und Jeschua HaMaschiach.", he:"שֵׁבֶט הַמְּלָכִים וְהַמַּנְהִיגִים. יְהוּדָה צָעַד בְּרֹאשׁ יִשְׂרָאֵל, שֵׁבֶט דָּוִד הַמֶּלֶךְ וְיֵשׁוּעַ הַמָּשִׁיחַ.", ru:"Колено царей и вождей. Иуда шёл во главе Израиля, колено царя Давида и Йешуа ха-Машиаха." },
+    qualities: {
+      pt:["Liderança", "Coragem", "Lealdade", "Realeza"],
+      en:["Leadership", "Courage", "Loyalty", "Royalty"],
+      es:["Liderazgo", "Coraje", "Lealtad", "Realeza"],
+      fr:["Leadership", "Courage", "Loyauté", "Royauté"],
+      de:["Führung", "Mut", "Loyalität", "Königtum"],
+      he:["מַנְהִיגוּת", "אֹמֶץ", "נֶאֱמָנוּת", "מַלְכוּת"],
+      ru:["Лидерство", "Смелость", "Верность", "Царственность"],
+    },
+    challenge: { pt:"Orgulho e necessidade de controle", en:"Pride and need for control", es:"Orgullo y necesidad de control", fr:"Orgueil et besoin de contrôle", de:"Stolz und Kontrollbedürfnis", he:"גַּאֲוָה וְצֹרֶךְ בִּשְׁלִיטָה", ru:"Гордость и потребность в контроле" },
     scripture: "Gênesis 49:8-12; Números 2:3-9",
   },
   {
@@ -3388,10 +3554,18 @@ const TRIBES = [
     tribe: "Yissachar", heb: "יִשָּׂשכָר", eng: "Issachar",
     symbol: "🐂", mazal: "Touro ♉", stone: "Topázio",
     stoneHeb: "פִּטְדָה", color: "#d97706",
-    blessing: "Yissachar é um jumento forte, deitado entre as alforjas. (Gn 49:14)",
-    desc: "A tribo dos sábios e estudiosos da Torá. Especialistas em astronomia e no calendário hebraico, conheciam os tempos e as estações.",
-    qualities: ["Sabedoria", "Dedicação ao estudo", "Discernimento dos tempos", "Paciência"],
-    challenge: "Isolamento intelectual",
+    blessing: { pt:"Yissachar é um jumento forte, deitado entre as alforjas. (Gn 49:14)", en:"Issachar is a strong donkey, lying down between the sheepfolds. (Gen 49:14)", es:"Isacar es un asno fuerte que se recuesta entre los apriscos. (Gn 49:14)", fr:"Issacar est un âne robuste, couché entre les enclos. (Gn 49:14)", de:"Issachar ist ein knochiger Esel, der zwischen den Hürden liegt. (1. Mose 49:14)", he:"יִשָּׂשכָר חֲמֹר גָּרֶם רֹבֵץ בֵּין הַמִּשְׁפְּתָיִם. (בְּרֵאשִׁית מט:יד)", ru:"Иссахар осёл крепкий, лежащий между протоками вод. (Быт 49:14)" },
+    desc: { pt:"A tribo dos sábios e estudiosos da Torá. Especialistas em astronomia e no calendário hebraico, conheciam os tempos e as estações.", en:"The tribe of the wise and Torah scholars. Experts in astronomy and the Hebrew calendar, they knew the times and seasons.", es:"La tribu de los sabios y estudiosos de la Torá. Expertos en astronomía y en el calendario hebreo, conocían los tiempos y las estaciones.", fr:"La tribu des sages et des érudits de la Torah. Experts en astronomie et dans le calendrier hébraïque, ils connaissaient les temps et les saisons.", de:"Der Stamm der Weisen und Toragelehrten. Experten in Astronomie und im hebräischen Kalender, sie kannten die Zeiten und Jahreszeiten.", he:"שֵׁבֶט הַחֲכָמִים וְלוֹמְדֵי הַתּוֹרָה. מֻמְחִים בְּאַסְטְרוֹנוֹמְיָה וּבַלּוּחַ הָעִבְרִי, יָדְעוּ אֶת הָעִתִּים וְהַזְּמַנִּים.", ru:"Колено мудрецов и знатоков Торы. Эксперты в астрономии и еврейском календаре, они знали времена и сроки." },
+    qualities: {
+      pt:["Sabedoria", "Dedicação ao estudo", "Discernimento dos tempos", "Paciência"],
+      en:["Wisdom", "Dedication to study", "Discernment of times", "Patience"],
+      es:["Sabiduría", "Dedicación al estudio", "Discernimiento de los tiempos", "Paciencia"],
+      fr:["Sagesse", "Dévouement à l'étude", "Discernement des temps", "Patience"],
+      de:["Weisheit", "Hingabe zum Studium", "Zeitunterscheidung", "Geduld"],
+      he:["חָכְמָה", "הַקְדָּשָׁה לְלִמּוּד", "בִּינַת הָעִתִּים", "סַבְלָנוּת"],
+      ru:["Мудрость", "Преданность учёбе", "Различение времён", "Терпение"],
+    },
+    challenge: { pt:"Isolamento intelectual", en:"Intellectual isolation", es:"Aislamiento intelectual", fr:"Isolement intellectuel", de:"Intellektuelle Isolation", he:"בִּדּוּד אִינְטֶלֶקְטוּאָלִי", ru:"Интеллектуальная изоляция" },
     scripture: "Gênesis 49:14-15; 1 Crônicas 12:32",
   },
   {
@@ -3399,10 +3573,18 @@ const TRIBES = [
     tribe: "Zevulun", heb: "זְבוּלוּן", eng: "Zebulun",
     symbol: "⚓", mazal: "Gêmeos ♊", stone: "Esmeralda",
     stoneHeb: "בָּרֶקֶת", color: "#16a34a",
-    blessing: "Zevulun habitará à beira do mar, será porto de navios. (Gn 49:13)",
-    desc: "A tribo dos comerciantes e navegadores. Zevulun sustentava financeiramente os estudos de Yissachar, sendo modelo de parceria entre trabalho e Torá.",
-    qualities: ["Generosidade", "Espírito empreendedor", "Parceria", "Prosperidade"],
-    challenge: "Materialismo excessivo",
+    blessing: { pt:"Zevulun habitará à beira do mar, será porto de navios. (Gn 49:13)", en:"Zebulun shall dwell by the seashore; he shall become a haven for ships. (Gen 49:13)", es:"Zabulón habitará en la costa del mar; será puerto de naves. (Gn 49:13)", fr:"Zabulon habitera sur la côte des mers, il sera sur la côte des navires. (Gn 49:13)", de:"Sebulon wird an der Anfurt des Meeres wohnen und an der Anfurt der Schiffe. (1. Mose 49:13)", he:"זְבוּלֻן לְחוֹף יַמִּים יִשְׁכֹּן וְהוּא לְחוֹף אֳנִיּוֹת. (בְּרֵאשִׁית מט:יג)", ru:"Завулон при береге морском будет жить и у пристани корабельной. (Быт 49:13)" },
+    desc: { pt:"A tribo dos comerciantes e navegadores. Zevulun sustentava financeiramente os estudos de Yissachar, sendo modelo de parceria entre trabalho e Torá.", en:"The tribe of merchants and sailors. Zebulun financially supported Issachar's studies, being a model of partnership between work and Torah.", es:"La tribu de los comerciantes y navegantes. Zabulón sostenía financieramente los estudios de Isacar, siendo modelo de sociedad entre trabajo y Torá.", fr:"La tribu des marchands et navigateurs. Zabulon soutenait financièrement les études d'Issacar, étant un modèle de partenariat entre travail et Torah.", de:"Der Stamm der Kaufleute und Seefahrer. Sebulon unterstützte finanziell Issachars Studien, ein Modell der Partnerschaft zwischen Arbeit und Tora.", he:"שֵׁבֶט הַסּוֹחֲרִים וְהַסַּפָּנִים. זְבוּלֻן פִּרְנֵס אֶת לִמּוּדֵי יִשָּׂשכָר, דֻּגְמָה לְשֻׁתָּפוּת בֵּין עֲבוֹדָה לְתוֹרָה.", ru:"Колено купцов и мореплавателей. Завулон финансово поддерживал учёбу Иссахара, будучи образцом партнёрства труда и Торы." },
+    qualities: {
+      pt:["Generosidade", "Espírito empreendedor", "Parceria", "Prosperidade"],
+      en:["Generosity", "Entrepreneurial spirit", "Partnership", "Prosperity"],
+      es:["Generosidad", "Espíritu emprendedor", "Sociedad", "Prosperidad"],
+      fr:["Générosité", "Esprit d'entreprise", "Partenariat", "Prospérité"],
+      de:["Großzügigkeit", "Unternehmergeist", "Partnerschaft", "Wohlstand"],
+      he:["נְדִיבוּת", "רוּחַ יְזָמּוּת", "שֻׁתָּפוּת", "שִׂגְשׂוּג"],
+      ru:["Щедрость", "Предпринимательский дух", "Партнёрство", "Процветание"],
+    },
+    challenge: { pt:"Materialismo excessivo", en:"Excessive materialism", es:"Materialismo excesivo", fr:"Matérialisme excessif", de:"Übermäßiger Materialismus", he:"מָטֶרְיָאלִיזְם מֻגְזָם", ru:"Чрезмерный материализм" },
     scripture: "Gênesis 49:13; Deuteronômio 33:18-19",
   },
   {
@@ -3410,10 +3592,18 @@ const TRIBES = [
     tribe: "Reuven", heb: "רְאוּבֵן", eng: "Reuben",
     symbol: "🌊", mazal: "Câncer ♋", stone: "Cornalina",
     stoneHeb: "אֹדֶם", color: "#2563eb",
-    blessing: "Reuven, tu és meu primogênito, minha força… (Gn 49:3)",
-    desc: "O primogênito de Yaakov. Um mês de vulnerabilidade e reflexão. Tammuz foi mês de queda (bezerro de ouro), mas também de potencial de arrependimento e restauração.",
-    qualities: ["Sensibilidade", "Capacidade de arrependimento", "Empatia", "Visão"],
-    challenge: "Impulsividade e instabilidade emocional",
+    blessing: { pt:"Reuven, tu és meu primogênito, minha força… (Gn 49:3)", en:"Reuben, you are my firstborn, my strength… (Gen 49:3)", es:"Rubén, tú eres mi primogénito, mi fuerza… (Gn 49:3)", fr:"Ruben, toi, mon premier-né, ma force… (Gn 49:3)", de:"Ruben, du bist mein erstgeborener Sohn, meine Kraft… (1. Mose 49:3)", he:"רְאוּבֵן בְּכֹרִי אַתָּה כֹּחִי… (בְּרֵאשִׁית מט:ג)", ru:"Рувим, первенец мой, сила моя… (Быт 49:3)" },
+    desc: { pt:"O primogênito de Yaakov. Um mês de vulnerabilidade e reflexão. Tammuz foi mês de queda (bezerro de ouro), mas também de potencial de arrependimento e restauração.", en:"Yaakov's firstborn. A month of vulnerability and reflection. Tammuz was a month of downfall (golden calf), but also of potential repentance and restoration.", es:"El primogénito de Yaakov. Un mes de vulnerabilidad y reflexión. Tamuz fue mes de caída (becerro de oro), pero también de potencial arrepentimiento y restauración.", fr:"Le premier-né de Yaakov. Un mois de vulnérabilité et de réflexion. Tammouz fut un mois de chute (veau d'or), mais aussi de repentance et restauration potentielles.", de:"Jaakobs Erstgeborener. Ein Monat der Verletzlichkeit und Reflexion. Tammus war ein Monat des Falls (goldenes Kalb), aber auch möglicher Reue und Wiederherstellung.", he:"בְּכוֹר יַעֲקֹב. חֹדֶשׁ שֶׁל פְּגִיעוּת וְהִרְהוּר. תַּמּוּז הָיָה חֹדֶשׁ הַנְּפִילָה (עֵגֶל הַזָּהָב), אַךְ גַּם שֶׁל פּוֹטֶנְצְיָאל תְּשׁוּבָה.", ru:"Первенец Иакова. Месяц уязвимости и размышлений. Таммуз был месяцем падения (золотой телец), но также потенциального покаяния и восстановления." },
+    qualities: {
+      pt:["Sensibilidade", "Capacidade de arrependimento", "Empatia", "Visão"],
+      en:["Sensitivity", "Capacity for repentance", "Empathy", "Vision"],
+      es:["Sensibilidad", "Capacidad de arrepentimiento", "Empatía", "Visión"],
+      fr:["Sensibilité", "Capacité de repentance", "Empathie", "Vision"],
+      de:["Sensibilität", "Reuefähigkeit", "Empathie", "Vision"],
+      he:["רְגִישׁוּת", "יְכֹלֶת תְּשׁוּבָה", "אֶמְפַּתְיָה", "חָזוֹן"],
+      ru:["Чувствительность", "Способность к покаянию", "Эмпатия", "Видение"],
+    },
+    challenge: { pt:"Impulsividade e instabilidade emocional", en:"Impulsiveness and emotional instability", es:"Impulsividad e inestabilidad emocional", fr:"Impulsivité et instabilité émotionnelle", de:"Impulsivität und emotionale Instabilität", he:"אִימְפּוּלְסִיבִיּוּת וְחֹסֶר יַצִּיבוּת רִגְשִׁית", ru:"Импульсивность и эмоциональная нестабильность" },
     scripture: "Gênesis 49:3-4; Números 1:20-21",
   },
   {
@@ -3421,10 +3611,18 @@ const TRIBES = [
     tribe: "Shimon", heb: "שִׁמְעוֹן", eng: "Simeon",
     symbol: "🗡️", mazal: "Leão ♌", stone: "Esmeralda",
     stoneHeb: "נֹפֶךְ", color: "#7c3aed",
-    blessing: "Shimon e Levi são irmãos; suas espadas são instrumentos de violência. (Gn 49:5)",
-    desc: "A tribo do fervor e da intensidade. Av é o mês mais difícil do calendário (destruição do Templo), mas porta a semente da maior luz. O nome Shimon vem de 'ouvir'.",
-    qualities: ["Fervor espiritual", "Intensidade", "Ouvir a voz de Deus", "Transformação"],
-    challenge: "Ira e impulsividade destrutiva",
+    blessing: { pt:"Shimon e Levi são irmãos; suas espadas são instrumentos de violência. (Gn 49:5)", en:"Simeon and Levi are brothers; their swords are instruments of violence. (Gen 49:5)", es:"Simeón y Leví son hermanos; sus armas son instrumentos de violencia. (Gn 49:5)", fr:"Siméon et Lévi sont frères; leurs glaives sont des instruments de violence. (Gn 49:5)", de:"Simeon und Levi sind Brüder, ihre Schwerter sind Werkzeuge der Gewalttat. (1. Mose 49:5)", he:"שִׁמְעוֹן וְלֵוִי אַחִים כְּלֵי חָמָס מְכֵרֹתֵיהֶם. (בְּרֵאשִׁית מט:ה)", ru:"Симеон и Левий братья, орудия жестокости мечи их. (Быт 49:5)" },
+    desc: { pt:"A tribo do fervor e da intensidade. Av é o mês mais difícil do calendário (destruição do Templo), mas porta a semente da maior luz. O nome Shimon vem de 'ouvir'.", en:"The tribe of fervor and intensity. Av is the hardest month of the calendar (destruction of the Temple), but carries the seed of the greatest light. The name Shimon comes from 'to hear'.", es:"La tribu del fervor y la intensidad. Av es el mes más difícil del calendario (destrucción del Templo), pero porta la semilla de la mayor luz. El nombre Shimón viene de 'oír'.", fr:"La tribu de la ferveur et de l'intensité. Av est le mois le plus difficile du calendrier (destruction du Temple), mais porte la graine de la plus grande lumière.", de:"Der Stamm der Leidenschaft und Intensität. Av ist der schwerste Monat des Kalenders (Zerstörung des Tempels), trägt aber den Samen des größten Lichts.", he:"שֵׁבֶט הַלַּהַט וְהָעֹצְמָה. אָב הוּא הַחֹדֶשׁ הַקָּשֶׁה בְּיוֹתֵר בַּלּוּחַ (חֻרְבַּן הַמִּקְדָּשׁ), אַךְ נוֹשֵׂא אֶת זֶרַע הָאוֹר הַגָּדוֹל בְּיוֹתֵר.", ru:"Колено пыла и интенсивности. Ав — самый трудный месяц календаря (разрушение Храма), но несёт семя величайшего света." },
+    qualities: {
+      pt:["Fervor espiritual", "Intensidade", "Ouvir a voz de Deus", "Transformação"],
+      en:["Spiritual fervor", "Intensity", "Hearing God's voice", "Transformation"],
+      es:["Fervor espiritual", "Intensidad", "Oír la voz de Dios", "Transformación"],
+      fr:["Ferveur spirituelle", "Intensité", "Entendre la voix de Dieu", "Transformation"],
+      de:["Geistlicher Eifer", "Intensität", "Gottes Stimme hören", "Verwandlung"],
+      he:["לַהַט רוּחָנִי", "עֹצְמָה", "שְׁמִיעַת קוֹל ה'", "טְרַנְספוֹרְמַצְיָה"],
+      ru:["Духовный пыл", "Интенсивность", "Слышание голоса Бога", "Трансформация"],
+    },
+    challenge: { pt:"Ira e impulsividade destrutiva", en:"Anger and destructive impulsiveness", es:"Ira e impulsividad destructiva", fr:"Colère et impulsivité destructrice", de:"Zorn und zerstörerische Impulsivität", he:"כַּעַס וְאִימְפּוּלְסִיבִיּוּת הַרְסָנִית", ru:"Гнев и разрушительная импульсивность" },
     scripture: "Gênesis 49:5-7; Números 1:22-23",
   },
   {
@@ -3432,10 +3630,18 @@ const TRIBES = [
     tribe: "Gad", heb: "גָּד", eng: "Gad",
     symbol: "⚔️", mazal: "Virgem ♍", stone: "Diamante",
     stoneHeb: "יָהֲלֹם", color: "#0891b2",
-    blessing: "Gad, um exército o atacará, mas ele atacará o calcanhar deles. (Gn 49:19)",
-    desc: "A tribo dos guerreiros e dos vencedores. Elul é o mês de preparação e teshuvá (arrependimento) antes de Rosh Hashaná — o guerreiro se prepara para o julgamento.",
-    qualities: ["Coragem militar", "Resiliência", "Preparação", "Superação"],
-    challenge: "Agressividade desnecessária",
+    blessing: { pt:"Gad, um exército o atacará, mas ele atacará o calcanhar deles. (Gn 49:19)", en:"Gad, a troop shall press upon him, but he shall press upon their heel. (Gen 49:19)", es:"Gad, ejército lo asaltará, mas él asaltará su retaguardia. (Gn 49:19)", fr:"Gad sera assailli par des bandes armées, mais il les assaillira et les poursuivra. (Gn 49:19)", de:"Gad, Kriegsscharen werden ihn drängen, er aber wird sie in die Ferse drängen. (1. Mose 49:19)", he:"גָּד גְּדוּד יְגוּדֶנּוּ וְהוּא יָגֻד עָקֵב. (בְּרֵאשִׁית מט:יט)", ru:"Гад, толпа будет теснить его, но он оттеснит её по пятам. (Быт 49:19)" },
+    desc: { pt:"A tribo dos guerreiros e dos vencedores. Elul é o mês de preparação e teshuvá (arrependimento) antes de Rosh Hashaná — o guerreiro se prepara para o julgamento.", en:"The tribe of warriors and conquerors. Elul is the month of preparation and teshuvah (repentance) before Rosh Hashanah — the warrior prepares for judgment.", es:"La tribu de los guerreros y vencedores. Elul es el mes de preparación y teshuvá (arrepentimiento) antes de Rosh Hashaná — el guerrero se prepara para el juicio.", fr:"La tribu des guerriers et des vainqueurs. Elloul est le mois de préparation et de techouva (repentance) avant Roch Hachana — le guerrier se prépare au jugement.", de:"Der Stamm der Krieger und Sieger. Elul ist der Monat der Vorbereitung und Teschuwa (Buße) vor Rosch Haschana — der Krieger bereitet sich auf das Gericht vor.", he:"שֵׁבֶט הַלּוֹחֲמִים וְהַמְּנַצְּחִים. אֱלוּל הוּא חֹדֶשׁ הַהֲכָנָה וְהַתְּשׁוּבָה לִפְנֵי רֹאשׁ הַשָּׁנָה — הַלּוֹחֵם מִתְכּוֹנֵן לַמִּשְׁפָּט.", ru:"Колено воинов и победителей. Элул — месяц подготовки и тшувы (покаяния) перед Рош ха-Шана — воин готовится к суду." },
+    qualities: {
+      pt:["Coragem militar", "Resiliência", "Preparação", "Superação"],
+      en:["Military courage", "Resilience", "Preparation", "Overcoming"],
+      es:["Coraje militar", "Resiliencia", "Preparación", "Superación"],
+      fr:["Courage militaire", "Résilience", "Préparation", "Dépassement"],
+      de:["Militärischer Mut", "Widerstandsfähigkeit", "Vorbereitung", "Überwindung"],
+      he:["אֹמֶץ צְבָאִי", "חֹסֶן", "הֲכָנָה", "הִתְגַּבְּרוּת"],
+      ru:["Военная смелость", "Стойкость", "Подготовка", "Преодоление"],
+    },
+    challenge: { pt:"Agressividade desnecessária", en:"Unnecessary aggressiveness", es:"Agresividad innecesaria", fr:"Agressivité inutile", de:"Unnötige Aggressivität", he:"תּוֹקְפָנוּת מְיֻתֶּרֶת", ru:"Ненужная агрессивность" },
     scripture: "Gênesis 49:19; Deuteronômio 33:20-21",
   },
   {
@@ -3443,10 +3649,18 @@ const TRIBES = [
     tribe: "Efraim", heb: "אֶפְרַיִם", eng: "Ephraim",
     symbol: "🌳", mazal: "Libra ♎", stone: "Ônix",
     stoneHeb: "שֹׁהַם", color: "#059669",
-    blessing: "Seu descendente se tornará uma multidão de nações. (Gn 48:19)",
-    desc: "Filho de Yosef, recebeu a bênção do primogênito. Tishrei é o mês mais rico em festas — Rosh Hashaná, Yom Kippur e Sukkot. Efraim representa multiplicação e renovação.",
-    qualities: ["Multiplicação", "Renovação", "Equilíbrio (balança de Tishrei)", "Frutificação"],
-    challenge: "Dispersão de foco",
+    blessing: { pt:"Seu descendente se tornará uma multidão de nações. (Gn 48:19)", en:"His descendants shall become a multitude of nations. (Gen 48:19)", es:"Su descendencia llegará a ser multitud de naciones. (Gn 48:19)", fr:"Sa postérité deviendra une multitude de nations. (Gn 48:19)", de:"Sein Same wird eine Menge von Völkern werden. (1. Mose 48:19)", he:"וְזַרְעוֹ יִהְיֶה מְלֹא הַגּוֹיִם. (בְּרֵאשִׁית מח:יט)", ru:"Потомство его будет множеством народов. (Быт 48:19)" },
+    desc: { pt:"Filho de Yosef, recebeu a bênção do primogênito. Tishrei é o mês mais rico em festas — Rosh Hashaná, Yom Kippur e Sukkot. Efraim representa multiplicação e renovação.", en:"Son of Yosef, he received the firstborn's blessing. Tishrei is the month richest in feasts — Rosh Hashanah, Yom Kippur and Sukkot. Ephraim represents multiplication and renewal.", es:"Hijo de Yosef, recibió la bendición del primogénito. Tishrei es el mes más rico en fiestas — Rosh Hashaná, Yom Kipur y Sucot. Efraín representa multiplicación y renovación.", fr:"Fils de Yosef, il reçut la bénédiction du premier-né. Tichri est le mois le plus riche en fêtes — Roch Hachana, Yom Kippour et Souccot. Éphraïm représente la multiplication et le renouveau.", de:"Sohn von Josef, erhielt den Erstgeburtssegen. Tischri ist der festreichste Monat — Rosch Haschana, Jom Kippur und Sukkot. Ephraim steht für Vermehrung und Erneuerung.", he:"בְּנוֹ שֶׁל יוֹסֵף, קִבֵּל אֶת בִּרְכַּת הַבְּכוֹרָה. תִּשְׁרֵי הוּא הַחֹדֶשׁ הֶעָשִׁיר בְּיוֹתֵר בְּמוֹעֲדִים — רֹאשׁ הַשָּׁנָה, יוֹם כִּפּוּר וְסֻכּוֹת.", ru:"Сын Иосифа, получил благословение первенца. Тишрей — месяц, богатейший праздниками — Рош ха-Шана, Йом Кипур и Суккот. Ефрем представляет умножение и обновление." },
+    qualities: {
+      pt:["Multiplicação", "Renovação", "Equilíbrio (balança de Tishrei)", "Frutificação"],
+      en:["Multiplication", "Renewal", "Balance (Tishrei scales)", "Fruitfulness"],
+      es:["Multiplicación", "Renovación", "Equilibrio (balanza de Tishrei)", "Fructificación"],
+      fr:["Multiplication", "Renouveau", "Équilibre (balance de Tichri)", "Fructification"],
+      de:["Vermehrung", "Erneuerung", "Gleichgewicht (Tischri-Waage)", "Fruchtbarkeit"],
+      he:["רִבּוּי", "הִתְחַדְּשׁוּת", "אִזּוּן (מֹאזְנֵי תִּשְׁרֵי)", "הַפְרָיָה"],
+      ru:["Умножение", "Обновление", "Равновесие (весы Тишрея)", "Плодовитость"],
+    },
+    challenge: { pt:"Dispersão de foco", en:"Loss of focus", es:"Dispersión de enfoque", fr:"Dispersion de la concentration", de:"Zerstreuung des Fokus", he:"פִּזּוּר רֹאשׁ", ru:"Рассеивание фокуса" },
     scripture: "Gênesis 48:14-20; Deuteronômio 33:17",
   },
   {
@@ -3454,10 +3668,18 @@ const TRIBES = [
     tribe: "Menashe", heb: "מְנַשֶּׁה", eng: "Manasseh",
     symbol: "💧", mazal: "Escorpião ♏", stone: "Ágata",
     stoneHeb: "שְׁבוֹ", color: "#1d4ed8",
-    blessing: "Que Deus te faça como Efraim e Menashe. (Gn 48:20)",
-    desc: "O primogênito de Yosef. Cheshvan é o único mês sem festas — um mês de introspecção profunda e trabalho silencioso. Menashe representa esquecer o sofrimento passado e seguir em frente.",
-    qualities: ["Introspecção", "Superação do passado", "Trabalho silencioso", "Perseverança"],
-    challenge: "Melancolia e isolamento",
+    blessing: { pt:"Que Deus te faça como Efraim e Menashe. (Gn 48:20)", en:"May God make you as Ephraim and Manasseh. (Gen 48:20)", es:"Que Dios te haga como a Efraín y a Manasés. (Gn 48:20)", fr:"Que Dieu te rende semblable à Éphraïm et à Manassé. (Gn 48:20)", de:"Gott setze dich wie Ephraim und Manasse. (1. Mose 48:20)", he:"יְשִׂמְךָ אֱלֹהִים כְּאֶפְרַיִם וְכִמְנַשֶּׁה. (בְּרֵאשִׁית מח:כ)", ru:"Бог да сотворит тебе, как Ефрему и Манассии. (Быт 48:20)" },
+    desc: { pt:"O primogênito de Yosef. Cheshvan é o único mês sem festas — um mês de introspecção profunda e trabalho silencioso. Menashe representa esquecer o sofrimento passado e seguir em frente.", en:"Yosef's firstborn. Cheshvan is the only month without feasts — a month of deep introspection and quiet work. Manasseh represents forgetting past suffering and moving forward.", es:"El primogénito de Yosef. Cheshvan es el único mes sin fiestas — un mes de introspección profunda y trabajo silencioso. Manasés representa olvidar el sufrimiento pasado y seguir adelante.", fr:"Le premier-né de Yosef. Hesvan est le seul mois sans fêtes — un mois d'introspection profonde et de travail silencieux. Manassé représente l'oubli des souffrances passées.", de:"Josefs Erstgeborener. Cheschwan ist der einzige Monat ohne Feste — ein Monat tiefer Selbstreflexion und stiller Arbeit. Manasse steht für das Vergessen vergangenen Leids.", he:"בְּכוֹר יוֹסֵף. חֶשְׁוָן הוּא הַחֹדֶשׁ הַיָּחִיד לְלֹא מוֹעֲדִים — חֹדֶשׁ שֶׁל הִתְבּוֹנְנוּת עֲמֻקָּה וַעֲבוֹדָה שְׁקֵטָה.", ru:"Первенец Иосифа. Хешван — единственный месяц без праздников — месяц глубокой самоанализа и тихой работы. Манассия представляет забвение прошлых страданий." },
+    qualities: {
+      pt:["Introspecção", "Superação do passado", "Trabalho silencioso", "Perseverança"],
+      en:["Introspection", "Overcoming the past", "Quiet work", "Perseverance"],
+      es:["Introspección", "Superación del pasado", "Trabajo silencioso", "Perseverancia"],
+      fr:["Introspection", "Dépassement du passé", "Travail silencieux", "Persévérance"],
+      de:["Selbstreflexion", "Vergangenheitsbewältigung", "Stille Arbeit", "Beharrlichkeit"],
+      he:["הִתְבּוֹנְנוּת פְּנִימִית", "הִתְגַּבְּרוּת עַל הֶעָבָר", "עֲבוֹדָה שְׁקֵטָה", "הַתְמָדָה"],
+      ru:["Интроспекция", "Преодоление прошлого", "Тихая работа", "Настойчивость"],
+    },
+    challenge: { pt:"Melancolia e isolamento", en:"Melancholy and isolation", es:"Melancolía y aislamiento", fr:"Mélancolie et isolement", de:"Melancholie und Isolation", he:"מְלַנְכוֹלְיָה וּבִדּוּד", ru:"Меланхолия и изоляция" },
     scripture: "Gênesis 41:51; 48:14-20",
   },
   {
@@ -3465,10 +3687,18 @@ const TRIBES = [
     tribe: "Binyamin", heb: "בִּנְיָמִן", eng: "Benjamin",
     symbol: "🐺", mazal: "Sagitário ♐", stone: "Ametista",
     stoneHeb: "אַחְלָמָה", color: "#7c3aed",
-    blessing: "Binyamin é um lobo que devora; de manhã consome a presa. (Gn 49:27)",
-    desc: "O filho amado de Yaakov e Raquel. Kislev é o mês de Chanukah — a festa da luz e da dedicação. Binyamin era o único filho nascido em Eretz Israel, representando santidade e intimidade com o sagrado.",
-    qualities: ["Intimidade com o sagrado", "Proteção feroz", "Devoção", "Luz na escuridão"],
-    challenge: "Impulsividade e territorialismo",
+    blessing: { pt:"Binyamin é um lobo que devora; de manhã consome a presa. (Gn 49:27)", en:"Benjamin is a ravenous wolf; in the morning he shall devour the prey. (Gen 49:27)", es:"Benjamín es lobo arrebatador; a la mañana comerá la presa. (Gn 49:27)", fr:"Benjamin est un loup qui déchire; le matin, il dévore la proie. (Gn 49:27)", de:"Benjamin ist ein reißender Wolf; am Morgen wird er Raub fressen. (1. Mose 49:27)", he:"בִּנְיָמִין זְאֵב יִטְרָף בַּבֹּקֶר יֹאכַל עַד. (בְּרֵאשִׁית מט:כז)", ru:"Вениамин, хищный волк, утром будет есть ловитву. (Быт 49:27)" },
+    desc: { pt:"O filho amado de Yaakov e Raquel. Kislev é o mês de Chanukah — a festa da luz e da dedicação. Binyamin era o único filho nascido em Eretz Israel, representando santidade e intimidade com o sagrado.", en:"The beloved son of Yaakov and Rachel. Kislev is the month of Chanukah — the feast of light and dedication. Benjamin was the only son born in Eretz Israel, representing holiness and intimacy with the sacred.", es:"El hijo amado de Yaakov y Raquel. Kislev es el mes de Janucá — la fiesta de la luz y la dedicación. Benjamín fue el único hijo nacido en Eretz Israel, representando santidad e intimidad con lo sagrado.", fr:"Le fils bien-aimé de Yaakov et Rachel. Kislev est le mois de Hanoucca — la fête de la lumière et de la dédicace. Benjamin était le seul fils né en Eretz Israël, représentant la sainteté.", de:"Der geliebte Sohn von Jaakob und Rachel. Kislev ist der Monat von Chanukka — das Lichter- und Weihefest. Benjamin war der einzige in Eretz Israel geborene Sohn, ein Symbol der Heiligkeit.", he:"הַבֵּן הָאָהוּב שֶׁל יַעֲקֹב וְרָחֵל. כִּסְלֵו הוּא חֹדֶשׁ הַחֲנֻכָּה — חַג הָאוֹר וְהַחֲנֻכָּה. בִּנְיָמִין הָיָה הַבֵּן הַיָּחִיד שֶׁנּוֹלַד בְּאֶרֶץ יִשְׂרָאֵל.", ru:"Любимый сын Иакова и Рахили. Кислев — месяц Хануки — праздника света и посвящения. Вениамин был единственным сыном, рождённым в Эрец Исраэль." },
+    qualities: {
+      pt:["Intimidade com o sagrado", "Proteção feroz", "Devoção", "Luz na escuridão"],
+      en:["Intimacy with the sacred", "Fierce protection", "Devotion", "Light in darkness"],
+      es:["Intimidad con lo sagrado", "Protección feroz", "Devoción", "Luz en la oscuridad"],
+      fr:["Intimité avec le sacré", "Protection féroce", "Dévotion", "Lumière dans les ténèbres"],
+      de:["Nähe zum Heiligen", "Wilder Schutz", "Hingabe", "Licht in der Dunkelheit"],
+      he:["קִרְבָה לַקֹּדֶשׁ", "הֲגָנָה עַזָּה", "מְסִירוּת", "אוֹר בַּחֹשֶׁךְ"],
+      ru:["Близость к святому", "Яростная защита", "Преданность", "Свет во тьме"],
+    },
+    challenge: { pt:"Impulsividade e territorialismo", en:"Impulsiveness and territorialism", es:"Impulsividad y territorialismo", fr:"Impulsivité et territorialité", de:"Impulsivität und Territorialverhalten", he:"אִימְפּוּלְסִיבִיּוּת וְטֶרִיטוֹרְיָאלִיּוּת", ru:"Импульсивность и территориальность" },
     scripture: "Gênesis 49:27; Deuteronômio 33:12",
   },
   {
@@ -3476,10 +3706,18 @@ const TRIBES = [
     tribe: "Dan", heb: "דָּן", eng: "Dan",
     symbol: "🐍", mazal: "Capricórnio ♑", stone: "Berilo",
     stoneHeb: "תַּרְשִׁישׁ", color: "#374151",
-    blessing: "Dã julgará seu povo como uma das tribos de Israel. (Gn 49:16)",
-    desc: "A tribo dos juízes e do discernimento. Tevet é um mês sombrio (jejum do 10 de Tevet), mas Dan representa a capacidade de distinguir o bem do mal e fazer justiça.",
-    qualities: ["Discernimento", "Senso de justiça", "Percepção aguçada", "Julgamento justo"],
-    challenge: "Cinismo e julgamento excessivo",
+    blessing: { pt:"Dã julgará seu povo como uma das tribos de Israel. (Gn 49:16)", en:"Dan shall judge his people as one of the tribes of Israel. (Gen 49:16)", es:"Dan juzgará a su pueblo como una de las tribus de Israel. (Gn 49:16)", fr:"Dan jugera son peuple, comme l'une des tribus d'Israël. (Gn 49:16)", de:"Dan wird sein Volk richten als eine der Stämme Israels. (1. Mose 49:16)", he:"דָּן יָדִין עַמּוֹ כְּאַחַד שִׁבְטֵי יִשְׂרָאֵל. (בְּרֵאשִׁית מט:טז)", ru:"Дан будет судить народ свой, как одно из колен Израиля. (Быт 49:16)" },
+    desc: { pt:"A tribo dos juízes e do discernimento. Tevet é um mês sombrio (jejum do 10 de Tevet), mas Dan representa a capacidade de distinguir o bem do mal e fazer justiça.", en:"The tribe of judges and discernment. Tevet is a somber month (fast of the 10th of Tevet), but Dan represents the ability to distinguish good from evil and administer justice.", es:"La tribu de los jueces y el discernimiento. Tevet es un mes sombrío (ayuno del 10 de Tevet), pero Dan representa la capacidad de distinguir el bien del mal y hacer justicia.", fr:"La tribu des juges et du discernement. Tevet est un mois sombre (jeûne du 10 Tevet), mais Dan représente la capacité de distinguer le bien du mal et de rendre justice.", de:"Der Stamm der Richter und der Unterscheidung. Tevet ist ein düsterer Monat (Fasten am 10. Tevet), aber Dan steht für die Fähigkeit, Gut und Böse zu unterscheiden.", he:"שֵׁבֶט הַשּׁוֹפְטִים וְהַהֲבָנָה. טֵבֵת הוּא חֹדֶשׁ קוֹדֵר (צוֹם עֲשָׂרָה בְּטֵבֵת), אַךְ דָּן מְיַצֵּג אֶת הַיְּכֹלֶת לְהַבְחִין בֵּין טוֹב לְרַע.", ru:"Колено судей и различения. Тевет — мрачный месяц (пост 10 Тевета), но Дан представляет способность отличать добро от зла и творить правосудие." },
+    qualities: {
+      pt:["Discernimento", "Senso de justiça", "Percepção aguçada", "Julgamento justo"],
+      en:["Discernment", "Sense of justice", "Sharp perception", "Fair judgment"],
+      es:["Discernimiento", "Sentido de justicia", "Percepción aguda", "Juicio justo"],
+      fr:["Discernement", "Sens de la justice", "Perception aiguë", "Jugement équitable"],
+      de:["Unterscheidungsvermögen", "Gerechtigkeitssinn", "Scharfe Wahrnehmung", "Faires Urteil"],
+      he:["שִׁפּוּט", "חוּשׁ צֶדֶק", "תְּפִיסָה חַדָּה", "מִשְׁפָּט הוֹגֵן"],
+      ru:["Различение", "Чувство справедливости", "Острое восприятие", "Справедливый суд"],
+    },
+    challenge: { pt:"Cinismo e julgamento excessivo", en:"Cynicism and excessive judgment", es:"Cinismo y juicio excesivo", fr:"Cynisme et jugement excessif", de:"Zynismus und übermäßiges Urteilen", he:"צִינִיּוּת וּשְׁפִיטָה מֻגְזֶמֶת", ru:"Цинизм и чрезмерное осуждение" },
     scripture: "Gênesis 49:16-18; Juízes 13-16 (Sansão)",
   },
   {
@@ -3487,10 +3725,18 @@ const TRIBES = [
     tribe: "Asher", heb: "אָשֵׁר", eng: "Asher",
     symbol: "🌿", mazal: "Aquário ♒", stone: "Berilo",
     stoneHeb: "שֹׁהַם", color: "#65a30d",
-    blessing: "De Asher virá pão excelente; ele produzirá delícias reais. (Gn 49:20)",
-    desc: "A tribo da abundância e das bênçãos materiais. Shevat é o Ano Novo das Árvores (Tu BiShvat) — tempo de renovação e gratidão pelos frutos da terra. Asher representa alegria e contentamento.",
-    qualities: ["Alegria", "Abundância", "Gratidão", "Contentamento"],
-    challenge: "Conformismo e acomodação",
+    blessing: { pt:"De Asher virá pão excelente; ele produzirá delícias reais. (Gn 49:20)", en:"Bread from Asher shall be rich, and he shall yield royal dainties. (Gen 49:20)", es:"El pan de Aser será substancioso, y él dará deleites reales. (Gn 49:20)", fr:"Aser produit une nourriture excellente; il fournira les mets délicats des rois. (Gn 49:20)", de:"Von Asser kommt fettes Brot, und er wird königliche Leckerbissen liefern. (1. Mose 49:20)", he:"מֵאָשֵׁר שְׁמֵנָה לַחְמוֹ וְהוּא יִתֵּן מַעֲדַנֵּי מֶלֶךְ. (בְּרֵאשִׁית מט:כ)", ru:"Для Асира — хлеб его тучен, и он будет доставлять царские яства. (Быт 49:20)" },
+    desc: { pt:"A tribo da abundância e das bênçãos materiais. Shevat é o Ano Novo das Árvores (Tu BiShvat) — tempo de renovação e gratidão pelos frutos da terra. Asher representa alegria e contentamento.", en:"The tribe of abundance and material blessings. Shevat is the New Year of Trees (Tu BiShvat) — a time of renewal and gratitude for the fruits of the earth. Asher represents joy and contentment.", es:"La tribu de la abundancia y las bendiciones materiales. Shevat es el Año Nuevo de los Árboles (Tu BiShvat) — tiempo de renovación y gratitud por los frutos de la tierra.", fr:"La tribu de l'abondance et des bénédictions matérielles. Shevat est le Nouvel An des Arbres (Tou BiShvat) — temps de renouveau et de gratitude pour les fruits de la terre.", de:"Der Stamm des Überflusses und materieller Segnungen. Schwat ist das Neujahr der Bäume (Tu BiSchwat) — Zeit der Erneuerung und Dankbarkeit für die Früchte der Erde.", he:"שֵׁבֶט הַשֶּׁפַע וְהַבְּרָכוֹת הַגַּשְׁמִיּוֹת. שְׁבָט הוּא רֹאשׁ הַשָּׁנָה לָאִילָנוֹת (טוּ בִּשְׁבָט) — זְמַן הִתְחַדְּשׁוּת וְהַכָּרַת תּוֹדָה.", ru:"Колено изобилия и материальных благословений. Шват — Новый год деревьев (Ту би-Шват) — время обновления и благодарности за плоды земли." },
+    qualities: {
+      pt:["Alegria", "Abundância", "Gratidão", "Contentamento"],
+      en:["Joy", "Abundance", "Gratitude", "Contentment"],
+      es:["Alegría", "Abundancia", "Gratitud", "Contentamiento"],
+      fr:["Joie", "Abondance", "Gratitude", "Contentement"],
+      de:["Freude", "Überfluss", "Dankbarkeit", "Zufriedenheit"],
+      he:["שִׂמְחָה", "שֶׁפַע", "הַכָּרַת תּוֹדָה", "שְׂבִיעוּת רָצוֹן"],
+      ru:["Радость", "Изобилие", "Благодарность", "Довольство"],
+    },
+    challenge: { pt:"Conformismo e acomodação", en:"Conformism and complacency", es:"Conformismo y acomodación", fr:"Conformisme et complaisance", de:"Konformismus und Selbstzufriedenheit", he:"קוֹנְפוֹרְמִיזְם וְשַׁאֲנַנּוּת", ru:"Конформизм и самоуспокоенность" },
     scripture: "Gênesis 49:20; Deuteronômio 33:24-25",
   },
   {
@@ -3498,10 +3744,18 @@ const TRIBES = [
     tribe: "Naftali", heb: "נַפְתָּלִי", eng: "Naphtali",
     symbol: "🦌", mazal: "Peixes ♓", stone: "Ametista",
     stoneHeb: "אַחְלָמָה", color: "#0284c7",
-    blessing: "Naftali é uma gazela solta, que pronuncia belas palavras. (Gn 49:21)",
-    desc: "A tribo da leveza, alegria e belas palavras. Adar é o mês de Purim — alegria e celebração. Naftali era veloz como uma gazela, representando espiritualidade ágil e palavras inspiradas.",
-    qualities: ["Alegria", "Leveza", "Eloquência", "Agilidade espiritual"],
-    challenge: "Superficialidade e inconstância",
+    blessing: { pt:"Naftali é uma gazela solta, que pronuncia belas palavras. (Gn 49:21)", en:"Naphtali is a doe let loose, giving beautiful words. (Gen 49:21)", es:"Neftalí es una cierva suelta, que pronuncia dichos hermosos. (Gn 49:21)", fr:"Nephtali est une biche en liberté; il profère de belles paroles. (Gn 49:21)", de:"Naphtali ist eine losgelassene Hirschkuh, die schöne Worte spricht. (1. Mose 49:21)", he:"נַפְתָּלִי אַיָּלָה שְׁלֻחָה הַנֹּתֵן אִמְרֵי שָׁפֶר. (בְּרֵאשִׁית מט:כא)", ru:"Неффалим — серна стройная; он говорит прекрасные изречения. (Быт 49:21)" },
+    desc: { pt:"A tribo da leveza, alegria e belas palavras. Adar é o mês de Purim — alegria e celebração. Naftali era veloz como uma gazela, representando espiritualidade ágil e palavras inspiradas.", en:"The tribe of lightness, joy and beautiful words. Adar is the month of Purim — joy and celebration. Naphtali was swift as a doe, representing agile spirituality and inspired words.", es:"La tribu de la ligereza, alegría y palabras hermosas. Adar es el mes de Purim — alegría y celebración. Neftalí era veloz como una cierva, representando espiritualidad ágil.", fr:"La tribu de la légèreté, la joie et les belles paroles. Adar est le mois de Pourim — joie et célébration. Nephtali était rapide comme une biche, représentant une spiritualité agile.", de:"Der Stamm der Leichtigkeit, Freude und schönen Worte. Adar ist der Monat von Purim — Freude und Feier. Naphtali war schnell wie eine Hirschkuh, agile Spiritualität.", he:"שֵׁבֶט הַקַּלּוּת, הַשִּׂמְחָה וְהַמִּלִּים הַיָּפוֹת. אֲדָר הוּא חֹדֶשׁ הַפּוּרִים — שִׂמְחָה וְחֲגִיגָה. נַפְתָּלִי הָיָה מָהִיר כְּאַיָּלָה.", ru:"Колено лёгкости, радости и красивых слов. Адар — месяц Пурима — радости и празднования. Неффалим был быстр, как серна, представляя гибкую духовность." },
+    qualities: {
+      pt:["Alegria", "Leveza", "Eloquência", "Agilidade espiritual"],
+      en:["Joy", "Lightness", "Eloquence", "Spiritual agility"],
+      es:["Alegría", "Ligereza", "Elocuencia", "Agilidad espiritual"],
+      fr:["Joie", "Légèreté", "Éloquence", "Agilité spirituelle"],
+      de:["Freude", "Leichtigkeit", "Eloquenz", "Geistliche Beweglichkeit"],
+      he:["שִׂמְחָה", "קַלּוּת", "רְהִיטוּת", "זְרִיזוּת רוּחָנִית"],
+      ru:["Радость", "Лёгкость", "Красноречие", "Духовная гибкость"],
+    },
+    challenge: { pt:"Superficialidade e inconstância", en:"Superficiality and inconsistency", es:"Superficialidad e inconstancia", fr:"Superficialité et inconstance", de:"Oberflächlichkeit und Unbeständigkeit", he:"שִׁטְחִיּוּת וְחֹסֶר עֲקֵבִיּוּת", ru:"Поверхностность и непостоянство" },
     scripture: "Gênesis 49:21; Deuteronômio 33:23",
   },
   {
@@ -3509,13 +3763,22 @@ const TRIBES = [
     tribe: "Naftali", heb: "נַפְתָּלִי", eng: "Naphtali",
     symbol: "🦌", mazal: "Peixes ♓", stone: "Ametista",
     stoneHeb: "אַחְלָמָה", color: "#0284c7",
-    blessing: "Naftali é uma gazela solta, que pronuncia belas palavras. (Gn 49:21)",
-    desc: "Segundo Adar — em anos embolísmicos (bissextos). Purim é celebrado no Adar II nestes anos. A duplicidade do mês amplifica a alegria e a redenção.",
-    qualities: ["Alegria duplicada", "Graça divina", "Redenção", "Renovação"],
-    challenge: "Inconstância",
+    blessing: { pt:"Naftali é uma gazela solta, que pronuncia belas palavras. (Gn 49:21)", en:"Naphtali is a doe let loose, giving beautiful words. (Gen 49:21)", es:"Neftalí es una cierva suelta, que pronuncia dichos hermosos. (Gn 49:21)", fr:"Nephtali est une biche en liberté; il profère de belles paroles. (Gn 49:21)", de:"Naphtali ist eine losgelassene Hirschkuh, die schöne Worte spricht. (1. Mose 49:21)", he:"נַפְתָּלִי אַיָּלָה שְׁלֻחָה הַנֹּתֵן אִמְרֵי שָׁפֶר. (בְּרֵאשִׁית מט:כא)", ru:"Неффалим — серна стройная; он говорит прекрасные изречения. (Быт 49:21)" },
+    desc: { pt:"Segundo Adar — em anos embolísmicos (bissextos). Purim é celebrado no Adar II nestes anos. A duplicidade do mês amplifica a alegria e a redenção.", en:"Second Adar — in embolismic (leap) years. Purim is celebrated in Adar II in these years. The duplication of the month amplifies joy and redemption.", es:"Segundo Adar — en años embolísmicos (bisiestos). Purim se celebra en Adar II en estos años. La duplicidad del mes amplifica la alegría y la redención.", fr:"Second Adar — les années embolismiques (bissextiles). Pourim est célébré en Adar II ces années-là. La duplication du mois amplifie la joie et la rédemption.", de:"Zweiter Adar — in Schaltjahren. Purim wird in diesen Jahren im Adar II gefeiert. Die Verdopplung des Monats verstärkt Freude und Erlösung.", he:"אֲדָר שֵׁנִי — בְּשָׁנִים מְעֻבָּרוֹת. פּוּרִים נֶחְגָּג בַּאֲדָר ב' בַּשָּׁנִים הַלָּלוּ. כֶּפֶל הַחֹדֶשׁ מַגְבִּיר אֶת הַשִּׂמְחָה וְהַגְּאֻלָּה.", ru:"Второй Адар — в високосные годы. Пурим празднуется в Адар II в эти годы. Удвоение месяца усиливает радость и искупление." },
+    qualities: {
+      pt:["Alegria duplicada", "Graça divina", "Redenção", "Renovação"],
+      en:["Doubled joy", "Divine grace", "Redemption", "Renewal"],
+      es:["Alegría duplicada", "Gracia divina", "Redención", "Renovación"],
+      fr:["Joie doublée", "Grâce divine", "Rédemption", "Renouveau"],
+      de:["Verdoppelte Freude", "Göttliche Gnade", "Erlösung", "Erneuerung"],
+      he:["שִׂמְחָה כְּפוּלָה", "חֶסֶד אֱלֹהִי", "גְּאֻלָּה", "הִתְחַדְּשׁוּת"],
+      ru:["Удвоенная радость", "Божественная благодать", "Искупление", "Обновление"],
+    },
+    challenge: { pt:"Inconstância", en:"Inconsistency", es:"Inconstancia", fr:"Inconstance", de:"Unbeständigkeit", he:"חֹסֶר עֲקֵבִיּוּת", ru:"Непостоянство" },
     scripture: "Ester 9:20-28",
   },
 ];
+;
 
 // Mapa de acesso rápido por ID
 const TRIBE_BY_MONTH = Object.fromEntries(TRIBES.map(t => [t.monthId, t]));
@@ -3604,18 +3867,18 @@ function ConverterPage({ lang = "pt" }) {
         {/* bênção */}
         <div style={{background:ink(0.5),borderRadius:10,padding:"10px 14px",marginBottom:12}}>
           <div style={{color:S.gold,fontSize:10,fontWeight:700,marginBottom:4}}>{t("jacobsBlessing")}</div>
-          <p style={{color:S.text,fontSize:12,fontStyle:"italic",lineHeight:1.6}}>{tribe.blessing}</p>
+          <p style={{color:S.text,fontSize:12,fontStyle:"italic",lineHeight:1.6}}>{tribe.blessing[lang] || tribe.blessing.pt}</p>
         </div>
 
         {/* descrição */}
-        <p style={{color:S.textMuted,fontSize:13,lineHeight:1.7,marginBottom:12}}>{tribe.desc}</p>
+        <p style={{color:S.textMuted,fontSize:13,lineHeight:1.7,marginBottom:12}}>{tribe.desc[lang] || tribe.desc.pt}</p>
 
         {/* qualidades e desafio */}
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
           <div style={{background:`${tribe.color}10`,borderRadius:10,padding:"10px 12px"}}>
             <div style={{color:tribe.color,fontSize:10,fontWeight:700,marginBottom:6}}>{t("giftsLabel")}</div>
             <div style={{display:"flex",flexDirection:"column",gap:4}}>
-              {tribe.qualities.map(q => (
+              {(tribe.qualities[lang] || tribe.qualities.pt).map(q => (
                 <span key={q} style={{color:S.text,fontSize:11,display:"flex",alignItems:"center",gap:6}}>
                   <span style={{width:5,height:5,borderRadius:"50%",background:tribe.color,flexShrink:0,display:"inline-block"}}/>
                   {q}
@@ -3625,7 +3888,7 @@ function ConverterPage({ lang = "pt" }) {
           </div>
           <div style={{background:"rgba(239,68,68,0.08)",borderRadius:10,padding:"10px 12px"}}>
             <div style={{color:"#f87171",fontSize:10,fontWeight:700,marginBottom:6}}>{t("challengeLabel")}</div>
-            <p style={{color:S.textMuted,fontSize:11,lineHeight:1.5}}>{tribe.challenge}</p>
+            <p style={{color:S.textMuted,fontSize:11,lineHeight:1.5}}>{tribe.challenge[lang] || tribe.challenge.pt}</p>
             <div style={{marginTop:8,color:S.gold,fontSize:10,fontStyle:"italic"}}>{tribe.scripture}</div>
           </div>
         </div>
@@ -3746,7 +4009,7 @@ function ConverterPage({ lang = "pt" }) {
                         <div style={{color:S.goldLight,fontSize:11,fontWeight:700}}>
                           {birthResult.feast.emoji} {t("bornDuringFeast").replace("{feast}", birthResult.feast.name)}
                         </div>
-                        <div style={{color:S.textMuted,fontSize:10,marginTop:2}}>{birthResult.feast.desc}</div>
+                        <div style={{color:S.textMuted,fontSize:10,marginTop:2}}>{birthResult.feast.desc[lang] || birthResult.feast.desc.pt}</div>
                       </div>
                     )}
                   </div>
@@ -3881,8 +4144,8 @@ function ConverterPage({ lang = "pt" }) {
                   <div style={{color:S.goldLight,fontWeight:700,fontSize:15,marginBottom:6}}>
                     {convResult.feast.emoji} {t("dateIsFeast").replace("{feast}", convResult.feast.name)}
                   </div>
-                  <p style={{color:S.text,fontSize:13,lineHeight:1.6,marginBottom:6}}>{convResult.feast.desc}</p>
-                  <p style={{color:S.textMuted,fontSize:12,fontStyle:"italic"}}>{convResult.feast.sig}</p>
+                  <p style={{color:S.text,fontSize:13,lineHeight:1.6,marginBottom:6}}>{convResult.feast.desc[lang] || convResult.feast.desc.pt}</p>
+                  <p style={{color:S.textMuted,fontSize:12,fontStyle:"italic"}}>{convResult.feast.sig[lang] || convResult.feast.sig.pt}</p>
                   <div style={{color:S.gold,fontSize:12,marginTop:6}}>📖 {convResult.feast.scripture}</div>
                 </div>
               )}
@@ -3954,7 +4217,7 @@ function ConverterPage({ lang = "pt" }) {
                 </div>
               </div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-                {tribe.qualities.slice(0,2).map(q => (
+                {(tribe.qualities[lang] || tribe.qualities.pt).slice(0,2).map(q => (
                   <span key={q} style={{background:`${tribe.color}1a`,color:tribe.color,fontSize:10,
                     padding:"2px 8px",borderRadius:20,border:`1px solid ${tribe.color}33`}}>{q}</span>
                 ))}
@@ -5047,7 +5310,7 @@ export default function App() {
 
       {/* Notification manager */}
       <div style={{ maxWidth: 960, margin: "12px auto 0", padding: "0 16px" }}>
-        <NotificationManager />
+        <NotificationManager lang={lang} />
       </div>
 
       {/* Page content */}
@@ -5055,7 +5318,7 @@ export default function App() {
         {pages[activeTab]}
       </main>
 
-      <InstallBanner />
+      <InstallBanner lang={lang} />
 
       {/* Premium Footer */}
       <footer style={{
