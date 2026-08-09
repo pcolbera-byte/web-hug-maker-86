@@ -2007,6 +2007,23 @@ function CalendarPage({ lang = "pt" }) {
         <div style={{ position:"absolute", top:-90, right:-70, width:280, height:280,
           borderRadius:"50%", border:`1px solid ${S.goldBorder}`, opacity:0.15, pointerEvents:"none" }}/>
 
+        <div style={{ textAlign: "center", marginBottom: 22 }}>
+          <img
+            src="/moedim-brand.png"
+            alt="Moedim — Calendário Bíblico"
+            style={{
+              width: 180,
+              maxWidth: "60%",
+              height: "auto",
+              borderRadius: 18,
+              boxShadow: S.isDark
+                ? "0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25)"
+                : "0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(212,175,55,0.25)",
+              display: "inline-block",
+            }}
+          />
+        </div>
+
         <div style={{ position:"relative", display:"flex", flexWrap:"wrap", gap:20, alignItems:"flex-start" }}>
           {/* Left: Hebrew date */}
           <div style={{ flex:"1 1 200px" }}>
