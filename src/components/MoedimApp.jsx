@@ -1783,15 +1783,7 @@ function Navigation({ active, setActive, lang, setLang }) {
           {/* Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
             onClick={() => setActive("calendar")}>
-            <MenorahLogo size={40} />
-            <div>
-              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, lineHeight: 1, letterSpacing: "0.06em" }}>
-                Moedim — Calendário Bíblico
-              </div>
-              <div className="hebrew" style={{ color: S.gold, fontSize: 12, opacity: 0.8, letterSpacing: "0.06em" }}>
-                מוֹעֲדִים
-              </div>
-            </div>
+            <MenorahLogo size={52} />
           </div>
           {/* Desktop tabs */}
           <div style={{ display: "flex", gap: 2, overflowX: "auto", minWidth: 0 }}>
