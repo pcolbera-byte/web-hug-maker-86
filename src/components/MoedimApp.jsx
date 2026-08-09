@@ -1783,15 +1783,7 @@ function Navigation({ active, setActive, lang, setLang }) {
           {/* Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
             onClick={() => setActive("calendar")}>
-            <MenorahLogo size={40} />
-            <div>
-              <div className="cinzel" style={{ color: S.goldLight, fontWeight: 700, fontSize: 15, lineHeight: 1, letterSpacing: "0.06em" }}>
-                Moedim — Calendário Bíblico
-              </div>
-              <div className="hebrew" style={{ color: S.gold, fontSize: 12, opacity: 0.8, letterSpacing: "0.06em" }}>
-                מוֹעֲדִים
-              </div>
-            </div>
+            <MenorahLogo size={52} />
           </div>
           {/* Desktop tabs */}
           <div style={{ display: "flex", gap: 2, overflowX: "auto", minWidth: 0 }}>
@@ -2007,22 +1999,6 @@ function CalendarPage({ lang = "pt" }) {
         <div style={{ position:"absolute", top:-90, right:-70, width:280, height:280,
           borderRadius:"50%", border:`1px solid ${S.goldBorder}`, opacity:0.15, pointerEvents:"none" }}/>
 
-        <div style={{ textAlign: "center", marginBottom: 22 }}>
-          <img
-            src="/moedim-brand.png"
-            alt="Moedim — Calendário Bíblico"
-            style={{
-              width: 180,
-              maxWidth: "60%",
-              height: "auto",
-              borderRadius: 18,
-              boxShadow: S.isDark
-                ? "0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25)"
-                : "0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(212,175,55,0.25)",
-              display: "inline-block",
-            }}
-          />
-        </div>
 
         <div style={{ position:"relative", display:"flex", flexWrap:"wrap", gap:20, alignItems:"flex-start" }}>
           {/* Left: Hebrew date */}
@@ -5348,7 +5324,7 @@ export default function App() {
         {/* gold divider */}
         <div style={{ display:"flex", alignItems:"center", gap:12, maxWidth:300, margin:"0 auto 20px" }}>
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg, transparent, ${S.goldBorder})` }}/>
-          <MenorahLogo size={28} glow={false} />
+          <MenorahLogo size={48} glow={false} />
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg, ${S.goldBorder}, transparent)` }}/>
         </div>
         <div className="hebrew" style={{ color:S.gold, fontSize:17, marginBottom:6, opacity:0.9 }}>
