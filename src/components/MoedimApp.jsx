@@ -5324,7 +5324,7 @@ export default function App() {
         {/* gold divider */}
         <div style={{ display:"flex", alignItems:"center", gap:12, maxWidth:300, margin:"0 auto 20px" }}>
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg, transparent, ${S.goldBorder})` }}/>
-          <MenorahLogo size={28} glow={false} />
+          <MenorahLogo size={48} glow={false} />
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg, ${S.goldBorder}, transparent)` }}/>
         </div>
         <div className="hebrew" style={{ color:S.gold, fontSize:17, marginBottom:6, opacity:0.9 }}>
