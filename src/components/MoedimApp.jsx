@@ -3513,7 +3513,7 @@ function InstallButton({ lang = "pt", style = {} }) {
         fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
         transition: "all 0.2s ease",
       }}>
-        <Icon name="download" size={15} color="#0A1B45" strokeWidth={2} />
+        <MenorahLogo size={22} glow={false} />
         {t("addToHomeScreen")}
       </button>
       {showHint && (
