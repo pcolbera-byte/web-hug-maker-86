@@ -1180,6 +1180,7 @@ function Icon({ name, size = 20, color, strokeWidth = 1.6 }) {
     locate:   <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></>,
     tribe:    <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
     check:    <><polyline points="20 6 9 17 4 12"/></>,
+    download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>,
   };
   return (
     <svg style={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
@@ -1713,6 +1714,11 @@ const T = {
   installApp:        { pt:"Instalar Moedim", en:"Install Moedim", es:"Instalar Moedim", fr:"Installer Moedim", de:"Moedim installieren", he:"הַתְקֵן אֶת מוֹעֲדִים", ru:"Установить Моэдим" },
   offlineAccess:     { pt:"Acesse offline a qualquer momento", en:"Access offline anytime", es:"Accede sin conexión en cualquier momento", fr:"Accédez hors ligne à tout moment", de:"Jederzeit offline zugreifen", he:"גִּשׁ לְלֹא חִבּוּר בְּכָל עֵת", ru:"Доступ офлайн в любое время" },
   installBtn:        { pt:"Instalar", en:"Install", es:"Instalar", fr:"Installer", de:"Installieren", he:"הַתְקֵן", ru:"Установить" },
+  addToHomeScreen:   { pt:"Adicionar à tela inicial", en:"Add to home screen", es:"Añadir a la pantalla de inicio", fr:"Ajouter à l'écran d'accueil", de:"Zum Startbildschirm hinzufügen", he:"הוֹסֵף לְמַסֵּך הַבַּיִת", ru:"Добавить на главный экран" },
+  installIosHint:    { pt:"Toque em Compartilhar e depois 'Adicionar à Tela de Início'", en:"Tap Share then 'Add to Home Screen'", es:"Toca Compartir y luego 'Añadir a pantalla de inicio'", fr:"Appuyez sur Partager puis 'Ajouter à l'écran d'accueil'", de:"Tippen Sie auf Teilen und dann 'Zum Startbildschirm hinzufügen'", he:"הַקֵּשׁ עַל שַׁתֵּף וְאַחַר כָּךְ 'הוֹסֵף לְמַסֵּך הַבַּיִת'", ru:"Нажмите Поделиться, затем 'Добавить на главный экран'" },
+  installDesktopHint:{ pt:"Use Chrome, Edge ou Samsung Internet e clique no botão para instalar", en:"Use Chrome, Edge or Samsung Internet and click the button to install", es:"Usa Chrome, Edge o Samsung Internet y toca el botón para instalar", fr:"Utilisez Chrome, Edge ou Samsung Internet et appuyez sur le bouton pour installer", de:"Verwenden Sie Chrome, Edge oder Samsung Internet und tippen Sie zum Installieren auf die Schaltfläche", he:"השתמש ב-Chrome, Edge או Samsung Internet ולחץ על הכפתור להתקנה", ru:"Используйте Chrome, Edge или Samsung Internet и нажмите кнопку для установки" },
+
+
   notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים", ru:"Уведомления о праздниках" },
   notifFeastsDesc:   { pt:"Receba alertas sobre as festas bíblicas próximas", en:"Get alerts about upcoming biblical feasts", es:"Recibe alertas sobre las próximas fiestas bíblicas", fr:"Recevez des alertes sur les fêtes bibliques à venir", de:"Erhalte Benachrichtigungen über bevorstehende biblische Feste", he:"קַבֵּל הַתְרָאוֹת עַל מוֹעֲדִים מִקְרָאִיִּים קְרוֹבִים", ru:"Получайте уведомления о предстоящих библейских праздниках" },
   blockedInSettings: { pt:"Bloqueado nas configurações", en:"Blocked in settings", es:"Bloqueado en la configuración", fr:"Bloqué dans les paramètres", de:"In den Einstellungen blockiert", he:"חָסוּם בַּהַגְדָּרוֹת", ru:"Заблокировано в настройках" },
@@ -2012,6 +2018,9 @@ function CalendarPage({ lang = "pt" }) {
               {todayHeb.monthNameHeb} {todayHeb.year}
             </div>
             <div style={{ color:S.textMuted, fontSize:13 }}>{todayStr}</div>
+            <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <InstallButton lang={lang} />
+            </div>
             {inTransition && (
               <div style={{
                 display: "inline-flex", alignItems: "center", gap: 5,
@@ -3453,6 +3462,76 @@ function InstallBanner({ lang = "pt" }) {
     </div>
   );
 }
+
+// ─── PWA INSTALL BUTTON (for in-page placement) ─────────────────────────────────
+
+function InstallButton({ lang = "pt", style = {} }) {
+  const t = useT(lang);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showHint, setShowHint] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true) {
+      setIsInstalled(true);
+      return;
+    }
+    const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  if (isInstalled || typeof window === "undefined") return null;
+
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  const handleClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") setDeferredPrompt(null);
+      return;
+    }
+    setShowHint(true);
+    setTimeout(() => setShowHint(false), 6000);
+  };
+
+  const hintText = isIos
+    ? t("installIosHint")
+    : t("installDesktopHint") || "Use Chrome, Edge ou Samsung Internet para instalar";
+
+  return (
+    <div style={{ position: "relative", ...style }}>
+      <button onClick={handleClick} style={{
+        background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
+        color: "#0A1B45", border: "none", borderRadius: 12,
+        padding: "10px 16px", fontSize: 12, fontWeight: 700,
+        cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8,
+        boxShadow: `0 4px 18px ${S.goldGlow}`,
+        fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
+        transition: "all 0.2s ease",
+      }}>
+        <Icon name="download" size={15} color="#0A1B45" strokeWidth={2} />
+        {t("addToHomeScreen")}
+      </button>
+      {showHint && (
+        <div className="fade-up" style={{
+          position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 10,
+          background: S.navBg, backdropFilter: "blur(12px)",
+          border: `1px solid ${S.goldBorder}`, borderRadius: 12,
+          padding: "10px 14px", fontSize: 11, color: S.textSub,
+          boxShadow: `0 8px 24px rgba(0,0,0,0.3)`, maxWidth: 280,
+          whiteSpace: "normal", lineHeight: 1.4,
+        }}>
+          <span style={{ color: S.gold, fontWeight: 700 }}>{isIos ? "iOS:" : "Instalar:"}</span> {hintText}
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 
