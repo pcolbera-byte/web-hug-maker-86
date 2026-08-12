@@ -3466,46 +3466,39 @@ function InstallBanner({ lang = "pt" }) {
 function InstallButton({ lang = "pt", style = {} }) {
   const t = useT(lang);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showIosHint, setShowIosHint] = useState(false);
+  const [showHint, setShowHint] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if already installed as standalone
+    if (typeof window === "undefined") return;
     if (window.matchMedia("(display-mode: standalone)").matches ||
         window.navigator.standalone === true) {
       setIsInstalled(true);
       return;
     }
-
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
+    const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); };
     window.addEventListener("beforeinstallprompt", handler);
-
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isInstalled || typeof window === "undefined") return null;
 
-  if (isInstalled) return null;
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   const handleClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") setDeferredPrompt(null);
-    } else if (isIos) {
-      setShowIosHint(true);
-      setTimeout(() => setShowIosHint(false), 5000);
+      return;
     }
+    setShowHint(true);
+    setTimeout(() => setShowHint(false), 6000);
   };
 
-  // Only show on mobile/tablet or when a prompt is available
-  const canInstall = deferredPrompt || isIos ||
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-  if (!canInstall) return null;
+  const hintText = isIos
+    ? t("installIosHint")
+    : t("installDesktopHint") || "Use Chrome, Edge ou Samsung Internet para instalar";
 
   return (
     <div style={{ position: "relative", ...style }}>
@@ -3521,16 +3514,16 @@ function InstallButton({ lang = "pt", style = {} }) {
         <Icon name="download" size={15} color="#0A1B45" strokeWidth={2} />
         {t("addToHomeScreen")}
       </button>
-      {showIosHint && (
+      {showHint && (
         <div className="fade-up" style={{
           position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 10,
           background: S.navBg, backdropFilter: "blur(12px)",
           border: `1px solid ${S.goldBorder}`, borderRadius: 12,
           padding: "10px 14px", fontSize: 11, color: S.textSub,
-          boxShadow: `0 8px 24px rgba(0,0,0,0.3)`, maxWidth: 260,
-          whiteSpace: "nowrap",
+          boxShadow: `0 8px 24px rgba(0,0,0,0.3)", maxWidth: 280,
+          whiteSpace: "normal", lineHeight: 1.4,
         }}>
-          <span style={{ color: S.gold, fontWeight: 700 }}>iOS:</span> {t("installIosHint")}
+          <span style={{ color: S.gold, fontWeight: 700 }}>{isIos ? "iOS:" : "Instalar:"}</span> {hintText}
         </div>
       )}
     </div>
