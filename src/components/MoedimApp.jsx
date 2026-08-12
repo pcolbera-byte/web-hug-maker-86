@@ -2016,6 +2016,9 @@ function CalendarPage({ lang = "pt" }) {
               {todayHeb.monthNameHeb} {todayHeb.year}
             </div>
             <div style={{ color:S.textMuted, fontSize:13 }}>{todayStr}</div>
+            <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <InstallButton lang={lang} />
+            </div>
             {inTransition && (
               <div style={{
                 display: "inline-flex", alignItems: "center", gap: 5,
