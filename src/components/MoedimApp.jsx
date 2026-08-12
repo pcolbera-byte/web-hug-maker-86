@@ -3458,6 +3458,83 @@ function InstallBanner({ lang = "pt" }) {
   );
 }
 
+// ─── PWA INSTALL BUTTON (for in-page placement) ─────────────────────────────────
+
+function InstallButton({ lang = "pt", style = {} }) {
+  const t = useT(lang);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showIosHint, setShowIosHint] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if already installed as standalone
+    if (window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true) {
+      setIsInstalled(true);
+      return;
+    }
+
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isInstalled) return null;
+
+  const handleClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") setDeferredPrompt(null);
+    } else if (isIos) {
+      setShowIosHint(true);
+      setTimeout(() => setShowIosHint(false), 5000);
+    }
+  };
+
+  // Only show on mobile/tablet or when a prompt is available
+  const canInstall = deferredPrompt || isIos ||
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  if (!canInstall) return null;
+
+  return (
+    <div style={{ position: "relative", ...style }}>
+      <button onClick={handleClick} style={{
+        background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
+        color: "#0A1B45", border: "none", borderRadius: 12,
+        padding: "10px 16px", fontSize: 12, fontWeight: 700,
+        cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8,
+        boxShadow: `0 4px 18px ${S.goldGlow}`,
+        fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em",
+        transition: "all 0.2s ease",
+      }}>
+        <Icon name="download" size={15} color="#0A1B45" strokeWidth={2} />
+        {t("addToHomeScreen")}
+      </button>
+      {showIosHint && (
+        <div className="fade-up" style={{
+          position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 10,
+          background: S.navBg, backdropFilter: "blur(12px)",
+          border: `1px solid ${S.goldBorder}`, borderRadius: 12,
+          padding: "10px 14px", fontSize: 11, color: S.textSub,
+          boxShadow: `0 8px 24px rgba(0,0,0,0.3)`, maxWidth: 260,
+          whiteSpace: "nowrap",
+        }}>
+          <span style={{ color: S.gold, fontWeight: 700 }}>iOS:</span> {t("installIosHint")}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 
 function NotificationManager({ lang = "pt" }) {
