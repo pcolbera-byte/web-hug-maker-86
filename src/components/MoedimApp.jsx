@@ -3520,7 +3520,7 @@ function InstallButton({ lang = "pt", style = {} }) {
           background: S.navBg, backdropFilter: "blur(12px)",
           border: `1px solid ${S.goldBorder}`, borderRadius: 12,
           padding: "10px 14px", fontSize: 11, color: S.textSub,
-          boxShadow: `0 8px 24px rgba(0,0,0,0.3)", maxWidth: 280,
+          boxShadow: `0 8px 24px rgba(0,0,0,0.3)`, maxWidth: 280,
           whiteSpace: "normal", lineHeight: 1.4,
         }}>
           <span style={{ color: S.gold, fontWeight: 700 }}>{isIos ? "iOS:" : "Instalar:"}</span> {hintText}
