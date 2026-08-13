@@ -3452,7 +3452,7 @@ function InstallBanner({ lang = "pt" }) {
       display: "flex", alignItems: "center", gap: 12,
       boxShadow: `0 8px 32px rgba(212,168,67,0.2)`,
     }}>
-      <span style={{ fontSize: 28 }}>✡</span>
+      <MenorahLogo size={40} glow={false} />
       <div style={{ flex: 1 }}>
         <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13 }}>{t("installApp")}</div>
         <div style={{ color: S.textMuted, fontSize: 11 }}>{t("offlineAccess")}</div>
