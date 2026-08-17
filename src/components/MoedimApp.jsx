@@ -2076,7 +2076,21 @@ function CalendarPage({ lang = "pt" }) {
               </div>
               <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14 }}>{parasha?.name}</div>
               <div className="hebrew" style={{ color:S.gold, fontSize:17, lineHeight:1 }}>{parasha?.heb}</div>
-              <div style={{ color:S.textMuted, fontSize:10, marginTop:2 }}>{parasha?.ref}</div>
+              {dailyPortion?.ref ? (
+                <>
+                  <div style={{ color:S.text, fontSize:11, fontWeight:700, marginTop:5, paddingTop:5, borderTop:`1px solid ${S.goldBorder}` }}>
+                    📖 {dailyPortion.weekdayName} — {t("aliyahOf").replace("{n}", dailyPortion.aliyahNum)}
+                  </div>
+                  <div style={{ color:S.goldLight, fontSize:11, fontWeight:600, marginTop:1 }}>
+                    {dailyPortion.ref}
+                  </div>
+                  <div style={{ color:S.textMuted, fontSize:9, marginTop:3 }}>
+                    {t("fullWeekRef")}: {parasha?.ref}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color:S.textMuted, fontSize:10, marginTop:2 }}>{parasha?.ref}</div>
+              )}
               {parasha?.haftara && (
                 <div style={{ color:S.textMuted, fontSize:9, marginTop:4, paddingTop:4, borderTop:`1px solid ${S.goldBorder}` }}>
                   🎵 {parasha.haftara}
