@@ -634,6 +634,24 @@ function getParashaByDate(dateStr) {
 // Aproxima a Parashat correspondente a uma data de nascimento (qualquer ano),
 // mapeando o mês/dia gregoriano para o ciclo de leituras do ano 5786 (2025-2026),
 // já que o calendário de Parashot só está disponível para esse ciclo.
+// Retorna a porção diária (aliá) da parashá atual, seguindo o sistema
+// tradicional de estudo diário (Chitas): Domingo = 1ª aliá, Segunda = 2ª,
+// ..., Sábado = 7ª aliá — assim, ao ler uma pequena parte por dia,
+// completa-se a leitura de toda a Parashat HaShavua até o Shabat.
+function getDailyPortion(parasha, lang = "pt") {
+  if (!parasha) return null;
+  const dayIdx = new Date().getDay(); // 0=Dom ... 6=Sáb
+  const aliyahNum = dayIdx + 1;       // 1=Dom ... 7=Sáb
+  const hasData = Array.isArray(parasha.aliyot) && parasha.aliyot[dayIdx];
+  const weekdaysLoc = getWeekdays(lang);
+  return {
+    dayIdx,
+    aliyahNum,
+    weekdayName: weekdaysLoc[dayIdx],
+    ref: hasData ? parasha.aliyot[dayIdx] : null,
+  };
+}
+
 function getParashaForBirthday(month, day) {
   const year = month >= 10 ? 2025 : 2026; // cobre Out/Nov/Dez 2025 e Jan-Set 2026
   const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
