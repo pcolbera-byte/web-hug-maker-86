@@ -1521,6 +1521,8 @@ const T = {
   // ── Calendário (Home) ─────────────────────────────────────────────
   todayLabel:        { pt:"הַיּוֹם — HOJE", en:"הַיּוֹם — TODAY", es:"הַיּוֹם — HOY", fr:"הַיּוֹם — AUJOURD'HUI", de:"הַיּוֹם — HEUTE", he:"הַיּוֹם", ru:"הַיּוֹם — СЕГОДНЯ" },
   parashatOfDay:     { pt:"Parashat do Dia", en:"Parashah of the Day", es:"Parashat del Día", fr:"Parashat du Jour", de:"Parashat des Tages", he:"פָּרָשַׁת הַיּוֹם", ru:"Параша дня" },
+  aliyahOf:          { pt:"{n}ª Aliá", en:"{n} Aliyah", es:"{n}ª Aliá", fr:"{n}e Aliya", de:"{n}. Alija", he:"עֲלִיָּה {n}", ru:"{n}-я алия" },
+  fullWeekRef:       { pt:"Semana completa", en:"Full week", es:"Semana completa", fr:"Semaine complète", de:"Ganze Woche", he:"הַשָּׁבוּעַ כֻּלּוֹ", ru:"Вся неделя" },
   nextFeast:         { pt:"Próxima Festa", en:"Next Feast", es:"Próxima Fiesta", fr:"Prochaine Fête", de:"Nächstes Fest", he:"מוֹעֵד הַבָּא", ru:"Следующий праздник" },
   todayBang:         { pt:"Hoje!", en:"Today!", es:"¡Hoy!", fr:"Aujourd'hui!", de:"Heute!", he:"הַיּוֹם!", ru:"Сегодня!" },
   tomorrowBang:      { pt:"Amanhã!", en:"Tomorrow!", es:"¡Mañana!", fr:"Demain!", de:"Morgen!", he:"מָחָר!", ru:"Завтра!" },
