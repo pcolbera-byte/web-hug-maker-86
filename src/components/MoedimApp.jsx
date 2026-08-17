@@ -1976,6 +1976,7 @@ function CalendarPage({ lang = "pt" }) {
   const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
   const upcomingFeasts = useMemo(() => getUpcomingFeasts(60), []);
   const parasha        = useMemo(() => getCurrentParasha(), []);
+  const dailyPortion   = useMemo(() => getDailyPortion(parasha, lang), [parasha, lang]);
   const nextRC         = useMemo(() => getNextRoshChodesh(), []);
   const moonPhase      = useMemo(() => getMoonPhase(), []);
 
