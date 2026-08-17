@@ -546,6 +546,11 @@ const PARASHOT_5786 = [
     theme: "Juízes, reis, sacerdotes, profetas e as leis de guerra",
     dataDiaspora: "2026-08-15", dataIsrael: null,
     hebrewDate: "2 Elul 5786", book: "Devarim",
+    aliyot: [
+      "Dt 16:18–17:13", "Dt 17:14–17:20", "Dt 18:1–18:5",
+      "Dt 18:6–18:14", "Dt 18:15–19:13", "Dt 19:14–20:9",
+      "Dt 20:10–21:9",
+    ],
   },
   {
     num: 49, name: "Ki Teitzei", heb: "כִּי-תֵצֵא", ref: "Dt 21:10–25:19",
@@ -554,6 +559,11 @@ const PARASHOT_5786 = [
     theme: "74 mitzvot sobre família, propriedade e vida em comunidade",
     dataDiaspora: "2026-08-22", dataIsrael: null,
     hebrewDate: "9 Elul 5786", book: "Devarim",
+    aliyot: [
+      "Dt 21:10–21:21", "Dt 21:22–22:7", "Dt 22:8–23:7",
+      "Dt 23:8–23:24", "Dt 23:25–24:4", "Dt 24:5–24:13",
+      "Dt 24:14–25:19",
+    ],
   },
   {
     num: 50, name: "Ki Tavo", heb: "כִּי-תָבוֹא", ref: "Dt 26:1–29:8",
