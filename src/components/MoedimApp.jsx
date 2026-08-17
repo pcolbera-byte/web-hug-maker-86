@@ -546,6 +546,11 @@ const PARASHOT_5786 = [
     theme: "Juízes, reis, sacerdotes, profetas e as leis de guerra",
     dataDiaspora: "2026-08-15", dataIsrael: null,
     hebrewDate: "2 Elul 5786", book: "Devarim",
+    aliyot: [
+      "Dt 16:18–17:13", "Dt 17:14–17:20", "Dt 18:1–18:5",
+      "Dt 18:6–18:14", "Dt 18:15–19:13", "Dt 19:14–20:9",
+      "Dt 20:10–21:9",
+    ],
   },
   {
     num: 49, name: "Ki Teitzei", heb: "כִּי-תֵצֵא", ref: "Dt 21:10–25:19",
@@ -554,6 +559,11 @@ const PARASHOT_5786 = [
     theme: "74 mitzvot sobre família, propriedade e vida em comunidade",
     dataDiaspora: "2026-08-22", dataIsrael: null,
     hebrewDate: "9 Elul 5786", book: "Devarim",
+    aliyot: [
+      "Dt 21:10–21:21", "Dt 21:22–22:7", "Dt 22:8–23:7",
+      "Dt 23:8–23:24", "Dt 23:25–24:4", "Dt 24:5–24:13",
+      "Dt 24:14–25:19",
+    ],
   },
   {
     num: 50, name: "Ki Tavo", heb: "כִּי-תָבוֹא", ref: "Dt 26:1–29:8",
@@ -624,6 +634,24 @@ function getParashaByDate(dateStr) {
 // Aproxima a Parashat correspondente a uma data de nascimento (qualquer ano),
 // mapeando o mês/dia gregoriano para o ciclo de leituras do ano 5786 (2025-2026),
 // já que o calendário de Parashot só está disponível para esse ciclo.
+// Retorna a porção diária (aliá) da parashá atual, seguindo o sistema
+// tradicional de estudo diário (Chitas): Domingo = 1ª aliá, Segunda = 2ª,
+// ..., Sábado = 7ª aliá — assim, ao ler uma pequena parte por dia,
+// completa-se a leitura de toda a Parashat HaShavua até o Shabat.
+function getDailyPortion(parasha, lang = "pt") {
+  if (!parasha) return null;
+  const dayIdx = new Date().getDay(); // 0=Dom ... 6=Sáb
+  const aliyahNum = dayIdx + 1;       // 1=Dom ... 7=Sáb
+  const hasData = Array.isArray(parasha.aliyot) && parasha.aliyot[dayIdx];
+  const weekdaysLoc = getWeekdays(lang);
+  return {
+    dayIdx,
+    aliyahNum,
+    weekdayName: weekdaysLoc[dayIdx],
+    ref: hasData ? parasha.aliyot[dayIdx] : null,
+  };
+}
+
 function getParashaForBirthday(month, day) {
   const year = month >= 10 ? 2025 : 2026; // cobre Out/Nov/Dez 2025 e Jan-Set 2026
   const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -1493,6 +1521,8 @@ const T = {
   // ── Calendário (Home) ─────────────────────────────────────────────
   todayLabel:        { pt:"הַיּוֹם — HOJE", en:"הַיּוֹם — TODAY", es:"הַיּוֹם — HOY", fr:"הַיּוֹם — AUJOURD'HUI", de:"הַיּוֹם — HEUTE", he:"הַיּוֹם", ru:"הַיּוֹם — СЕГОДНЯ" },
   parashatOfDay:     { pt:"Parashat do Dia", en:"Parashah of the Day", es:"Parashat del Día", fr:"Parashat du Jour", de:"Parashat des Tages", he:"פָּרָשַׁת הַיּוֹם", ru:"Параша дня" },
+  aliyahOf:          { pt:"{n}ª Aliá", en:"{n} Aliyah", es:"{n}ª Aliá", fr:"{n}e Aliya", de:"{n}. Alija", he:"עֲלִיָּה {n}", ru:"{n}-я алия" },
+  fullWeekRef:       { pt:"Semana completa", en:"Full week", es:"Semana completa", fr:"Semaine complète", de:"Ganze Woche", he:"הַשָּׁבוּעַ כֻּלּוֹ", ru:"Вся неделя" },
   nextFeast:         { pt:"Próxima Festa", en:"Next Feast", es:"Próxima Fiesta", fr:"Prochaine Fête", de:"Nächstes Fest", he:"מוֹעֵד הַבָּא", ru:"Следующий праздник" },
   todayBang:         { pt:"Hoje!", en:"Today!", es:"¡Hoy!", fr:"Aujourd'hui!", de:"Heute!", he:"הַיּוֹם!", ru:"Сегодня!" },
   tomorrowBang:      { pt:"Amanhã!", en:"Tomorrow!", es:"¡Mañana!", fr:"Demain!", de:"Morgen!", he:"מָחָר!", ru:"Завтра!" },
@@ -1946,6 +1976,7 @@ function CalendarPage({ lang = "pt" }) {
   const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
   const upcomingFeasts = useMemo(() => getUpcomingFeasts(60), []);
   const parasha        = useMemo(() => getCurrentParasha(), []);
+  const dailyPortion   = useMemo(() => getDailyPortion(parasha, lang), [parasha, lang]);
   const nextRC         = useMemo(() => getNextRoshChodesh(), []);
   const moonPhase      = useMemo(() => getMoonPhase(), []);
 
@@ -2045,7 +2076,21 @@ function CalendarPage({ lang = "pt" }) {
               </div>
               <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:14 }}>{parasha?.name}</div>
               <div className="hebrew" style={{ color:S.gold, fontSize:17, lineHeight:1 }}>{parasha?.heb}</div>
-              <div style={{ color:S.textMuted, fontSize:10, marginTop:2 }}>{parasha?.ref}</div>
+              {dailyPortion?.ref ? (
+                <>
+                  <div style={{ color:S.text, fontSize:11, fontWeight:700, marginTop:5, paddingTop:5, borderTop:`1px solid ${S.goldBorder}` }}>
+                    📖 {dailyPortion.weekdayName} — {t("aliyahOf").replace("{n}", dailyPortion.aliyahNum)}
+                  </div>
+                  <div style={{ color:S.goldLight, fontSize:11, fontWeight:600, marginTop:1 }}>
+                    {dailyPortion.ref}
+                  </div>
+                  <div style={{ color:S.textMuted, fontSize:9, marginTop:3 }}>
+                    {t("fullWeekRef")}: {parasha?.ref}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color:S.textMuted, fontSize:10, marginTop:2 }}>{parasha?.ref}</div>
+              )}
               {parasha?.haftara && (
                 <div style={{ color:S.textMuted, fontSize:9, marginTop:4, paddingTop:4, borderTop:`1px solid ${S.goldBorder}` }}>
                   🎵 {parasha.haftara}
