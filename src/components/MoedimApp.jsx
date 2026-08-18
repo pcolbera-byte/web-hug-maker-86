@@ -1746,7 +1746,7 @@ const T = {
   installBtn:        { pt:"Instalar", en:"Install", es:"Instalar", fr:"Installer", de:"Installieren", he:"הַתְקֵן", ru:"Установить" },
   addToHomeScreen:   { pt:"Adicionar à tela inicial", en:"Add to home screen", es:"Añadir a la pantalla de inicio", fr:"Ajouter à l'écran d'accueil", de:"Zum Startbildschirm hinzufügen", he:"הוֹסֵף לְמַסֵּך הַבַּיִת", ru:"Добавить на главный экран" },
   installIosHint:    { pt:"Toque em Compartilhar e depois 'Adicionar à Tela de Início'", en:"Tap Share then 'Add to Home Screen'", es:"Toca Compartir y luego 'Añadir a pantalla de inicio'", fr:"Appuyez sur Partager puis 'Ajouter à l'écran d'accueil'", de:"Tippen Sie auf Teilen und dann 'Zum Startbildschirm hinzufügen'", he:"הַקֵּשׁ עַל שַׁתֵּף וְאַחַר כָּךְ 'הוֹסֵף לְמַסֵּך הַבַּיִת'", ru:"Нажмите Поделиться, затем 'Добавить на главный экран'" },
-  installDesktopHint:{ pt:"Use Chrome, Edge ou Samsung Internet e clique no botão para instalar", en:"Use Chrome, Edge or Samsung Internet and click the button to install", es:"Usa Chrome, Edge o Samsung Internet y toca el botón para instalar", fr:"Utilisez Chrome, Edge ou Samsung Internet et appuyez sur le bouton pour installer", de:"Verwenden Sie Chrome, Edge oder Samsung Internet und tippen Sie zum Installieren auf die Schaltfläche", he:"השתמש ב-Chrome, Edge או Samsung Internet ולחץ על הכפתור להתקנה", ru:"Используйте Chrome, Edge или Samsung Internet и нажмите кнопку для установки" },
+  installDesktopHint:{ pt:"No menu do Chrome, Edge ou Samsung Internet, toque em 'Instalar aplicativo' ou 'Adicionar à tela inicial'", en:"In the Chrome, Edge, or Samsung Internet menu, tap 'Install app' or 'Add to Home screen'", es:"En el menú de Chrome, Edge o Samsung Internet, toca 'Instalar aplicación' o 'Añadir a pantalla de inicio'", fr:"Dans le menu de Chrome, Edge ou Samsung Internet, appuyez sur 'Installer l'application' ou 'Ajouter à l'écran d'accueil'", de:"Tippen Sie im Menü von Chrome, Edge oder Samsung Internet auf 'App installieren' oder 'Zum Startbildschirm hinzufügen'", he:"בתפריט של Chrome, Edge או Samsung Internet, הקש על 'התקנת אפליקציה' או 'הוספה למסך הבית'", ru:"В меню Chrome, Edge или Samsung Internet нажмите 'Установить приложение' или 'Добавить на главный экран'" },
 
 
   notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים360", ru:"Уведомления о праздниках" },
@@ -3476,8 +3476,13 @@ function InstallBanner({ lang = "pt" }) {
 
   useEffect(() => {
     const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); setShow(true); };
+    const installedHandler = () => { setDeferredPrompt(null); setShow(false); };
     window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", installedHandler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("appinstalled", installedHandler);
+    };
   }, []);
 
   if (!show) return null;
@@ -3502,8 +3507,8 @@ function InstallBanner({ lang = "pt" }) {
         <div style={{ color: S.goldLight, fontWeight: 700, fontSize: 13 }}>{t("installApp")}</div>
         <div style={{ color: S.textMuted, fontSize: 11 }}>{t("offlineAccess")}</div>
       </div>
-      <button onClick={install} style={{ background: S.gold, border: "none", color: S.bg, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>{t("installBtn")}</button>
-      <button onClick={() => setShow(false)} style={{ background: "none", border: "none", color: S.textMuted, cursor: "pointer", fontSize: 18 }}>×</button>
+      <button aria-label={t("installApp")} onClick={install} style={{ background: S.gold, border: "none", color: S.bg, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>{t("installBtn")}</button>
+      <button aria-label={t("close")} onClick={() => setShow(false)} style={{ background: "none", border: "none", color: S.textMuted, cursor: "pointer", fontSize: 18 }}>×</button>
     </div>
   );
 }
@@ -3524,13 +3529,23 @@ function InstallButton({ lang = "pt", style = {} }) {
       return;
     }
     const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); };
+    const installedHandler = () => {
+      setDeferredPrompt(null);
+      setShowHint(false);
+      setIsInstalled(true);
+    };
     window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", installedHandler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("appinstalled", installedHandler);
+    };
   }, []);
 
   if (isInstalled || typeof window === "undefined") return null;
 
-  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const handleClick = async () => {
     if (deferredPrompt) {
@@ -3540,7 +3555,6 @@ function InstallButton({ lang = "pt", style = {} }) {
       return;
     }
     setShowHint(true);
-    setTimeout(() => setShowHint(false), 6000);
   };
 
   const hintText = isIos
@@ -3549,7 +3563,7 @@ function InstallButton({ lang = "pt", style = {} }) {
 
   return (
     <div style={{ position: "relative", ...style }}>
-      <button onClick={handleClick} style={{
+      <button aria-label={t("addToHomeScreen")} onClick={handleClick} style={{
         background: `linear-gradient(135deg, ${S.gold} 0%, ${S.goldLight} 100%)`,
         color: "#0A1B45", border: "none", borderRadius: 12,
         padding: "10px 16px", fontSize: 12, fontWeight: 700,
@@ -3562,15 +3576,25 @@ function InstallButton({ lang = "pt", style = {} }) {
         {t("addToHomeScreen")}
       </button>
       {showHint && (
-        <div className="fade-up" style={{
-          position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 10,
-          background: S.navBg, backdropFilter: "blur(12px)",
-          border: `1px solid ${S.goldBorder}`, borderRadius: 12,
-          padding: "10px 14px", fontSize: 11, color: S.textSub,
-          boxShadow: `0 8px 24px rgba(0,0,0,0.3)`, maxWidth: 280,
-          whiteSpace: "normal", lineHeight: 1.4,
+        <div role="dialog" aria-modal="true" aria-label={t("installApp")} onClick={() => setShowHint(false)} style={{
+          position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.62)",
+          display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16,
         }}>
-          <span style={{ color: S.gold, fontWeight: 700 }}>{isIos ? "iOS:" : "Instalar:"}</span> {hintText}
+          <div className="fade-up" onClick={(event) => event.stopPropagation()} style={{
+            width: "100%", maxWidth: 420, background: S.navBg, backdropFilter: "blur(16px)",
+            border: `1px solid ${S.goldBorder}`, borderRadius: 16, padding: 20,
+            color: S.textSub, boxShadow: "0 16px 48px rgba(0,0,0,0.45)", lineHeight: 1.6,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+              <strong style={{ color: S.goldLight, fontSize: 16 }}>{t("installApp")}</strong>
+              <button aria-label={t("close")} onClick={() => setShowHint(false)} style={{ border: "none", background: "transparent", color: S.textMuted, fontSize: 24, cursor: "pointer" }}>×</button>
+            </div>
+            <div style={{ fontSize: 14 }}>
+              <span style={{ color: S.gold, fontWeight: 700 }}>{isIos ? "iPhone/iPad: " : "Android: "}</span>
+              {hintText}
+            </div>
+            {isIos && <div style={{ marginTop: 12, fontSize: 13, color: S.textMuted }}>No Safari, toque no ícone de compartilhar □↑ na barra do navegador e escolha “Adicionar à Tela de Início”.</div>}
+          </div>
         </div>
       )}
     </div>
