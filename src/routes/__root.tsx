@@ -77,11 +77,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Moedim360 Calendário Bíblico Hebraico" },
+      {
+        name: "description",
+        content:
+          "Moedim: calendário bíblico hebraico com festas, parashot, Shabat, Rosh Chodesh, conversor de datas e versículo do dia.",
+      },
+      { property: "og:title", content: "Moedim360 Calendário Bíblico Hebraico" },
+      {
+        property: "og:description",
+        content:
+          "Moedim: calendário bíblico hebraico com festas, parashot, Shabat, Rosh Chodesh, conversor de datas e versículo do dia.",
+      },
+      { property: "og:site_name", content: "Moedim360" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

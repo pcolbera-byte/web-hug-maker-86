@@ -1,0 +1,17 @@
+# Moedim360 Calendário Bíblico Hebraico
+
+> Calendário bíblico hebraico com festas (moedim), parashot, Shabat, Rosh Chodesh, conversor de datas e versículo do dia.
+
+Moedim360 é um aplicativo web (PWA) em português, inglês, espanhol, francês, alemão, hebraico e russo que apresenta o calendário hebraico bíblico: o dia começa ao pôr do sol, os meses seguem o ciclo lunar e as festas bíblicas são calculadas a partir dele.
+
+## Pages
+
+- [Início / Calendário](/): Calendário hebraico do mês atual, data hebraica de hoje e versículo do dia.
+- [Parashá da semana](/?tab=parasha): Porção semanal da Torá, aliyot e leitura diária.
+- [Shabat](/?tab=shabat): Horários de entrada e saída do Shabat.
+- [Festas bíblicas](/?tab=feasts): Pessach, Shavuot, Yom Teruah, Yom Kipur, Sucot, Chanucá, Purim, 9 de Av e 15 de Av.
+- [Conversor de datas](/?tab=converter): Conversão entre datas gregorianas e hebraicas.
+
+## Optional
+
+- [Configurações](/?tab=settings): Idioma, tema e preferências de localização.
