@@ -640,7 +640,7 @@ function getParashaByDate(dateStr) {
 // completa-se a leitura de toda a Parashat HaShavua até o Shabat.
 function getDailyPortion(parasha, lang = "pt") {
   if (!parasha) return null;
-  const dayIdx = new Date().getDay(); // 0=Dom ... 6=Sáb
+  const dayIdx = getHebrewCivilDate().getDay(); // 0=Dom ... 6=Sáb — já ajustado para virar às 18h
   const aliyahNum = dayIdx + 1;       // 1=Dom ... 7=Sáb
   const hasData = Array.isArray(parasha.aliyot) && parasha.aliyot[dayIdx];
   const weekdaysLoc = getWeekdays(lang);
@@ -1402,7 +1402,7 @@ function MenorahLogo({ size = 44, glow = true }) {
   return (
     <img
       src="/moedim-logo.png"
-      alt="Moedim"
+      alt="Moedim360"
       width={size}
       height={size}
       style={{
@@ -1440,7 +1440,7 @@ const T = {
   nav_converter:  { pt:"Conversor",    en:"Converter",  es:"Conversor",   fr:"Convertir",   de:"Konverter",   he:"המרה",           ru:"Конвертер" },
   nav_parasha:    { pt:"Parashah",     en:"Parashah",   es:"Parashah",    fr:"Parashah",    de:"Parashah",    he:"פָּרָשָׁה",      ru:"Парашат" },
   nav_shabat:     { pt:"Shabat",       en:"Shabbat",    es:"Shabat",      fr:"Shabbat",     de:"Schabbat",    he:"שַׁבָּת",        ru:"Шаббат" },
-  nav_feasts:     { pt:"Festas",       en:"Feasts",     es:"Fiestas",     fr:"Fêtes",       de:"Feste",       he:"מוֹעֲדִים",     ru:"Праздники" },
+  nav_feasts:     { pt:"Festas",       en:"Feasts",     es:"Fiestas",     fr:"Fêtes",       de:"Feste",       he:"מוֹעֲדִים360",     ru:"Праздники" },
   nav_moon:       { pt:"Lua Nova",     en:"New Moon",   es:"Luna Nueva",  fr:"Nouvelle Lune",de:"Neumond",    he:"רֹאשׁ חֹדֶשׁ",  ru:"Новолуние" },
   nav_verse:      { pt:"Versículo",    en:"Verse",      es:"Versículo",   fr:"Verset",      de:"Vers",        he:"פָּסוּק",        ru:"Стих" },
   nav_learn:      { pt:"Aprender",     en:"Learn",      es:"Aprender",    fr:"Apprendre",   de:"Lernen",      he:"לִלְמֹד",       ru:"Учиться" },
@@ -1481,7 +1481,7 @@ const T = {
   doublePortion:  { pt:"Porção Dupla", en:"Double Portion", es:"Porción Doble", fr:"Double Portion", de:"Doppelabschnitt", he:"פָּרָשָׁה כְּפוּלָה", ru:"Двойная часть" },
   diffDate:       { pt:"data diferente", en:"different date", es:"fecha diferente", fr:"date différente", de:"anderes Datum", he:"תַּאֲרִיךְ שׁוֹנֶה", ru:"другая дата" },
   // ── Festas ─────────────────────────────────────────
-  upcomingFeasts: { pt:"Festas Próximas", en:"Upcoming Feasts", es:"Próximas Fiestas", fr:"Prochaines Fêtes", de:"Bevorstehende Feste", he:"מוֹעֲדִים קְרוֹבִים", ru:"Предстоящие праздники" },
+  upcomingFeasts: { pt:"Festas Próximas", en:"Upcoming Feasts", es:"Próximas Fiestas", fr:"Prochaines Fêtes", de:"Bevorstehende Feste", he:"מוֹעֲדִים360 קְרוֹבִים", ru:"Предстоящие праздники" },
   spring:         { pt:"Primavera", en:"Spring", es:"Primavera", fr:"Printemps", de:"Frühling", he:"אָבִיב", ru:"Весна" },
   fall:           { pt:"Outono",    en:"Fall",   es:"Otoño",     fr:"Automne",   de:"Herbst",  he:"סְתָיו",  ru:"Осень" },
   other:          { pt:"Outras",    en:"Other",  es:"Otras",     fr:"Autres",    de:"Andere",  he:"אֲחֵרוֹת", ru:"Другие" },
@@ -1600,7 +1600,7 @@ const T = {
 
   // ── Festas page ─────────────────────────────────────────────────────
   feastsHeaderSub:   { pt:"Os Moadim — Encontros Marcados pelo Eterno", en:"The Moadim — Appointed Times of the Eternal", es:"Los Moadim — Citas Señaladas del Eterno", fr:"Les Moadim — Rendez-vous Fixés par l'Éternel", de:"Die Moadim — Festgesetzte Zeiten des Ewigen", he:"הַמּוֹעֲדִים — זְמַנֵּי ה' הַקְּבוּעִים", ru:"Моадим — назначенные времена Вечного" },
-  upcomingFeastsBox: { pt:"⭐ Festas Próximas (próximos 365 dias)", en:"⭐ Upcoming Feasts (next 365 days)", es:"⭐ Próximas Fiestas (próximos 365 días)", fr:"⭐ Prochaines Fêtes (365 prochains jours)", de:"⭐ Bevorstehende Feste (nächste 365 Tage)", he:"⭐ מוֹעֲדִים קְרוֹבִים (365 יָמִים הַבָּאִים)", ru:"⭐ Предстоящие праздники (следующие 365 дней)" },
+  upcomingFeastsBox: { pt:"⭐ Festas Próximas (próximos 365 dias)", en:"⭐ Upcoming Feasts (next 365 days)", es:"⭐ Próximas Fiestas (próximos 365 días)", fr:"⭐ Prochaines Fêtes (365 prochains jours)", de:"⭐ Bevorstehende Feste (nächste 365 Tage)", he:"⭐ מוֹעֲדִים360 קְרוֹבִים (365 יָמִים הַבָּאִים)", ru:"⭐ Предстоящие праздники (следующие 365 дней)" },
   tabSpring:         { pt:"🌸 Primavera", en:"🌸 Spring", es:"🌸 Primavera", fr:"🌸 Printemps", de:"🌸 Frühling", he:"🌸 אָבִיב", ru:"🌸 Весна" },
   tabFall:           { pt:"🍂 Outono", en:"🍂 Fall", es:"🍂 Otoño", fr:"🍂 Automne", de:"🍂 Herbst", he:"🍂 סְתָיו", ru:"🍂 Осень" },
   tabOther:          { pt:"✨ Outras", en:"✨ Other", es:"✨ Otras", fr:"✨ Autres", de:"✨ Andere", he:"✨ אֲחֵרוֹת", ru:"✨ Другие" },
@@ -1656,7 +1656,7 @@ const T = {
   learnSub:          { pt:"Os 13 meses do calendário bíblico hebraico", en:"The 13 months of the Hebrew biblical calendar", es:"Los 13 meses del calendario bíblico hebreo", fr:"Les 13 mois du calendrier biblique hébraïque", de:"Die 13 Monate des hebräischen biblischen Kalenders", he:"13 הַחֳדָשִׁים שֶׁל הַלּוּחַ הַמִּקְרָאִי", ru:"13 месяцев еврейского библейского календаря" },
   lunisolarTitle:    { pt:"📖 O Calendário Lunissolar", en:"📖 The Lunisolar Calendar", es:"📖 El Calendario Lunisolar", fr:"📖 Le Calendrier Lunisolaire", de:"📖 Der Lunisolare Kalender", he:"📖 הַלּוּחַ הַשָּׁנִי-יָרֵחִי", ru:"📖 Лунно-солнечный календарь" },
   monthsOfYear:      { pt:"Os 13 Meses do Ano Hebraico", en:"The 13 Months of the Hebrew Year", es:"Los 13 Meses del Año Hebreo", fr:"Les 13 Mois de l'Année Hébraïque", de:"Die 13 Monate des Hebräischen Jahres", he:"13 חָדְשֵׁי הַשָּׁנָה הָעִבְרִית", ru:"13 месяцев еврейского года" },
-  feastsThisMonth:   { pt:"Festas neste mês:", en:"Feasts this month:", es:"Fiestas este mes:", fr:"Fêtes ce mois-ci:", de:"Feste in diesem Monat:", he:"מוֹעֲדִים בְּחֹדֶשׁ זֶה:", ru:"Праздники в этом месяце:" },
+  feastsThisMonth:   { pt:"Festas neste mês:", en:"Feasts this month:", es:"Fiestas este mes:", fr:"Fêtes ce mois-ci:", de:"Feste in diesem Monat:", he:"מוֹעֲדִים360 בְּחֹדֶשׁ זֶה:", ru:"Праздники в этом месяце:" },
   messianicConnTitle:{ pt:"✡ Conexão Messiânica", en:"✡ Messianic Connection", es:"✡ Conexión Mesiánica", fr:"✡ Connexion Messianique", de:"✡ Messianische Verbindung", he:"✡ הַקֶּשֶׁר הַמָּשִׁיחִי", ru:"✡ Мессианская связь" },
   lunisolarText: {
     pt:"O calendário hebraico é __lunissolar__ — baseado nos ciclos da lua e do sol. O primeiro mês bíblico é __Nissan__ (Êxodo 12:2), e o ano civil começa em __Tishrei__ (Rosh Hashaná). O ano hebraico conta desde a criação do mundo (Anno Mundi); adicione ~3760 ao ano gregoriano.",
@@ -1692,7 +1692,7 @@ const T = {
   notifStatusAsk:    { pt:"Permissão necessária", en:"Permission needed", es:"Permiso necesario", fr:"Autorisation nécessaire", de:"Berechtigung erforderlich", he:"נִדְרֶשֶׁת הַרְשָׁאָה", ru:"Требуется разрешение" },
   notifStatusOnDesc: { pt:"O app pode enviar alertas. Configure cada tipo abaixo.", en:"The app can send alerts. Configure each type below.", es:"La app puede enviar alertas. Configura cada tipo abajo.", fr:"L'application peut envoyer des alertes. Configurez chaque type ci-dessous.", de:"Die App kann Benachrichtigungen senden. Konfiguriere jeden Typ unten.", he:"הָאַפְּלִיקַצְיָה יְכוֹלָה לִשְׁלֹחַ הַתְרָאוֹת. הַגְדֵּר כָּל סוּג לְמַטָּה.", ru:"Приложение может отправлять уведомления. Настройте каждый тип ниже." },
   notifStatusOffDesc:{ pt:"Acesse Configurações do navegador → Notificações → Permitir para este site.", en:"Go to Browser Settings → Notifications → Allow for this site.", es:"Ve a Configuración del navegador → Notificaciones → Permitir para este sitio.", fr:"Allez dans Paramètres du navigateur → Notifications → Autoriser pour ce site.", de:"Gehe zu Browser-Einstellungen → Benachrichtigungen → Für diese Seite erlauben.", he:"עֲבֹר לְהַגְדְּרוֹת הַדְּפַדְפָן → הוֹדָעוֹת → אַפְשֵׁר לְאֲתָר זֶה.", ru:"Перейдите в настройки браузера → Уведомления → Разрешить для этого сайта." },
-  notifStatusAskDesc:{ pt:"Toque em Ativar para receber alertas de Shabat, Festas e mais.", en:"Tap Activate to receive alerts for Shabbat, Feasts and more.", es:"Toca Activar para recibir alertas de Shabat, Fiestas y más.", fr:"Appuyez sur Activer pour recevoir des alertes pour Chabbat, Fêtes et plus.", de:"Tippe auf Aktivieren, um Benachrichtigungen für Schabbat, Feste und mehr zu erhalten.", he:"הַקֵּשׁ עַל הַפְעֵל כְּדֵי לְקַבֵּל הַתְרָאוֹת עַל שַׁבָּת, מוֹעֲדִים וְעוֹד.", ru:"Нажмите «Включить», чтобы получать уведомления о Шаббате, праздниках и не только." },
+  notifStatusAskDesc:{ pt:"Toque em Ativar para receber alertas de Shabat, Festas e mais.", en:"Tap Activate to receive alerts for Shabbat, Feasts and more.", es:"Toca Activar para recibir alertas de Shabat, Fiestas y más.", fr:"Appuyez sur Activer pour recevoir des alertes pour Chabbat, Fêtes et plus.", de:"Tippe auf Aktivieren, um Benachrichtigungen für Schabbat, Feste und mehr zu erhalten.", he:"הַקֵּשׁ עַל הַפְעֵל כְּדֵי לְקַבֵּל הַתְרָאוֹת עַל שַׁבָּת, מוֹעֲדִים360 וְעוֹד.", ru:"Нажмите «Включить», чтобы получать уведомления о Шаббате, праздниках и не только." },
   pleaseWait:        { pt:"Aguarde…", en:"Please wait…", es:"Espera…", fr:"Veuillez patienter…", de:"Bitte warten…", he:"אָנָּא הַמְתֵּן…", ru:"Пожалуйста, подождите…" },
   typesEnabled:      { pt:"Tipos habilitados", en:"Enabled types", es:"Tipos habilitados", fr:"Types activés", de:"Aktivierte Typen", he:"סוּגִים מֻפְעָלִים", ru:"Включённые типы" },
   activate:          { pt:"Ativar", en:"Activate", es:"Activar", fr:"Activer", de:"Aktivieren", he:"הַפְעֵל", ru:"Включить" },
@@ -1701,7 +1701,7 @@ const T = {
   savedBadge:        { pt:"Salvo", en:"Saved", es:"Guardado", fr:"Enregistré", de:"Gespeichert", he:"נִשְׁמַר", ru:"Сохранено" },
   enableAllBtn:      { pt:"Ativar todas", en:"Enable all", es:"Activar todas", fr:"Activer tout", de:"Alle aktivieren", he:"הַפְעֵל הַכֹּל", ru:"Включить все" },
   disableAllBtn:     { pt:"Desativar todas", en:"Disable all", es:"Desactivar todas", fr:"Désactiver tout", de:"Alle deaktivieren", he:"כַּבֵּה הַכֹּל", ru:"Выключить все" },
-  aboutApp:          { pt:"✡ Sobre o Calendário Moedim", en:"✡ About the Moedim Calendar", es:"✡ Sobre el Calendario Moedim", fr:"✡ À Propos du Calendrier Moedim", de:"✡ Über den Moedim-Kalender", he:"✡ אוֹדוֹת לוּחַ מוֹעֲדִים", ru:"✡ О календаре Моэдим" },
+  aboutApp:          { pt:"✡ Sobre o Calendário Moedim360", en:"✡ About the Moedim360 Calendar", es:"✡ Sobre el Calendario Moedim360", fr:"✡ À Propos du Calendrier Moedim360", de:"✡ Über den Moedim360-Kalender", he:"✡ אוֹדוֹת לוּחַ מוֹעֲדִים360", ru:"✡ О календаре Моэдим360" },
 
   // ── Textos de notificações (NOTIF_DEFS) ────────────────────────────
   notif_shabat_label:   { pt:"Shabat", en:"Shabbat", es:"Shabat", fr:"Chabbat", de:"Schabbat", he:"שַׁבָּת", ru:"Шаббат" },
@@ -1709,7 +1709,7 @@ const T = {
   notif_shabat_detail:  { pt:"Receba um alerta para preparar o coração, a mesa e acender as velas no tempo certo.", en:"Get an alert to prepare your heart, the table, and light candles at the right time.", es:"Recibe una alerta para preparar el corazón, la mesa y encender las velas a tiempo.", fr:"Recevez une alerte pour préparer votre cœur, la table et allumer les bougies au bon moment.", de:"Erhalte eine Erinnerung, um Herz, Tisch und Kerzen rechtzeitig vorzubereiten.", he:"קַבֵּל הַתְרָאָה לְהָכִין אֶת הַלֵּב, הַשֻּׁלְחָן וּלְהַדְלִיק נֵרוֹת בַּזְּמַן הַנָּכוֹן.", ru:"Получите напоминание, чтобы вовремя подготовить сердце, стол и зажечь свечи." },
   notif_shabat_verse:   { pt:"Êxodo 20:8 — Lembra do dia do Shabat para santificá-lo.", en:"Exodus 20:8 — Remember the Sabbath day, to keep it holy.", es:"Éxodo 20:8 — Acuérdate del día de reposo para santificarlo.", fr:"Exode 20:8 — Souviens-toi du jour du repos, pour le sanctifier.", de:"2. Mose 20:8 — Gedenke des Sabbattags, dass du ihn heiligest.", he:"שְׁמוֹת כ:ח — זָכוֹר אֶת יוֹם הַשַּׁבָּת לְקַדְּשׁוֹ.", ru:"Исход 20:8 — Помни день субботний, чтобы святить его." },
 
-  notif_feasts_label:   { pt:"Festas Bíblicas", en:"Biblical Feasts", es:"Fiestas Bíblicas", fr:"Fêtes Bibliques", de:"Biblische Feste", he:"מוֹעֲדִים", ru:"Библейские праздники" },
+  notif_feasts_label:   { pt:"Festas Bíblicas", en:"Biblical Feasts", es:"Fiestas Bíblicas", fr:"Fêtes Bibliques", de:"Biblische Feste", he:"מוֹעֲדִים360", ru:"Библейские праздники" },
   notif_feasts_when:    { pt:"3 dias antes de cada Moed (festa bíblica)", en:"3 days before each Moed (biblical feast)", es:"3 días antes de cada Moed (fiesta bíblica)", fr:"3 jours avant chaque Moed (fête biblique)", de:"3 Tage vor jedem Moed (biblisches Fest)", he:"3 יָמִים לִפְנֵי כָּל מוֹעֵד", ru:"За 3 дня до каждого Моэда (библейского праздника)" },
   notif_feasts_detail:  { pt:"Alertas para Pessach, Shavuot, Rosh Hashaná, Yom Kippur, Sukkot, Chanukah e Purim.", en:"Alerts for Passover, Shavuot, Rosh Hashanah, Yom Kippur, Sukkot, Chanukah and Purim.", es:"Alertas para Pesaj, Shavuot, Rosh Hashaná, Yom Kipur, Sucot, Janucá y Purim.", fr:"Alertes pour Pessah, Chavouot, Roch Hachana, Yom Kippour, Souccot, Hanoucca et Pourim.", de:"Erinnerungen für Pessach, Schawuot, Rosch Haschana, Jom Kippur, Sukkot, Chanukka und Purim.", he:"הַתְרָאוֹת לְפֶסַח, שָׁבוּעוֹת, רֹאשׁ הַשָּׁנָה, יוֹם כִּפּוּר, סֻכּוֹת, חֲנֻכָּה וּפוּרִים.", ru:"Напоминания о Песахе, Шавуоте, Рош ха-Шана, Йом Кипур, Суккот, Ханука и Пурим." },
   notif_feasts_verse:   { pt:"Levítico 23:2 — As festas do Senhor são convocações sagradas.", en:"Leviticus 23:2 — The feasts of the LORD are holy convocations.", es:"Levítico 23:2 — Las fiestas del Señor son santas convocaciones.", fr:"Lévitique 23:2 — Les fêtes de l'Éternel sont de saintes convocations.", de:"3. Mose 23:2 — Die Feste des HERRN sind heilige Versammlungen.", he:"וַיִּקְרָא כג:ב — מוֹעֲדֵי ה' מִקְרָאֵי קֹדֶשׁ.", ru:"Левит 23:2 — Праздники Господни — священные собрания." },
@@ -1730,18 +1730,18 @@ const T = {
   enableAboveHint:   { pt:"Ative as notificações acima para configurar", en:"Enable notifications above to configure", es:"Activa las notificaciones arriba para configurar", fr:"Activez les notifications ci-dessus pour configurer", de:"Aktiviere die Benachrichtigungen oben zum Konfigurieren", he:"הַפְעֵל אֶת הַהוֹדָעוֹת לְמַעְלָה כְּדֵי לְהַגְדִּיר", ru:"Включите уведомления выше для настройки" },
   enableAllBtn:      { pt:"Ativar todas", en:"Enable all", es:"Activar todas", fr:"Activer tout", de:"Alle aktivieren", he:"הַפְעֵל הַכֹּל", ru:"Включить все" },
   disableAllBtn:     { pt:"Desativar todas", en:"Disable all", es:"Desactivar todas", fr:"Désactiver tout", de:"Alle deaktivieren", he:"כַּבֵּה הַכֹּל", ru:"Выключить все" },
-  encountersEternal: { pt:"Encontros Marcados pelo Eterno", en:"Appointed Encounters with the Eternal", es:"Encuentros Señalados por el Eterno", fr:"Rencontres Fixées par l'Éternel", de:"Festgesetzte Begegnungen mit dem Ewigen", he:"מוֹעֲדִים קְבוּעִים עִם הַנִּצְחִי", ru:"Назначенные встречи с Вечным" },
+  encountersEternal: { pt:"Encontros Marcados pelo Eterno", en:"Appointed Encounters with the Eternal", es:"Encuentros Señalados por el Eterno", fr:"Rencontres Fixées par l'Éternel", de:"Festgesetzte Begegnungen mit dem Ewigen", he:"מוֹעֲדִים360 קְבוּעִים עִם הַנִּצְחִי", ru:"Назначенные встречи с Вечным" },
   featCalendar:      { pt:"Hebraico + gregoriano", en:"Hebrew + Gregorian", es:"Hebreo + gregoriano", fr:"Hébreu + grégorien", de:"Hebräisch + gregorianisch", he:"עִבְרִי + גְּרֵגוֹרְיָאנִי", ru:"Еврейский + григорианский" },
   featConverter:     { pt:"Com tribos de Israel", en:"With tribes of Israel", es:"Con tribus de Israel", fr:"Avec les tribus d'Israël", de:"Mit Stämmen Israels", he:"עִם שִׁבְטֵי יִשְׂרָאֵל", ru:"С коленами Израиля" },
   featParashah:      { pt:"Ciclo real 5786", en:"Real 5786 cycle", es:"Ciclo real 5786", fr:"Cycle réel 5786", de:"Echter Zyklus 5786", he:"מַחֲזוֹר אֲמִתִּי תשפ״ו", ru:"Настоящий цикл 5786" },
   featShabat:        { pt:"Horários por GPS", en:"GPS-based times", es:"Horarios por GPS", fr:"Horaires par GPS", de:"Zeiten per GPS", he:"זְמַנִּים לְפִי GPS", ru:"Время по GPS" },
-  featFeasts:        { pt:"Moadim messiânicos", en:"Messianic Moadim", es:"Moadim mesiánicos", fr:"Moadim messianiques", de:"Messianische Moadim", he:"מוֹעֲדִים מְשִׁיחִיִּים", ru:"Мессианские Моадим" },
+  featFeasts:        { pt:"Moadim messiânicos", en:"Messianic Moadim", es:"Moadim mesiánicos", fr:"Moadim messianiques", de:"Messianische Moadim", he:"מוֹעֲדִים360 מְשִׁיחִיִּים", ru:"Мессианские Моадим" },
   featRosh:          { pt:"Fase lunar real", en:"Real moon phase", es:"Fase lunar real", fr:"Phase lunaire réelle", de:"Echte Mondphase", he:"שְׁלַב יָרֵחַ אֲמִתִּי", ru:"Настоящая фаза луны" },
   featVerse:         { pt:"30 versos em Heb+PT", en:"30 verses in Heb+PT", es:"30 versos en Heb+PT", fr:"30 versets en Héb+PT", de:"30 Verse auf Hebr+PT", he:"30 פְּסוּקִים בְּעִבְרִית וּפוֹרְטוּגֶזִית", ru:"30 стихов на иврите и португальском" },
   featSettings:      { pt:"Tema + notificações", en:"Theme + notifications", es:"Tema + notificaciones", fr:"Thème + notifications", de:"Thema + Benachrichtigungen", he:"נוֹשֵׂא + הוֹדָעוֹת", ru:"Тема + уведомления" },
 
   close:             { pt:"Fechar", en:"Close", es:"Cerrar", fr:"Fermer", de:"Schließen", he:"סְגֹר", ru:"Закрыть" },
-  installApp:        { pt:"Instalar Moedim", en:"Install Moedim", es:"Instalar Moedim", fr:"Installer Moedim", de:"Moedim installieren", he:"הַתְקֵן אֶת מוֹעֲדִים", ru:"Установить Моэдим" },
+  installApp:        { pt:"Instalar Moedim360", en:"Install Moedim360", es:"Instalar Moedim360", fr:"Installer Moedim360", de:"Moedim360 installieren", he:"הַתְקֵן אֶת מוֹעֲדִים360", ru:"Установить Моэдим360" },
   offlineAccess:     { pt:"Acesse offline a qualquer momento", en:"Access offline anytime", es:"Accede sin conexión en cualquier momento", fr:"Accédez hors ligne à tout moment", de:"Jederzeit offline zugreifen", he:"גִּשׁ לְלֹא חִבּוּר בְּכָל עֵת", ru:"Доступ офлайн в любое время" },
   installBtn:        { pt:"Instalar", en:"Install", es:"Instalar", fr:"Installer", de:"Installieren", he:"הַתְקֵן", ru:"Установить" },
   addToHomeScreen:   { pt:"Adicionar à tela inicial", en:"Add to home screen", es:"Añadir a la pantalla de inicio", fr:"Ajouter à l'écran d'accueil", de:"Zum Startbildschirm hinzufügen", he:"הוֹסֵף לְמַסֵּך הַבַּיִת", ru:"Добавить на главный экран" },
@@ -1749,8 +1749,8 @@ const T = {
   installDesktopHint:{ pt:"Use Chrome, Edge ou Samsung Internet e clique no botão para instalar", en:"Use Chrome, Edge or Samsung Internet and click the button to install", es:"Usa Chrome, Edge o Samsung Internet y toca el botón para instalar", fr:"Utilisez Chrome, Edge ou Samsung Internet et appuyez sur le bouton pour installer", de:"Verwenden Sie Chrome, Edge oder Samsung Internet und tippen Sie zum Installieren auf die Schaltfläche", he:"השתמש ב-Chrome, Edge או Samsung Internet ולחץ על הכפתור להתקנה", ru:"Используйте Chrome, Edge или Samsung Internet и нажмите кнопку для установки" },
 
 
-  notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים", ru:"Уведомления о праздниках" },
-  notifFeastsDesc:   { pt:"Receba alertas sobre as festas bíblicas próximas", en:"Get alerts about upcoming biblical feasts", es:"Recibe alertas sobre las próximas fiestas bíblicas", fr:"Recevez des alertes sur les fêtes bibliques à venir", de:"Erhalte Benachrichtigungen über bevorstehende biblische Feste", he:"קַבֵּל הַתְרָאוֹת עַל מוֹעֲדִים מִקְרָאִיִּים קְרוֹבִים", ru:"Получайте уведомления о предстоящих библейских праздниках" },
+  notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים360", ru:"Уведомления о праздниках" },
+  notifFeastsDesc:   { pt:"Receba alertas sobre as festas bíblicas próximas", en:"Get alerts about upcoming biblical feasts", es:"Recibe alertas sobre las próximas fiestas bíblicas", fr:"Recevez des alertes sur les fêtes bibliques à venir", de:"Erhalte Benachrichtigungen über bevorstehende biblische Feste", he:"קַבֵּל הַתְרָאוֹת עַל מוֹעֲדִים360 מִקְרָאִיִּים קְרוֹבִים", ru:"Получайте уведомления о предстоящих библейских праздниках" },
   blockedInSettings: { pt:"Bloqueado nas configurações", en:"Blocked in settings", es:"Bloqueado en la configuración", fr:"Bloqué dans les paramètres", de:"In den Einstellungen blockiert", he:"חָסוּם בַּהַגְדָּרוֹת", ru:"Заблокировано в настройках" },
   feastApproaching:  { pt:"se aproxima!", en:"is approaching!", es:"¡se acerca!", fr:"approche!", de:"naht!", he:"מִתְקָרֵב!", ru:"приближается!" },
   feastTodayNotif:   { pt:"Esta festa é hoje! ", en:"This feast is today! ", es:"¡Esta fiesta es hoy! ", fr:"Cette fête est aujourd'hui! ", de:"Dieses Fest ist heute! ", he:"מוֹעֵד זֶה הַיּוֹם! ", ru:"Этот праздник сегодня! " },
@@ -3767,7 +3767,7 @@ const TRIBES = [
     symbol: "🌳", mazal: "Libra ♎", stone: "Ônix",
     stoneHeb: "שֹׁהַם", color: "#059669",
     blessing: { pt:"Seu descendente se tornará uma multidão de nações. (Gn 48:19)", en:"His descendants shall become a multitude of nations. (Gen 48:19)", es:"Su descendencia llegará a ser multitud de naciones. (Gn 48:19)", fr:"Sa postérité deviendra une multitude de nations. (Gn 48:19)", de:"Sein Same wird eine Menge von Völkern werden. (1. Mose 48:19)", he:"וְזַרְעוֹ יִהְיֶה מְלֹא הַגּוֹיִם. (בְּרֵאשִׁית מח:יט)", ru:"Потомство его будет множеством народов. (Быт 48:19)" },
-    desc: { pt:"Filho de Yosef, recebeu a bênção do primogênito. Tishrei é o mês mais rico em festas — Rosh Hashaná, Yom Kippur e Sukkot. Efraim representa multiplicação e renovação.", en:"Son of Yosef, he received the firstborn's blessing. Tishrei is the month richest in feasts — Rosh Hashanah, Yom Kippur and Sukkot. Ephraim represents multiplication and renewal.", es:"Hijo de Yosef, recibió la bendición del primogénito. Tishrei es el mes más rico en fiestas — Rosh Hashaná, Yom Kipur y Sucot. Efraín representa multiplicación y renovación.", fr:"Fils de Yosef, il reçut la bénédiction du premier-né. Tichri est le mois le plus riche en fêtes — Roch Hachana, Yom Kippour et Souccot. Éphraïm représente la multiplication et le renouveau.", de:"Sohn von Josef, erhielt den Erstgeburtssegen. Tischri ist der festreichste Monat — Rosch Haschana, Jom Kippur und Sukkot. Ephraim steht für Vermehrung und Erneuerung.", he:"בְּנוֹ שֶׁל יוֹסֵף, קִבֵּל אֶת בִּרְכַּת הַבְּכוֹרָה. תִּשְׁרֵי הוּא הַחֹדֶשׁ הֶעָשִׁיר בְּיוֹתֵר בְּמוֹעֲדִים — רֹאשׁ הַשָּׁנָה, יוֹם כִּפּוּר וְסֻכּוֹת.", ru:"Сын Иосифа, получил благословение первенца. Тишрей — месяц, богатейший праздниками — Рош ха-Шана, Йом Кипур и Суккот. Ефрем представляет умножение и обновление." },
+    desc: { pt:"Filho de Yosef, recebeu a bênção do primogênito. Tishrei é o mês mais rico em festas — Rosh Hashaná, Yom Kippur e Sukkot. Efraim representa multiplicação e renovação.", en:"Son of Yosef, he received the firstborn's blessing. Tishrei is the month richest in feasts — Rosh Hashanah, Yom Kippur and Sukkot. Ephraim represents multiplication and renewal.", es:"Hijo de Yosef, recibió la bendición del primogénito. Tishrei es el mes más rico en fiestas — Rosh Hashaná, Yom Kipur y Sucot. Efraín representa multiplicación y renovación.", fr:"Fils de Yosef, il reçut la bénédiction du premier-né. Tichri est le mois le plus riche en fêtes — Roch Hachana, Yom Kippour et Souccot. Éphraïm représente la multiplication et le renouveau.", de:"Sohn von Josef, erhielt den Erstgeburtssegen. Tischri ist der festreichste Monat — Rosch Haschana, Jom Kippur und Sukkot. Ephraim steht für Vermehrung und Erneuerung.", he:"בְּנוֹ שֶׁל יוֹסֵף, קִבֵּל אֶת בִּרְכַּת הַבְּכוֹרָה. תִּשְׁרֵי הוּא הַחֹדֶשׁ הֶעָשִׁיר בְּיוֹתֵר בְּמוֹעֲדִים360 — רֹאשׁ הַשָּׁנָה, יוֹם כִּפּוּר וְסֻכּוֹת.", ru:"Сын Иосифа, получил благословение первенца. Тишрей — месяц, богатейший праздниками — Рош ха-Шана, Йом Кипур и Суккот. Ефрем представляет умножение и обновление." },
     qualities: {
       pt:["Multiplicação", "Renovação", "Equilíbrio (balança de Tishrei)", "Frutificação"],
       en:["Multiplication", "Renewal", "Balance (Tishrei scales)", "Fruitfulness"],
@@ -3786,7 +3786,7 @@ const TRIBES = [
     symbol: "💧", mazal: "Escorpião ♏", stone: "Ágata",
     stoneHeb: "שְׁבוֹ", color: "#1d4ed8",
     blessing: { pt:"Que Deus te faça como Efraim e Menashe. (Gn 48:20)", en:"May God make you as Ephraim and Manasseh. (Gen 48:20)", es:"Que Dios te haga como a Efraín y a Manasés. (Gn 48:20)", fr:"Que Dieu te rende semblable à Éphraïm et à Manassé. (Gn 48:20)", de:"Gott setze dich wie Ephraim und Manasse. (1. Mose 48:20)", he:"יְשִׂמְךָ אֱלֹהִים כְּאֶפְרַיִם וְכִמְנַשֶּׁה. (בְּרֵאשִׁית מח:כ)", ru:"Бог да сотворит тебе, как Ефрему и Манассии. (Быт 48:20)" },
-    desc: { pt:"O primogênito de Yosef. Cheshvan é o único mês sem festas — um mês de introspecção profunda e trabalho silencioso. Menashe representa esquecer o sofrimento passado e seguir em frente.", en:"Yosef's firstborn. Cheshvan is the only month without feasts — a month of deep introspection and quiet work. Manasseh represents forgetting past suffering and moving forward.", es:"El primogénito de Yosef. Cheshvan es el único mes sin fiestas — un mes de introspección profunda y trabajo silencioso. Manasés representa olvidar el sufrimiento pasado y seguir adelante.", fr:"Le premier-né de Yosef. Hesvan est le seul mois sans fêtes — un mois d'introspection profonde et de travail silencieux. Manassé représente l'oubli des souffrances passées.", de:"Josefs Erstgeborener. Cheschwan ist der einzige Monat ohne Feste — ein Monat tiefer Selbstreflexion und stiller Arbeit. Manasse steht für das Vergessen vergangenen Leids.", he:"בְּכוֹר יוֹסֵף. חֶשְׁוָן הוּא הַחֹדֶשׁ הַיָּחִיד לְלֹא מוֹעֲדִים — חֹדֶשׁ שֶׁל הִתְבּוֹנְנוּת עֲמֻקָּה וַעֲבוֹדָה שְׁקֵטָה.", ru:"Первенец Иосифа. Хешван — единственный месяц без праздников — месяц глубокой самоанализа и тихой работы. Манассия представляет забвение прошлых страданий." },
+    desc: { pt:"O primogênito de Yosef. Cheshvan é o único mês sem festas — um mês de introspecção profunda e trabalho silencioso. Menashe representa esquecer o sofrimento passado e seguir em frente.", en:"Yosef's firstborn. Cheshvan is the only month without feasts — a month of deep introspection and quiet work. Manasseh represents forgetting past suffering and moving forward.", es:"El primogénito de Yosef. Cheshvan es el único mes sin fiestas — un mes de introspección profunda y trabajo silencioso. Manasés representa olvidar el sufrimiento pasado y seguir adelante.", fr:"Le premier-né de Yosef. Hesvan est le seul mois sans fêtes — un mois d'introspection profonde et de travail silencieux. Manassé représente l'oubli des souffrances passées.", de:"Josefs Erstgeborener. Cheschwan ist der einzige Monat ohne Feste — ein Monat tiefer Selbstreflexion und stiller Arbeit. Manasse steht für das Vergessen vergangenen Leids.", he:"בְּכוֹר יוֹסֵף. חֶשְׁוָן הוּא הַחֹדֶשׁ הַיָּחִיד לְלֹא מוֹעֲדִים360 — חֹדֶשׁ שֶׁל הִתְבּוֹנְנוּת עֲמֻקָּה וַעֲבוֹדָה שְׁקֵטָה.", ru:"Первенец Иосифа. Хешван — единственный месяц без праздников — месяц глубокой самоанализа и тихой работы. Манассия представляет забвение прошлых страданий." },
     qualities: {
       pt:["Introspecção", "Superação do passado", "Trabalho silencioso", "Perseverança"],
       en:["Introspection", "Overcoming the past", "Quiet work", "Perseverance"],
@@ -4551,7 +4551,7 @@ ${verse.heb}
 
 "${verse.pt}"
 
-— Moedim — Calendário Bíblico`;
+— Moedim360 — Calendário Bíblico`;
 
   const handleCopy = () => {
     navigator.clipboard?.writeText(shareText).then(() => {
@@ -4728,13 +4728,13 @@ function getNotifBody(key) {
       const rc = getNextRoshChodesh();
       return rc ? `Rosh Chodesh de ${rc.month} — Lua Nova e renovação!` : "Lua Nova — Rosh Chodesh!";
     }
-    default: return "Moedim — Calendário Bíblico";
+    default: return "Moedim360 — Calendário Bíblico";
   }
 }
 
 function fireTestNotif(key, label) {
   const icons = { shabat:"🕯️", feasts:"⭐", parasha:"📖", rosh:"🌙" };
-  notifShow(`${icons[key] || "✡"} ${label} — Moedim`, getNotifBody(key), {
+  notifShow(`${icons[key] || "✡"} ${label} — Moedim360`, getNotifBody(key), {
     tag: `moedim-test-${key}`,
   });
 }
@@ -4797,7 +4797,7 @@ const NOTIF_DEFS = [
   {
     key: "feasts",
     label: "Festas Bíblicas",
-    heb: "מוֹעֲדִים",
+    heb: "מוֹעֲדִים360",
     iconName: "star",
     color: "#F2A03D",
     when: "3 dias antes de cada Moed (festa bíblica)",
@@ -4871,7 +4871,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
     setRequesting(false);
     if (p === "granted") {
       notifShow(
-        "✡ Moedim ativado!",
+        "✡ Moedim360 ativado!",
         "Você receberá alertas de Shabat, Festas, Parashah e Rosh Chodesh.",
         { delayMs: 600, tag: "moedin-welcome" }
       );
@@ -5339,9 +5339,9 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
           <MenorahLogo size={48} glow />
           <div>
             <div className="cinzel" style={{ color:S.goldLight, fontWeight:700, fontSize:15 }}>
-              Moedim — Calendário Bíblico
+              Moedim360 — Calendário Bíblico
             </div>
-            <div className="hebrew" style={{ color:S.gold, fontSize:18 }}>מוֹעֲדִים</div>
+            <div className="hebrew" style={{ color:S.gold, fontSize:18 }}>מוֹעֲדִים360</div>
             <div style={{ color:S.textMuted, fontSize:11 }}>{t("encountersEternal")}</div>
           </div>
         </div>
@@ -5455,7 +5455,7 @@ export default function App() {
           שַׁבָּת שָׁלוֹם
         </div>
         <div className="cinzel" style={{ color:S.textMuted, fontSize:11, letterSpacing:"0.08em" }}>
-          MOEDIM — CALENDÁRIO BÍBLICO • מוֹעֲדִים
+          MOEDIM — CALENDÁRIO BÍBLICO • מוֹעֲדִים360
         </div>
         <div style={{ color:S.textMuted, fontSize:10, marginTop:4, fontFamily:"'Inter',sans-serif" }}>
           Encontros Marcados pelo Eterno
