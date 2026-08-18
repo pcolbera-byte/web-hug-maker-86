@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { registerMoedimPwa } from "../lib/pwa";
 
 function NotFoundComponent() {
   return (
@@ -153,6 +154,10 @@ gtag('config', 'G-458XBP1L8V');`,
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    void registerMoedimPwa();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
