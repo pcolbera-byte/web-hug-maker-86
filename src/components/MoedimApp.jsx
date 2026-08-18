@@ -1746,7 +1746,7 @@ const T = {
   installBtn:        { pt:"Instalar", en:"Install", es:"Instalar", fr:"Installer", de:"Installieren", he:"הַתְקֵן", ru:"Установить" },
   addToHomeScreen:   { pt:"Adicionar à tela inicial", en:"Add to home screen", es:"Añadir a la pantalla de inicio", fr:"Ajouter à l'écran d'accueil", de:"Zum Startbildschirm hinzufügen", he:"הוֹסֵף לְמַסֵּך הַבַּיִת", ru:"Добавить на главный экран" },
   installIosHint:    { pt:"Toque em Compartilhar e depois 'Adicionar à Tela de Início'", en:"Tap Share then 'Add to Home Screen'", es:"Toca Compartir y luego 'Añadir a pantalla de inicio'", fr:"Appuyez sur Partager puis 'Ajouter à l'écran d'accueil'", de:"Tippen Sie auf Teilen und dann 'Zum Startbildschirm hinzufügen'", he:"הַקֵּשׁ עַל שַׁתֵּף וְאַחַר כָּךְ 'הוֹסֵף לְמַסֵּך הַבַּיִת'", ru:"Нажмите Поделиться, затем 'Добавить на главный экран'" },
-  installDesktopHint:{ pt:"Use Chrome, Edge ou Samsung Internet e clique no botão para instalar", en:"Use Chrome, Edge or Samsung Internet and click the button to install", es:"Usa Chrome, Edge o Samsung Internet y toca el botón para instalar", fr:"Utilisez Chrome, Edge ou Samsung Internet et appuyez sur le bouton pour installer", de:"Verwenden Sie Chrome, Edge oder Samsung Internet und tippen Sie zum Installieren auf die Schaltfläche", he:"השתמש ב-Chrome, Edge או Samsung Internet ולחץ על הכפתור להתקנה", ru:"Используйте Chrome, Edge или Samsung Internet и нажмите кнопку для установки" },
+  installDesktopHint:{ pt:"No menu do Chrome, Edge ou Samsung Internet, toque em 'Instalar aplicativo' ou 'Adicionar à tela inicial'", en:"In the Chrome, Edge, or Samsung Internet menu, tap 'Install app' or 'Add to Home screen'", es:"En el menú de Chrome, Edge o Samsung Internet, toca 'Instalar aplicación' o 'Añadir a pantalla de inicio'", fr:"Dans le menu de Chrome, Edge ou Samsung Internet, appuyez sur 'Installer l'application' ou 'Ajouter à l'écran d'accueil'", de:"Tippen Sie im Menü von Chrome, Edge oder Samsung Internet auf 'App installieren' oder 'Zum Startbildschirm hinzufügen'", he:"בתפריט של Chrome, Edge או Samsung Internet, הקש על 'התקנת אפליקציה' או 'הוספה למסך הבית'", ru:"В меню Chrome, Edge или Samsung Internet нажмите 'Установить приложение' или 'Добавить на главный экран'" },
 
 
   notifFeastsTitle:  { pt:"Notificações de Festas", en:"Feast Notifications", es:"Notificaciones de Fiestas", fr:"Notifications de Fêtes", de:"Fest-Benachrichtigungen", he:"הוֹדָעוֹת מוֹעֲדִים360", ru:"Уведомления о праздниках" },
@@ -3544,7 +3544,8 @@ function InstallButton({ lang = "pt", style = {} }) {
 
   if (isInstalled || typeof window === "undefined") return null;
 
-  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const handleClick = async () => {
     if (deferredPrompt) {
