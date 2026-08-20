@@ -5479,7 +5479,7 @@ export default function App() {
           שַׁבָּת שָׁלוֹם
         </div>
         <div className="cinzel" style={{ color:S.textMuted, fontSize:11, letterSpacing:"0.08em" }}>
-          MOEDIM — CALENDÁRIO BÍBLICO • מוֹעֲדִים360
+          MOEDIM360 - CALENDÁRIO BÍBLICO
         </div>
         <div style={{ color:S.textMuted, fontSize:10, marginTop:4, fontFamily:"'Inter',sans-serif" }}>
           Encontros Marcados pelo Eterno
