@@ -712,29 +712,6 @@ function getCurrentParasha() {
   return best || PARASHOT_5786[0];
 }
 
-function __OLD_getCurrentParasha() {
-  // Usa dia hebraico ajustado: após 18h de sexta, o Shabat já começou
-  const now     = new Date();
-  const hebNow  = getHebrewCivilDate(); // D+1 se após 18h
-  const dayOfWeek = now.getDay();
-
-  // Se for após 18h de sexta (5), o Shabat já começou → usa sábado hebraico
-  // Se for após 18h de sábado (6), o Shabat já terminou → busca próxima semana
-  let nextSat = new Date(hebNow);
-  const hebDay = hebNow.getDay();
-  const daysUntilSat = (6 - hebDay + 7) % 7;
-  nextSat.setDate(hebNow.getDate() + daysUntilSat);
-
-  let best = null;
-  for (const p of PARASHOT_5786) {
-    const pd = new Date(p.dataDiaspora);
-    if (pd <= nextSat) {
-      if (!best || pd > new Date(best.dataDiaspora)) best = p;
-    }
-  }
-  return best || PARASHOT_5786[0];
-}
-
 function getNextParasha() {
   const current = getCurrentParasha();
   const idx = PARASHOT_5786.findIndex(p => p.name === current.name);
