@@ -875,7 +875,19 @@ function gregorianToHebrew(gYear, gMonth, gDay) {
   );
   const monthIndex = getMonthIndexFromName(hebrewMonthStr);
   const monthInfo = HEBREW_MONTHS[monthIndex] || HEBREW_MONTHS[0];
-  return { year: hebrewYear, month: monthIndex + 1, day: hebrewDay, monthName: monthInfo.name, monthNameHeb: monthInfo.heb };
+
+  // Anos bissextos hebraicos têm dois Adar (Adar I e Adar II). O índice
+  // continua sendo o de Adar (12) para que as festas — Purim cai em Adar II —
+  // continuem a ser reconhecidas, mas o nome exibido distingue os dois meses.
+  const adarStr = hebrewMonthStr.toLowerCase();
+  const isAdarII = /adar\s*(ii|2)/.test(adarStr);
+  const isAdarI  = !isAdarII && /adar\s*(i|1)\b/.test(adarStr);
+  let monthName    = monthInfo.name;
+  let monthNameHeb = monthInfo.heb;
+  if (isAdarII) { monthName = "Adar II"; monthNameHeb = "אֲדָר ב׳"; }
+  else if (isAdarI) { monthName = "Adar I"; monthNameHeb = "אֲדָר א׳"; }
+
+  return { year: hebrewYear, month: monthIndex + 1, day: hebrewDay, monthName, monthNameHeb };
 }
 
 function getTodayHebrew() {
