@@ -673,9 +673,21 @@ function getDailyPortion(parasha, lang = "pt") {
 }
 
 function getParashaForBirthday(month, day) {
+  const mm = String(month).padStart(2, "0");
+  const dd = String(day).padStart(2, "0");
+  // O ciclo mapeado começa em 18/10/2025 e termina em 03/10/2026.
   const year = month >= 10 ? 2025 : 2026; // cobre Out/Nov/Dez 2025 e Jan-Set 2026
-  const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-  return getParashaByDate(dateStr);
+  const found = getParashaByDate(`${year}-${mm}-${dd}`);
+  if (found) return found;
+  // Datas de 1 a 17 de outubro caem antes do início do ciclo em 2025 —
+  // o ciclo é anual, então buscamos a mesma data no fim do ciclo de 2026.
+  const wrapped = getParashaByDate(`2026-${mm}-${dd}`);
+  if (wrapped) return wrapped;
+  // Último recurso: a parashá mais recente do ciclo.
+  return PARASHOT_5786.reduce(
+    (a, p) => (!a || new Date(p.dataDiaspora) > new Date(a.dataDiaspora) ? p : a),
+    null
+  );
 }
 
 function getCurrentParasha() {
@@ -875,7 +887,19 @@ function gregorianToHebrew(gYear, gMonth, gDay) {
   );
   const monthIndex = getMonthIndexFromName(hebrewMonthStr);
   const monthInfo = HEBREW_MONTHS[monthIndex] || HEBREW_MONTHS[0];
-  return { year: hebrewYear, month: monthIndex + 1, day: hebrewDay, monthName: monthInfo.name, monthNameHeb: monthInfo.heb };
+
+  // Anos bissextos hebraicos têm dois Adar (Adar I e Adar II). O índice
+  // continua sendo o de Adar (12) para que as festas — Purim cai em Adar II —
+  // continuem a ser reconhecidas, mas o nome exibido distingue os dois meses.
+  const adarStr = hebrewMonthStr.toLowerCase();
+  const isAdarII = /adar\s*(ii|2)/.test(adarStr);
+  const isAdarI  = !isAdarII && /adar\s*(i|1)\b/.test(adarStr);
+  let monthName    = monthInfo.name;
+  let monthNameHeb = monthInfo.heb;
+  if (isAdarII) { monthName = "Adar II"; monthNameHeb = "אֲדָר ב׳"; }
+  else if (isAdarI) { monthName = "Adar I"; monthNameHeb = "אֲדָר א׳"; }
+
+  return { year: hebrewYear, month: monthIndex + 1, day: hebrewDay, monthName, monthNameHeb };
 }
 
 function getTodayHebrew() {
