@@ -684,6 +684,40 @@ function getCurrentParasha() {
   const hebNow  = getHebrewCivilDate(); // D+1 se após 18h
   const dayOfWeek = now.getDay();
 
+  // Início da semana atual (domingo), a partir do dia hebraico ajustado
+  const hebDay = hebNow.getDay();
+  let startOfWeek = new Date(hebNow);
+  startOfWeek.setDate(hebNow.getDate() - hebDay);
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  // A parashá "atual" é a primeira cujo Shabat cai nesta semana ou depois —
+  // isso avança automaticamente quando uma festa (ex.: Rosh Hashaná) substitui
+  // a leitura semanal normal, criando um intervalo de mais de 7 dias entre
+  // duas parashot consecutivas na tabela.
+  let best = null;
+  for (const p of PARASHOT_5786) {
+    const pd = new Date(p.dataDiaspora);
+    if (pd >= startOfWeek) {
+      if (!best || pd < new Date(best.dataDiaspora)) best = p;
+    }
+  }
+  // Fallback: se estiver após a última parashá do ciclo (ou antes da primeira),
+  // usa a mais próxima disponível
+  if (!best) {
+    for (const p of PARASHOT_5786) {
+      const pd = new Date(p.dataDiaspora);
+      if (!best || pd > new Date(best.dataDiaspora)) best = p;
+    }
+  }
+  return best || PARASHOT_5786[0];
+}
+
+function __OLD_getCurrentParasha() {
+  // Usa dia hebraico ajustado: após 18h de sexta, o Shabat já começou
+  const now     = new Date();
+  const hebNow  = getHebrewCivilDate(); // D+1 se após 18h
+  const dayOfWeek = now.getDay();
+
   // Se for após 18h de sexta (5), o Shabat já começou → usa sábado hebraico
   // Se for após 18h de sábado (6), o Shabat já terminou → busca próxima semana
   let nextSat = new Date(hebNow);
