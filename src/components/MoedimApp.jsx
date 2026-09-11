@@ -91,6 +91,168 @@ async function notifShow(title, body, opts = {}) {
   else fire();
 }
 
+// ─── CAMADA DE GEOLOCALIZAÇÃO (Web + Capacitor nativo) ─────────────────────────
+// Usa o plugin nativo quando disponível e mantém a API do navegador como fallback.
+function getGeolocationPlugin() {
+  try {
+    return window?.Capacitor?.Plugins?.Geolocation || null;
+  } catch (_) {
+    return null;
+  }
+}
+
+async function geoGetCurrentPosition() {
+  if (isNativeApp()) {
+    const plugin = getGeolocationPlugin();
+    if (!plugin) throw new Error("Geolocation plugin not available");
+    const perm = await plugin.checkPermissions();
+    if (perm.location !== "granted" && perm.coarseLocation !== "granted") {
+      const req = await plugin.requestPermissions();
+      if (req.location !== "granted" && req.coarseLocation !== "granted") {
+        throw new Error("Location permission denied");
+      }
+    }
+    const pos = await plugin.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+    return { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+  }
+
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Geolocation not supported"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      err => reject(err),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+}
+
+// ─── AGENDAMENTO REAL DE NOTIFICAÇÕES RECORRENTES ──────────────────────────────
+// O agendamento de longo prazo é feito somente no aplicativo nativo.
+function tPlain(key, lang) {
+  const entry = T[key];
+  if (!entry) return key;
+  return entry[lang] || entry.pt || key;
+}
+
+async function scheduleRecurringNotifications(notifPrefs, lang = "pt") {
+  if (!isNativeApp()) return;
+  const plugin = getLocalNotificationsPlugin();
+  if (!plugin) return;
+
+  try {
+    const pending = await plugin.getPending();
+    if (pending?.notifications?.length) {
+      await plugin.cancel({ notifications: pending.notifications.map(n => ({ id: n.id })) });
+    }
+  } catch (_) {}
+
+  const now = new Date();
+  const toSchedule = [];
+  let id = 2000;
+
+  function atTime(date, hour, minute = 0) {
+    const d = new Date(date);
+    d.setHours(hour, minute, 0, 0);
+    return d;
+  }
+
+  function fmtDateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  if (notifPrefs.shabat) {
+    let d = new Date(now);
+    for (let i = 0; i < 8; i++) {
+      while (d.getDay() !== 5) d.setDate(d.getDate() + 1);
+      const at = atTime(d, 16);
+      if (at > now) {
+        toSchedule.push({
+          id: id++,
+          title: `🕯️ ${tPlain("notif_shabat_label", lang)}`,
+          body: tPlain("notif_shabat_detail", lang),
+          smallIcon: "ic_stat_icon",
+          iconColor: "#D4AF37",
+          schedule: { at },
+        });
+      }
+      d.setDate(d.getDate() + 1);
+    }
+  }
+
+  if (notifPrefs.parasha) {
+    let d = new Date(now);
+    for (let i = 0; i < 8; i++) {
+      while (d.getDay() !== 5) d.setDate(d.getDate() + 1);
+      const saturday = new Date(d);
+      saturday.setDate(d.getDate() + 1);
+      const parasha = getParashaByDate(fmtDateStr(saturday));
+      const at = atTime(d, 8);
+      if (at > now && parasha) {
+        toSchedule.push({
+          id: id++,
+          title: `📖 ${tPlain("notif_parasha_label", lang)} — ${parasha.name}`,
+          body: parasha.theme || parasha.ref,
+          smallIcon: "ic_stat_icon",
+          iconColor: "#D4AF37",
+          schedule: { at },
+        });
+      }
+      d.setDate(d.getDate() + 1);
+    }
+  }
+
+  if (notifPrefs.feasts) {
+    const hebrewStart = getHebrewCivilDate();
+    hebrewStart.setHours(0, 0, 0, 0);
+    for (let offset = 0; offset <= 180; offset++) {
+      const checkDate = new Date(hebrewStart);
+      checkDate.setDate(hebrewStart.getDate() + offset);
+      const hd = gregorianToHebrew(checkDate.getFullYear(), checkDate.getMonth() + 1, checkDate.getDate());
+      const feast = BIBLICAL_FEASTS.find(item => item.month === hd.month && item.day === hd.day);
+      if (feast) {
+        const notificationDate = new Date(checkDate);
+        notificationDate.setDate(notificationDate.getDate() - 3);
+        const at = atTime(notificationDate, 9);
+        if (at > now) {
+          toSchedule.push({
+            id: id++,
+            title: `${feast.emoji} ${feast.name} ${tPlain("feastApproaching", lang)}`,
+            body: feast.desc?.[lang] || feast.desc?.pt || "",
+            smallIcon: "ic_stat_icon",
+            iconColor: "#D4AF37",
+            schedule: { at },
+          });
+        }
+      }
+    }
+  }
+
+  if (notifPrefs.rosh) {
+    for (const rc of ROSH_CHODESH_5786) {
+      const at = atTime(new Date(rc.date), 8);
+      if (at > now) {
+        toSchedule.push({
+          id: id++,
+          title: `🌙 ${tPlain("notif_rosh_label", lang)} — ${rc.month}`,
+          body: rc.note,
+          smallIcon: "ic_stat_icon",
+          iconColor: "#D4AF37",
+          schedule: { at },
+        });
+      }
+    }
+  }
+
+  if (toSchedule.length) {
+    try {
+      await plugin.schedule({ notifications: toSchedule });
+    } catch (_) {}
+  }
+}
+
 
 
 // ─── HEBREW CALENDAR DATA ────────────────────────────────────────────────────
@@ -2988,11 +3150,15 @@ function ShabatPage({ lang = "pt" }) {
 
   function handleGeo() {
     setLoading(true); setLocError("");
-    if (!navigator.geolocation) { setLocError(t("locationError")); setLoading(false); return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => { calcFromCoords(pos.coords.latitude, pos.coords.longitude, t("useMyLocation")); setLoading(false); },
-      () => { setLocError(t("locationError")); setLoading(false); }
-    );
+    geoGetCurrentPosition()
+      .then(({ latitude, longitude }) => {
+        calcFromCoords(latitude, longitude, t("useMyLocation"));
+        setLoading(false);
+      })
+      .catch(() => {
+        setLocError(t("locationError"));
+        setLoading(false);
+      });
   }
 
   return (
@@ -3659,7 +3825,7 @@ function InstallButton({ lang = "pt", style = {} }) {
 
 // ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 
-function NotificationManager({ lang = "pt" }) {
+function NotificationManager({ lang = "pt", notifPrefs }) {
   const t = useT(lang);
   const [permission, setPermission] = useState("default");
   const [enabled, setEnabled] = useState(false);
@@ -3682,6 +3848,7 @@ function NotificationManager({ lang = "pt" }) {
     setPermission(perm);
     if (perm === "granted") {
       setEnabled(true);
+      void scheduleRecurringNotifications(notifPrefs || {}, lang);
       // Notifica sobre festas próximas
       const upcoming = getUpcomingFeasts(7);
       upcoming.forEach(({ feast, daysAway }) => {
@@ -4949,6 +5116,7 @@ function SettingsPage({ theme, setTheme, notifPrefs, setNotifPrefs, lang, setLan
     setPerm(p);
     setRequesting(false);
     if (p === "granted") {
+      void scheduleRecurringNotifications(notifPrefs, lang);
       notifShow(
         "✡ Moedim360 ativado!",
         "Você receberá alertas de Shabat, Festas, Parashah e Rosh Chodesh.",
@@ -5484,6 +5652,17 @@ export default function App() {
     try { localStorage.setItem("moedin_lang", lang); } catch(_) {}
   }, [lang]);
 
+  // Mantém os alertas nativos sincronizados quando idioma ou preferências mudam.
+  useEffect(() => {
+    let cancelled = false;
+    notifGetPermission().then(perm => {
+      if (!cancelled && perm === "granted") {
+        void scheduleRecurringNotifications(notifPrefs, lang);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [notifPrefs, lang]);
+
   const pages = {
     calendar:    <CalendarPage    lang={lang} />,
     converter:   <ConverterPage   lang={lang} />,
@@ -5506,7 +5685,7 @@ export default function App() {
 
       {/* Notification manager */}
       <div style={{ maxWidth: 960, margin: "12px auto 0", padding: "0 16px" }}>
-        <NotificationManager lang={lang} />
+        <NotificationManager lang={lang} notifPrefs={notifPrefs} />
       </div>
 
       {/* Page content */}
