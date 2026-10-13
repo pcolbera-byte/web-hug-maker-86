@@ -231,8 +231,8 @@ async function scheduleRecurringNotifications(notifPrefs, lang = "pt") {
   }
 
   if (notifPrefs.rosh) {
-    for (const rc of ROSH_CHODESH_5786) {
-      const at = atTime(new Date(rc.date), 8);
+    for (const rc of ROSH_CHODESH_ALL) {
+      const at = atTime(parseLocalDate(rc.date), 8);
       if (at > now) {
         toSchedule.push({
           id: id++,
@@ -761,7 +761,7 @@ const PARASHOT_5786 = [
     brit: "Apocalipse 15:1-4",
     theme: "O grande cântico de Moshe — testemunho poético da história de Israel",
     dataDiaspora: "2026-09-19", dataIsrael: null,
-    hebrewDate: "4 Tishrei 5787", book: "Devarim",
+    hebrewDate: "8 Tishrei 5787", book: "Devarim",
     aliyot: [
       "Dt 32:1–32:6", "Dt 32:7–32:12", "Dt 32:13–32:18",
       "Dt 32:19–32:35", "Dt 32:36–32:43", "Dt 32:44–32:47",
@@ -774,7 +774,7 @@ const PARASHOT_5786 = [
     haftara: "Josué 1:1-18",
     brit: "Mateus 17:1-9",
     theme: "A última bênção de Moshe às tribos e sua morte no Monte Nebo",
-    dataDiaspora: "2026-10-03", dataIsrael: null,
+    dataDiaspora: "2026-10-04", dataIsrael: "2026-10-03",
     hebrewDate: "23 Tishrei 5787", book: "Devarim",
     aliyot: [
       "Dt 33:1–33:7", "Dt 33:8–33:12", "Dt 33:13–33:17",
@@ -784,6 +784,231 @@ const PARASHOT_5786 = [
     nota: "Simchat Torah — lida na festa, não no Shabat regular",
   },
 ];
+
+// ─── PARASHAT HASHAVUA 5787 — CICLO 2026-2027 (ano bissexto: Adar I e Adar II) ─────
+// Datas conferidas no Hebcal (biblioteca @hebcal/core). Mesma estrutura do ciclo 5786:
+// as leituras (ref, haftará, B'rit, tema, aliyot) são reaproveitadas pelo nome;
+// só mudam as datas, a data hebraica e as notas de cada ano.
+// Neste ano as porções Vayakhel/Pekudei, Tazria/Metzora, Acharei Mot/Kedoshim e
+// Behar/Bechukotai são lidas em semanas SEPARADAS (por isso têm entradas próprias).
+// ─── ALIYOT (7 leituras da semana = porção diária, Domingo → Sábado) ─────────────
+// Divisão tradicional da leitura da Torá (Hebcal/@hebcal/leyning). Preenche as
+// parashot que ainda não tinham as aliyot cadastradas manualmente.
+const _ALIYOT = {
+  "Bereshit": ["Gn 1:1–2:3", "Gn 2:4–2:19", "Gn 2:20–3:21", "Gn 3:22–4:18", "Gn 4:19–4:22", "Gn 4:23–5:24", "Gn 5:25–6:8"],
+  "Noach": ["Gn 6:9–6:22", "Gn 7:1–7:16", "Gn 7:17–8:14", "Gn 8:15–9:7", "Gn 9:8–9:17", "Gn 9:18–10:32", "Gn 11:1–11:32"],
+  "Lech Lecha": ["Gn 12:1–12:13", "Gn 12:14–13:4", "Gn 13:5–13:18", "Gn 14:1–14:20", "Gn 14:21–15:6", "Gn 15:7–17:6", "Gn 17:7–17:27"],
+  "Vayera": ["Gn 18:1–18:14", "Gn 18:15–18:33", "Gn 19:1–19:20", "Gn 19:21–21:4", "Gn 21:5–21:21", "Gn 21:22–21:34", "Gn 22:1–22:24"],
+  "Chayei Sarah": ["Gn 23:1–23:16", "Gn 23:17–24:9", "Gn 24:10–24:26", "Gn 24:27–24:52", "Gn 24:53–24:67", "Gn 25:1–25:11", "Gn 25:12–25:18"],
+  "Toldot": ["Gn 25:19–26:5", "Gn 26:6–26:12", "Gn 26:13–26:22", "Gn 26:23–26:29", "Gn 26:30–27:27", "Gn 27:28–28:4", "Gn 28:5–28:9"],
+  "Vayetze": ["Gn 28:10–28:22", "Gn 29:1–29:17", "Gn 29:18–30:13", "Gn 30:14–30:27", "Gn 30:28–31:16", "Gn 31:17–31:42", "Gn 31:43–32:3"],
+  "Vayishlach": ["Gn 32:4–32:13", "Gn 32:14–32:30", "Gn 32:31–33:5", "Gn 33:6–33:20", "Gn 34:1–35:11", "Gn 35:12–36:19", "Gn 36:20–36:43"],
+  "Vayeshev": ["Gn 37:1–37:11", "Gn 37:12–37:22", "Gn 37:23–37:36", "Gn 38:1–38:30", "Gn 39:1–39:6", "Gn 39:7–39:23", "Gn 40:1–40:23"],
+  "Miketz": ["Gn 41:1–41:14", "Gn 41:15–41:38", "Gn 41:39–41:52", "Gn 41:53–42:18", "Gn 42:19–43:15", "Gn 43:16–43:29", "Gn 43:30–44:17"],
+  "Vayigash": ["Gn 44:18–44:30", "Gn 44:31–45:7", "Gn 45:8–45:18", "Gn 45:19–45:27", "Gn 45:28–46:27", "Gn 46:28–47:10", "Gn 47:11–47:27"],
+  "Vayechi": ["Gn 47:28–48:9", "Gn 48:10–48:16", "Gn 48:17–48:22", "Gn 49:1–49:18", "Gn 49:19–49:26", "Gn 49:27–50:20", "Gn 50:21–50:26"],
+  "Shemot": ["Êx 1:1–1:17", "Êx 1:18–2:10", "Êx 2:11–2:25", "Êx 3:1–3:15", "Êx 3:16–4:17", "Êx 4:18–4:31", "Êx 5:1–6:1"],
+  "Va'era": ["Êx 6:2–6:13", "Êx 6:14–6:28", "Êx 6:29–7:7", "Êx 7:8–8:6", "Êx 8:7–8:18", "Êx 8:19–9:16", "Êx 9:17–9:35"],
+  "Bo": ["Êx 10:1–10:11", "Êx 10:12–10:23", "Êx 10:24–11:3", "Êx 11:4–12:20", "Êx 12:21–12:28", "Êx 12:29–12:51", "Êx 13:1–13:16"],
+  "Beshalach": ["Êx 13:17–14:8", "Êx 14:9–14:14", "Êx 14:15–14:25", "Êx 14:26–15:26", "Êx 15:27–16:10", "Êx 16:11–16:36", "Êx 17:1–17:16"],
+  "Yitro": ["Êx 18:1–18:12", "Êx 18:13–18:23", "Êx 18:24–18:27", "Êx 19:1–19:6", "Êx 19:7–19:19", "Êx 19:20–20:14", "Êx 20:15–20:23"],
+  "Mishpatim": ["Êx 21:1–21:19", "Êx 21:20–22:3", "Êx 22:4–22:26", "Êx 22:27–23:5", "Êx 23:6–23:19", "Êx 23:20–23:25", "Êx 23:26–24:18"],
+  "Terumah": ["Êx 25:1–25:16", "Êx 25:17–25:40", "Êx 26:1–26:14", "Êx 26:15–26:30", "Êx 26:31–26:37", "Êx 27:1–27:8", "Êx 27:9–27:19"],
+  "Tetzaveh": ["Êx 27:20–28:12", "Êx 28:13–28:30", "Êx 28:31–28:43", "Êx 29:1–29:18", "Êx 29:19–29:37", "Êx 29:38–29:46", "Êx 30:1–30:10"],
+  "Ki Tisa": ["Êx 30:11–31:17", "Êx 31:18–33:11", "Êx 33:12–33:16", "Êx 33:17–33:23", "Êx 34:1–34:9", "Êx 34:10–34:26", "Êx 34:27–34:35"],
+  "Vayakhel": ["Êx 35:1–35:20", "Êx 35:21–35:29", "Êx 35:30–36:7", "Êx 36:8–36:19", "Êx 36:20–37:16", "Êx 37:17–37:29", "Êx 38:1–38:20"],
+  "Pekudei": ["Êx 38:21–39:1", "Êx 39:2–39:21", "Êx 39:22–39:32", "Êx 39:33–39:43", "Êx 40:1–40:16", "Êx 40:17–40:27", "Êx 40:28–40:38"],
+  "Vayakhel-Pekudei": ["Êx 35:1–35:29", "Êx 35:30–37:16", "Êx 37:17–37:29", "Êx 38:1–39:1", "Êx 39:2–39:21", "Êx 39:22–39:43", "Êx 40:1–40:38"],
+  "Vayikra": ["Lv 1:1–1:13", "Lv 1:14–2:6", "Lv 2:7–2:16", "Lv 3:1–3:17", "Lv 4:1–4:26", "Lv 4:27–5:10", "Lv 5:11–5:26"],
+  "Tzav": ["Lv 6:1–6:11", "Lv 6:12–7:10", "Lv 7:11–7:38", "Lv 8:1–8:13", "Lv 8:14–8:21", "Lv 8:22–8:29", "Lv 8:30–8:36"],
+  "Shemini": ["Lv 9:1–9:16", "Lv 9:17–9:23", "Lv 9:24–10:11", "Lv 10:12–10:15", "Lv 10:16–10:20", "Lv 11:1–11:32", "Lv 11:33–11:47"],
+  "Tazria": ["Lv 12:1–13:5", "Lv 13:6–13:17", "Lv 13:18–13:23", "Lv 13:24–13:28", "Lv 13:29–13:39", "Lv 13:40–13:54", "Lv 13:55–13:59"],
+  "Metzora": ["Lv 14:1–14:12", "Lv 14:13–14:20", "Lv 14:21–14:32", "Lv 14:33–14:53", "Lv 14:54–15:15", "Lv 15:16–15:28", "Lv 15:29–15:33"],
+  "Tazria-Metzora": ["Lv 12:1–13:23", "Lv 13:24–13:39", "Lv 13:40–13:54", "Lv 13:55–14:20", "Lv 14:21–14:32", "Lv 14:33–15:15", "Lv 15:16–15:33"],
+  "Acharei Mot": ["Lv 16:1–16:17", "Lv 16:18–16:24", "Lv 16:25–16:34", "Lv 17:1–17:7", "Lv 17:8–18:5", "Lv 18:6–18:21", "Lv 18:22–18:30"],
+  "Kedoshim": ["Lv 19:1–19:14", "Lv 19:15–19:22", "Lv 19:23–19:32", "Lv 19:33–19:37", "Lv 20:1–20:7", "Lv 20:8–20:22", "Lv 20:23–20:27"],
+  "Acharei Mot-Kedoshim": ["Lv 16:1–16:24", "Lv 16:25–17:7", "Lv 17:8–18:21", "Lv 18:22–19:14", "Lv 19:15–19:32", "Lv 19:33–20:7", "Lv 20:8–20:27"],
+  "Emor": ["Lv 21:1–21:15", "Lv 21:16–22:16", "Lv 22:17–22:33", "Lv 23:1–23:22", "Lv 23:23–23:32", "Lv 23:33–23:44", "Lv 24:1–24:23"],
+  "Behar": ["Lv 25:1–25:13", "Lv 25:14–25:18", "Lv 25:19–25:24", "Lv 25:25–25:28", "Lv 25:29–25:38", "Lv 25:39–25:46", "Lv 25:47–26:2"],
+  "Bechukotai": ["Lv 26:3–26:5", "Lv 26:6–26:9", "Lv 26:10–26:46", "Lv 27:1–27:15", "Lv 27:16–27:21", "Lv 27:22–27:28", "Lv 27:29–27:34"],
+  "Behar-Bechukotai": ["Lv 25:1–25:18", "Lv 25:19–25:28", "Lv 25:29–25:38", "Lv 25:39–26:9", "Lv 26:10–26:46", "Lv 27:1–27:15", "Lv 27:16–27:34"],
+  "Bamidbar": ["Nm 1:1–1:19", "Nm 1:20–1:54", "Nm 2:1–2:34", "Nm 3:1–3:13", "Nm 3:14–3:39", "Nm 3:40–3:51", "Nm 4:1–4:20"],
+  "Nasso": ["Nm 4:21–4:37", "Nm 4:38–4:49", "Nm 5:1–5:10", "Nm 5:11–6:27", "Nm 7:1–7:41", "Nm 7:42–7:71", "Nm 7:72–7:89"],
+  "Beha'alotcha": ["Nm 8:1–8:14", "Nm 8:15–8:26", "Nm 9:1–9:14", "Nm 9:15–10:10", "Nm 10:11–10:34", "Nm 10:35–11:29", "Nm 11:30–12:16"],
+  "Shelach": ["Nm 13:1–13:20", "Nm 13:21–14:7", "Nm 14:8–14:25", "Nm 14:26–15:7", "Nm 15:8–15:16", "Nm 15:17–15:26", "Nm 15:27–15:41"],
+  "Korach": ["Nm 16:1–16:13", "Nm 16:14–16:19", "Nm 16:20–17:8", "Nm 17:9–17:15", "Nm 17:16–17:24", "Nm 17:25–18:20", "Nm 18:21–18:32"],
+  "Chukat-Balak": ["Nm 19:1–20:6", "Nm 20:7–20:21", "Nm 20:22–21:20", "Nm 21:21–22:12", "Nm 22:13–22:38", "Nm 22:39–23:26", "Nm 23:27–25:9"],
+  "Pinchas": ["Nm 25:10–26:4", "Nm 26:5–26:51", "Nm 26:52–27:5", "Nm 27:6–27:23", "Nm 28:1–28:15", "Nm 28:16–29:11", "Nm 29:12–30:1"],
+  "Matot-Masei": ["Nm 30:2–31:12", "Nm 31:13–31:54", "Nm 32:1–32:19", "Nm 32:20–33:49", "Nm 33:50–34:15", "Nm 34:16–35:8", "Nm 35:9–36:13"],
+  "Devarim": ["Dt 1:1–1:10", "Dt 1:11–1:21", "Dt 1:22–1:38", "Dt 1:39–2:1", "Dt 2:2–2:30", "Dt 2:31–3:14", "Dt 3:15–3:22"],
+  "Va'etchanan": ["Dt 3:23–4:4", "Dt 4:5–4:40", "Dt 4:41–4:49", "Dt 5:1–5:18", "Dt 5:19–6:3", "Dt 6:4–6:25", "Dt 7:1–7:11"],
+  "Eikev": ["Dt 7:12–8:10", "Dt 8:11–9:3", "Dt 9:4–9:29", "Dt 10:1–10:11", "Dt 10:12–11:9", "Dt 11:10–11:21", "Dt 11:22–11:25"],
+  "Re'eh": ["Dt 11:26–12:10", "Dt 12:11–12:28", "Dt 12:29–13:19", "Dt 14:1–14:21", "Dt 14:22–14:29", "Dt 15:1–15:18", "Dt 15:19–16:17"],
+  "Shoftim": ["Dt 16:18–17:13", "Dt 17:14–17:20", "Dt 18:1–18:5", "Dt 18:6–18:13", "Dt 18:14–19:13", "Dt 19:14–20:9", "Dt 20:10–21:9"],
+  "Ki Teitzei": ["Dt 21:10–21:21", "Dt 21:22–22:7", "Dt 22:8–23:7", "Dt 23:8–23:24", "Dt 23:25–24:4", "Dt 24:5–24:13", "Dt 24:14–25:19"],
+  "Ki Tavo": ["Dt 26:1–26:11", "Dt 26:12–26:15", "Dt 26:16–26:19", "Dt 27:1–27:10", "Dt 27:11–28:6", "Dt 28:7–28:69", "Dt 29:1–29:8"],
+  "Nitzavim-Vayelech": ["Dt 29:9–29:28", "Dt 30:1–30:6", "Dt 30:7–30:14", "Dt 30:15–31:6", "Dt 31:7–31:13", "Dt 31:14–31:19", "Dt 31:20–31:30"],
+  "Ha'azinu": ["Dt 32:1–32:6", "Dt 32:7–32:12", "Dt 32:13–32:18", "Dt 32:19–32:28", "Dt 32:29–32:39", "Dt 32:40–32:43", "Dt 32:44–32:52"],
+  "V'Zot HaBracha": ["Dt 33:1–33:7", "Dt 33:8–33:12", "Dt 33:13–33:17", "Dt 33:18–33:21", "Dt 33:22–33:26", "Dt 33:27–33:29", "Dt 34:1–34:12"],
+};
+PARASHOT_5786.forEach(p => { if (!p.aliyot && _ALIYOT[p.name]) p.aliyot = _ALIYOT[p.name]; });
+
+const _BASE_5787 = Object.fromEntries(PARASHOT_5786.map(p => [p.name, p]));
+
+const _SPLIT_5787 = {
+  "Vayakhel": {
+    name: "Vayakhel", heb: "וַיַּקְהֵל", ref: "Êx 35:1–38:20",
+    haftara: "1 Reis 7:40-50", brit: "Hebreus 9:1-14",
+    theme: "O povo traz ofertas voluntárias e Betzalel é chamado para construir o Tabernáculo",
+    book: "Shemot",
+  },
+  "Pekudei": {
+    name: "Pekudei", heb: "פְקוּדֵי", ref: "Êx 38:21–40:38",
+    haftara: "1 Reis 7:51–8:21", brit: "Hebreus 8:1-6",
+    theme: "O inventário do Tabernáculo e a glória de Deus enchendo a tenda",
+    book: "Shemot",
+  },
+  "Tazria": {
+    name: "Tazria", heb: "תַזְרִיעַ", ref: "Lv 12:1–13:59",
+    haftara: "2 Reis 4:42–5:19", brit: "Lucas 2:21-24",
+    theme: "Pureza após o parto e o diagnóstico da tsaraat (lepra)",
+    book: "Vayikra",
+  },
+  "Metzora": {
+    name: "Metzora", heb: "מְצֹרָע", ref: "Lv 14:1–15:33",
+    haftara: "2 Reis 7:3-20", brit: "Marcos 1:40-45",
+    theme: "A purificação do metzorá e as leis de pureza do corpo e da casa",
+    book: "Vayikra",
+  },
+  "Acharei Mot": {
+    name: "Acharei Mot", heb: "אַחֲרֵי מוֹת", ref: "Lv 16:1–18:30",
+    haftara: "Ezequiel 22:1-16", brit: "Hebreus 9:23-28",
+    theme: "O serviço de Yom Kippur e as leis de pureza e santidade",
+    book: "Vayikra",
+  },
+  "Kedoshim": {
+    name: "Kedoshim", heb: "קְדֹשִׁים", ref: "Lv 19:1–20:27",
+    haftara: "Amós 9:7-15", brit: "1 Pedro 1:13-16",
+    theme: "\"Sede santos!\" — justiça, misericórdia e amor ao próximo",
+    book: "Vayikra",
+  },
+  "Behar": {
+    name: "Behar", heb: "בְּהַר", ref: "Lv 25:1–26:2",
+    haftara: "Jeremias 32:6-27", brit: "Lucas 4:16-21",
+    theme: "O Shemitá, o Jubileu e a redenção da terra",
+    book: "Vayikra",
+  },
+  "Bechukotai": {
+    name: "Bechukotai", heb: "בְּחֻקֹּתַי", ref: "Lv 26:3–27:34",
+    haftara: "Jeremias 16:19–17:14", brit: "Gálatas 3:10-14",
+    theme: "As bênçãos e advertências da aliança",
+    book: "Vayikra",
+  },
+};
+
+const _NOTAS_5787 = {
+  "Bereshit": "Shabat Bereshit — início do novo ciclo de leituras 5787",
+  "Vayeshev": "Shabat Chanukah (1º dia, 25 de Kislev)",
+  "Miketz": "Shabat Chanukah — último dia da festa",
+  "Beshalach": "Shabat Shirah — Shabat do Cântico do Mar",
+  "Vayakhel": "Shabat Shekalim — leitura adicional: Êx 30:11-16",
+  "Vayikra": "Shabat Zachor — leitura adicional: Dt 25:17-19 (antes de Purim)",
+  "Tzav": "Shabat Parah — leitura adicional: Nm 19:1-22",
+  "Shemini": "Shabat HaChodesh — leitura adicional: Êx 12:1-20",
+  "Metzora": "Shabat HaGadol — Haftará: Malaquias 3:4-24",
+  "Acharei Mot": "Após Pessach — a semana de Pessach interrompe o ciclo",
+  "Devarim": "Shabat Chazon — semana de Tisha B'Av",
+  "Va'etchanan": "Shabat Nachamu — Haftará: Isaías 40:1-26",
+  "Nitzavim-Vayelech": "Porção dupla — último Shabat antes de Rosh Hashaná 5788",
+  "Ha'azinu": "Shabat Shuva — entre Rosh Hashaná e Yom Kippur 5788",
+  "V'Zot HaBracha": "Simchat Torah — lida na festa, não no Shabat regular",
+};
+
+// [nome, dataDiaspora, dataIsrael|null, data hebraica]
+const _ROWS_5787 = [
+  ["Bereshit", "2026-10-10", null, "29 Tishrei 5787"],
+  ["Noach", "2026-10-17", null, "6 Cheshvan 5787"],
+  ["Lech Lecha", "2026-10-24", null, "13 Cheshvan 5787"],
+  ["Vayera", "2026-10-31", null, "20 Cheshvan 5787"],
+  ["Chayei Sarah", "2026-11-07", null, "27 Cheshvan 5787"],
+  ["Toldot", "2026-11-14", null, "4 Kislev 5787"],
+  ["Vayetze", "2026-11-21", null, "11 Kislev 5787"],
+  ["Vayishlach", "2026-11-28", null, "18 Kislev 5787"],
+  ["Vayeshev", "2026-12-05", null, "25 Kislev 5787"],
+  ["Miketz", "2026-12-12", null, "2 Tevet 5787"],
+  ["Vayigash", "2026-12-19", null, "9 Tevet 5787"],
+  ["Vayechi", "2026-12-26", null, "16 Tevet 5787"],
+  ["Shemot", "2027-01-02", null, "23 Tevet 5787"],
+  ["Va'era", "2027-01-09", null, "1 Shevat 5787"],
+  ["Bo", "2027-01-16", null, "8 Shevat 5787"],
+  ["Beshalach", "2027-01-23", null, "15 Shevat 5787"],
+  ["Yitro", "2027-01-30", null, "22 Shevat 5787"],
+  ["Mishpatim", "2027-02-06", null, "29 Shevat 5787"],
+  ["Terumah", "2027-02-13", null, "6 Adar I 5787"],
+  ["Tetzaveh", "2027-02-20", null, "13 Adar I 5787"],
+  ["Ki Tisa", "2027-02-27", null, "20 Adar I 5787"],
+  ["Vayakhel", "2027-03-06", null, "27 Adar I 5787"],
+  ["Pekudei", "2027-03-13", null, "4 Adar II 5787"],
+  ["Vayikra", "2027-03-20", null, "11 Adar II 5787"],
+  ["Tzav", "2027-03-27", null, "18 Adar II 5787"],
+  ["Shemini", "2027-04-03", null, "25 Adar II 5787"],
+  ["Tazria", "2027-04-10", null, "3 Nissan 5787"],
+  ["Metzora", "2027-04-17", null, "10 Nissan 5787"],
+  ["Acharei Mot", "2027-05-01", null, "24 Nissan 5787"],
+  ["Kedoshim", "2027-05-08", null, "1 Iyar 5787"],
+  ["Emor", "2027-05-15", null, "8 Iyar 5787"],
+  ["Behar", "2027-05-22", null, "15 Iyar 5787"],
+  ["Bechukotai", "2027-05-29", null, "22 Iyar 5787"],
+  ["Bamidbar", "2027-06-05", null, "29 Iyar 5787"],
+  ["Nasso", "2027-06-19", "2027-06-12", "14 Sivan 5787"],
+  ["Beha'alotcha", "2027-06-26", "2027-06-19", "21 Sivan 5787"],
+  ["Shelach", "2027-07-03", "2027-06-26", "28 Sivan 5787"],
+  ["Korach", "2027-07-10", "2027-07-03", "5 Tamuz 5787"],
+  ["Chukat-Balak", "2027-07-17", null, "12 Tamuz 5787"],
+  ["Pinchas", "2027-07-24", null, "19 Tamuz 5787"],
+  ["Matot-Masei", "2027-07-31", null, "26 Tamuz 5787"],
+  ["Devarim", "2027-08-07", null, "4 Av 5787"],
+  ["Va'etchanan", "2027-08-14", null, "11 Av 5787"],
+  ["Eikev", "2027-08-21", null, "18 Av 5787"],
+  ["Re'eh", "2027-08-28", null, "25 Av 5787"],
+  ["Shoftim", "2027-09-04", null, "2 Elul 5787"],
+  ["Ki Teitzei", "2027-09-11", null, "9 Elul 5787"],
+  ["Ki Tavo", "2027-09-18", null, "16 Elul 5787"],
+  ["Nitzavim-Vayelech", "2027-09-25", null, "23 Elul 5787"],
+  ["Ha'azinu", "2027-10-09", null, "8 Tishrei 5788"],
+  ["V'Zot HaBracha", "2027-10-24", "2027-10-23", "23 Tishrei 5788"],
+];
+
+const PARASHOT_5787 = _ROWS_5787.map(([name, d, il, hd], i) => {
+  const base = _SPLIT_5787[name] || _BASE_5787[name];
+  const e = { ...base, num: i + 1, dataDiaspora: d, dataIsrael: il, hebrewDate: hd };
+  if (!e.aliyot && _ALIYOT[name]) e.aliyot = _ALIYOT[name];
+  delete e.nota; delete e.double; delete e.diffIsrael;
+  delete e.israelReading; delete e.israelReading2;
+  if (name.includes("-")) e.double = true;
+  if (il) e.diffIsrael = true;
+  if (name === "Chukat-Balak") {
+    // Em Israel: Chukat (10/07) e Balak (17/07) são lidas em semanas separadas
+    e.diffIsrael = true;
+    e.israelReading  = { ...base.israelReading,  date: "2027-07-10" };
+    e.israelReading2 = { ...base.israelReading2, date: "2027-07-17" };
+  }
+  const nota = _NOTAS_5787[name] || (e.double ? "Porção dupla" : null);
+  if (nota) e.nota = nota;
+  return e;
+});
+
+// Todos os ciclos em ordem cronológica
+const PARASHOT_ALL = [...PARASHOT_5786, ...PARASHOT_5787];
+
+// Qual ciclo (ano hebraico) a parashá pertence → usado nos títulos e na lista da página
+function getParashotCycle(p) {
+  const is87 = !!p && PARASHOT_5787.includes(p);
+  return is87
+    ? { year: 5787, label: "5787 (2026-2027)", hy: "תשפ״ז", list: PARASHOT_5787 }
+    : { year: 5786, label: "5786 (2025-2026)", hy: "תשפ״ו", list: PARASHOT_5786 };
+}
+
 
 // ─── LEITURA DE SHABAT ESPECIAL (festas e shabatot especiais) ─────────────────
 const SHABATOT_ESPECIAIS = [
@@ -797,25 +1022,50 @@ const SHABATOT_ESPECIAIS = [
   { name: "Shabat Nachamu", date: "2026-07-25", nota: "Shabat de Consolação após Tisha B'Av — Haftará: Isaías 40:1-26" },
   { name: "Shabat Chazon", date: "2026-07-18", nota: "Shabat da Visão — véspera de Tisha B'Av" },
   { name: "Shabat Shuva", date: "2026-09-19", nota: "Shabat do Retorno — entre Rosh Hashaná e Yom Kippur" },
+  // ── 5787 ──
+  { name: "Shabat Bereshit", date: "2026-10-10", nota: "Início do novo ciclo anual 5787" },
+  { name: "Shabat Chanukah", date: "2026-12-05", nota: "Primeiro Shabat de Chanukah — leitura adicional: Nm 7:1-17" },
+  { name: "Shabat Chanukah", date: "2026-12-12", nota: "Último dia de Chanukah — leitura adicional: Nm 7:48-53" },
+  { name: "Shabat Shirah", date: "2027-01-23", nota: "Shabat do Cântico do Mar (Beshalach)" },
+  { name: "Shabat Shekalim", date: "2027-03-06", nota: "Leitura adicional: Êx 30:11-16" },
+  { name: "Shabat Zachor", date: "2027-03-20", nota: "Leitura adicional: Dt 25:17-19 (antes de Purim)" },
+  { name: "Shabat Parah", date: "2027-03-27", nota: "Leitura adicional: Nm 19:1-22" },
+  { name: "Shabat HaChodesh", date: "2027-04-03", nota: "Leitura adicional: Êx 12:1-20 (antes de Nissan)" },
+  { name: "Shabat HaGadol", date: "2027-04-17", nota: "O Grande Shabat antes de Pessach — Haftará: Malaquias 3:4-24" },
+  { name: "Shabat Chazon", date: "2027-08-07", nota: "Shabat da Visão — semana de Tisha B'Av" },
+  { name: "Shabat Nachamu", date: "2027-08-14", nota: "Shabat de Consolação após Tisha B'Av — Haftará: Isaías 40:1-26" },
+  { name: "Shabat Shuva", date: "2027-10-09", nota: "Shabat do Retorno — entre Rosh Hashaná e Yom Kippur" },
 ];
 
 // ─── HELPER: encontrar parasha pela data ──────────────────────────────────────
-function getParashaByDate(dateStr) {
+// Datas "AAAA-MM-DD" interpretadas no fuso local (evita erro de 1 dia)
+function parseLocalDate(str) {
+  const [y, m, d] = String(str).split("-").map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function getParashaByDate(dateStr, list = PARASHOT_ALL) {
   // Encontra a parasha mais próxima anterior ou igual à data fornecida
-  const target = new Date(dateStr);
+  const target = parseLocalDate(dateStr);
   let best = null;
-  for (const p of PARASHOT_5786) {
-    const pd = new Date(p.dataDiaspora);
+  for (const p of list) {
+    const pd = parseLocalDate(p.dataDiaspora);
     if (pd <= target) {
-      if (!best || pd > new Date(best.dataDiaspora)) best = p;
+      if (!best || pd > parseLocalDate(best.dataDiaspora)) best = p;
+    }
+  }
+  // Data antes da primeira parashá da lista: usa a última (aproximação)
+  if (!best) {
+    for (const p of list) {
+      const pd = parseLocalDate(p.dataDiaspora);
+      if (!best || pd > parseLocalDate(best.dataDiaspora)) best = p;
     }
   }
   return best;
 }
 
-// Aproxima a Parashat correspondente a uma data de nascimento (qualquer ano),
-// mapeando o mês/dia gregoriano para o ciclo de leituras do ano 5786 (2025-2026),
-// já que o calendário de Parashot só está disponível para esse ciclo.
+// Aproxima a Parashat correspondente a uma data de nascimento (qualquer ano)
+// usando o ciclo de leituras 5787 (10/2026 a 10/2027), que cobre o ano inteiro.
 // Retorna a porção diária (aliá) da parashá atual, seguindo o sistema
 // tradicional de estudo diário (Chitas): Domingo = 1ª aliá, Segunda = 2ª,
 // ..., Sábado = 7ª aliá — assim, ao ler uma pequena parte por dia,
@@ -835,61 +1085,42 @@ function getDailyPortion(parasha, lang = "pt") {
 }
 
 function getParashaForBirthday(month, day) {
-  const mm = String(month).padStart(2, "0");
-  const dd = String(day).padStart(2, "0");
-  // O ciclo mapeado começa em 18/10/2025 e termina em 03/10/2026.
-  const year = month >= 10 ? 2025 : 2026; // cobre Out/Nov/Dez 2025 e Jan-Set 2026
-  const found = getParashaByDate(`${year}-${mm}-${dd}`);
-  if (found) return found;
-  // Datas de 1 a 17 de outubro caem antes do início do ciclo em 2025 —
-  // o ciclo é anual, então buscamos a mesma data no fim do ciclo de 2026.
-  const wrapped = getParashaByDate(`2026-${mm}-${dd}`);
-  if (wrapped) return wrapped;
-  // Último recurso: a parashá mais recente do ciclo.
-  return PARASHOT_5786.reduce(
-    (a, p) => (!a || new Date(p.dataDiaspora) > new Date(a.dataDiaspora) ? p : a),
-    null
-  );
+  // Ciclo 5787: de Bereshit (10/10/2026) até Ha'azinu (09/10/2027) — cobre o ano todo.
+  // De 10/10 a 31/12 → 2026; de 01/01 a 09/10 → 2027.
+  const year = (month > 10 || (month === 10 && day >= 10)) ? 2026 : 2027;
+  const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  return getParashaByDate(dateStr, PARASHOT_5787);
 }
 
 function getCurrentParasha() {
   // Usa dia hebraico ajustado: após 18h de sexta, o Shabat já começou
-  const now     = new Date();
   const hebNow  = getHebrewCivilDate(); // D+1 se após 18h
-  const dayOfWeek = now.getDay();
 
-  // Início da semana atual (domingo), a partir do dia hebraico ajustado
-  const hebDay = hebNow.getDay();
-  let startOfWeek = new Date(hebNow);
-  startOfWeek.setDate(hebNow.getDate() - hebDay);
+  // A partir de "hoje" (dia hebraico ajustado). Assim, quando uma leitura de festa
+  // já passou nesta mesma semana (ex.: V'Zot HaBracha no Simchat Torá, domingo),
+  // a parashá semanal seguinte (Bereshit, sábado) é a que aparece.
+  const startOfWeek = new Date(hebNow);
   startOfWeek.setHours(0, 0, 0, 0);
 
-  // A parashá "atual" é a primeira cujo Shabat cai nesta semana ou depois —
-  // isso avança automaticamente quando uma festa (ex.: Rosh Hashaná) substitui
-  // a leitura semanal normal, criando um intervalo de mais de 7 dias entre
-  // duas parashot consecutivas na tabela.
+  // A parashá "atual" é a primeira cujo Shabat cai hoje ou depois —
+  // isso avança automaticamente quando uma festa (ex.: Rosh Hashaná, Sucot)
+  // substitui a leitura semanal normal, e passa sozinho de um ciclo (5786)
+  // para o seguinte (5787).
   let best = null;
-  for (const p of PARASHOT_5786) {
-    const pd = new Date(p.dataDiaspora);
+  for (const p of PARASHOT_ALL) {
+    const pd = parseLocalDate(p.dataDiaspora);
     if (pd >= startOfWeek) {
-      if (!best || pd < new Date(best.dataDiaspora)) best = p;
+      if (!best || pd < parseLocalDate(best.dataDiaspora)) best = p;
     }
   }
-  // Fallback: se estiver após a última parashá do ciclo (ou antes da primeira),
-  // usa a mais próxima disponível
-  if (!best) {
-    for (const p of PARASHOT_5786) {
-      const pd = new Date(p.dataDiaspora);
-      if (!best || pd > new Date(best.dataDiaspora)) best = p;
-    }
-  }
-  return best || PARASHOT_5786[0];
+  // Fallback: depois da última parashá cadastrada, usa a última disponível
+  return best || PARASHOT_ALL[PARASHOT_ALL.length - 1];
 }
 
 function getNextParasha() {
   const current = getCurrentParasha();
-  const idx = PARASHOT_5786.findIndex(p => p.name === current.name);
-  return PARASHOT_5786[Math.min(idx + 1, PARASHOT_5786.length - 1)];
+  const idx = PARASHOT_ALL.indexOf(current);
+  return PARASHOT_ALL[Math.min(idx + 1, PARASHOT_ALL.length - 1)];
 }
 
 // ─── VERSÍCULOS DIÁRIOS ───────────────────────────────────────────────────────
@@ -980,16 +1211,36 @@ const ROSH_CHODESH_5786 = [
   { month:"Tishrei",  heb:"תִּשְׁרֵי",  date:"2026-09-13", note:"Rosh Hashaná 5787" },
 ];
 
+// Ano 5787 (2026-2027) — bissexto: Adar I e Adar II. Datas do Hebcal (1º dia do mês hebraico).
+const ROSH_CHODESH_5787 = [
+  { month:"Tishrei",  heb:"תִּשְׁרֵי",  date:"2026-09-12", note:"Rosh Hashaná 5787" },
+  { month:"Cheshvan", heb:"חֶשְׁוָן",   date:"2026-10-12", note:"Mês sem festas — chuvas de inverno" },
+  { month:"Kislev",   heb:"כִּסְלֵו",   date:"2026-11-11", note:"Mês de Chanukah" },
+  { month:"Tevet",    heb:"טֵבֵת",      date:"2026-12-11", note:"Continuação de Chanukah" },
+  { month:"Shevat",   heb:"שְׁבָט",     date:"2027-01-09", note:"Preparação para Tu BiShvat" },
+  { month:"Adar I",   heb:"אֲדָר א׳",   date:"2027-02-08", note:"Ano bissexto — primeiro mês de Adar" },
+  { month:"Adar II",  heb:"אֲדָר ב׳",   date:"2027-03-10", note:"Mês de Purim" },
+  { month:"Nissan",   heb:"נִיסָן",     date:"2027-04-08", note:"Primeiro mês bíblico — Pessach" },
+  { month:"Iyar",     heb:"אִיָּר",     date:"2027-05-08", note:"Contagem do Omer" },
+  { month:"Sivan",    heb:"סִיוָן",     date:"2027-06-06", note:"Mês de Shavuot" },
+  { month:"Tammuz",   heb:"תַּמּוּז",   date:"2027-07-06", note:"Início do período de jejum" },
+  { month:"Av",       heb:"אָב",        date:"2027-08-04", note:"Mês de Tisha B'Av" },
+  { month:"Elul",     heb:"אֱלוּל",     date:"2027-09-03", note:"Mês de teshuvá — preparação" },
+  { month:"Tishrei",  heb:"תִּשְׁרֵי",  date:"2027-10-02", note:"Rosh Hashaná 5788" },
+];
+
+// Lista cronológica contínua (usada em lembretes e no "próximo Rosh Chodesh")
+const ROSH_CHODESH_ALL = [...ROSH_CHODESH_5786.slice(0, -1), ...ROSH_CHODESH_5787];
+
 function getNextRoshChodesh() {
   // Após 18h, o dia hebraico já mudou — usa o dia seguinte como referência
   const ref = getHebrewCivilDate();
   ref.setHours(0, 0, 0, 0);
-  for (const rc of ROSH_CHODESH_5786) {
-    const d = new Date(rc.date);
-    d.setHours(0, 0, 0, 0);
+  for (const rc of ROSH_CHODESH_ALL) {
+    const d = parseLocalDate(rc.date);
     if (d >= ref) return rc;
   }
-  return ROSH_CHODESH_5786[ROSH_CHODESH_5786.length - 1];
+  return ROSH_CHODESH_ALL[ROSH_CHODESH_ALL.length - 1];
 }
 
 function getMoonPhase(date = getHebrewCivilDate()) {
@@ -1795,7 +2046,7 @@ const T = {
   monthOf:           { pt:"Mês de {month}", en:"Month of {month}", es:"Mes de {month}", fr:"Mois de {month}", de:"Monat {month}", he:"חֹדֶשׁ {month}", ru:"Месяц {month}" },
 
   // ── Parashah page ──────────────────────────────────────────────────
-  parashaHeaderSub:  { pt:"Leitura semanal da Torá — Ano 5786 (2025-2026)", en:"Weekly Torah reading — Year 5786 (2025-2026)", es:"Lectura semanal de la Torá — Año 5786 (2025-2026)", fr:"Lecture hebdomadaire de la Torah — Année 5786 (2025-2026)", de:"Wöchentliche Tora-Lesung — Jahr 5786 (2025-2026)", he:"קְרִיאַת הַתּוֹרָה הַשְּׁבוּעִית — שְׁנַת תשפ״ו", ru:"Еженедельное чтение Торы — год 5786 (2025-2026)" },
+  parashaHeaderSub:  { pt:"Leitura semanal da Torá — Ano {y}", en:"Weekly Torah reading — Year {y}", es:"Lectura semanal de la Torá — Año {y}", fr:"Lecture hebdomadaire de la Torah — Année {y}", de:"Wöchentliche Tora-Lesung — Jahr {y}", he:"קְרִיאַת הַתּוֹרָה הַשְּׁבוּעִית — שְׁנַת {hy}", ru:"Еженедельное чтение Торы — год {y}" },
   thisWeekBadge:     { pt:"📖 ESTA SEMANA", en:"📖 THIS WEEK", es:"📖 ESTA SEMANA", fr:"📖 CETTE SEMAINE", de:"📖 DIESE WOCHE", he:"📖 הַשָּׁבוּעַ", ru:"📖 На этой неделе" },
   doublePortionBadge:{ pt:"⚡ Porção Dupla", en:"⚡ Double Portion", es:"⚡ Porción Doble", fr:"⚡ Double Portion", de:"⚡ Doppelabschnitt", he:"⚡ פָּרָשָׁה כְּפוּלָה", ru:"⚡ Двойная часть" },
   torahLabelIcon:    { pt:"📚 Torá:", en:"📚 Torah:", es:"📚 Torá:", fr:"📚 Torah:", de:"📚 Tora:", he:"📚 תּוֹרָה:", ru:"📚 Тора:" },
@@ -1836,7 +2087,7 @@ const T = {
   nextRoshChodesh:   { pt:"PRÓXIMO ROSH CHODESH", en:"NEXT ROSH CHODESH", es:"PRÓXIMO ROSH CHODESH", fr:"PROCHAIN ROSH CHODESH", de:"NÄCHSTER ROSCH CHODESCH", he:"רֹאשׁ חֹדֶשׁ הַבָּא", ru:"Следующий Рош Ходеш" },
   daysWord:          { pt:"dias", en:"days", es:"días", fr:"jours", de:"Tage", he:"יָמִים", ru:"дней" },
   dayWord:           { pt:"dia", en:"day", es:"día", fr:"jour", de:"Tag", he:"יוֹם", ru:"день" },
-  fullCalendarRC:    { pt:"Calendário de Rosh Chodesh 5786", en:"Rosh Chodesh Calendar 5786", es:"Calendario de Rosh Chodesh 5786", fr:"Calendrier de Rosh Chodesh 5786", de:"Rosch-Chodesch-Kalender 5786", he:"לוּחַ רָאשֵׁי חֳדָשִׁים תשפ״ו", ru:"Календарь Рош Ходеш 5786" },
+  fullCalendarRC:    { pt:"Calendário de Rosh Chodesh 5787", en:"Rosh Chodesh Calendar 5787", es:"Calendario de Rosh Chodesh 5787", fr:"Calendrier de Rosh Chodesh 5787", de:"Rosch-Chodesch-Kalender 5787", he:"לוּחַ רָאשֵׁי חֳדָשִׁים תשפ״ז", ru:"Календарь Рош Ходеш 5787" },
   past:              { pt:"Passado", en:"Past", es:"Pasado", fr:"Passé", de:"Vergangen", he:"עָבַר", ru:"Прошло" },
   roshChodeshMeaning:{ pt:"🌙 O Significado de Rosh Chodesh", en:"🌙 The Meaning of Rosh Chodesh", es:"🌙 El Significado de Rosh Chodesh", fr:"🌙 La Signification de Rosh Chodesh", de:"🌙 Die Bedeutung von Rosch Chodesch", he:"🌙 מַשְׁמָעוּת רֹאשׁ חֹדֶשׁ", ru:"🌙 Значение Рош Ходеша" },
   roshChodeshText1: {
@@ -1950,7 +2201,7 @@ const T = {
   encountersEternal: { pt:"Encontros Marcados pelo Eterno", en:"Appointed Encounters with the Eternal", es:"Encuentros Señalados por el Eterno", fr:"Rencontres Fixées par l'Éternel", de:"Festgesetzte Begegnungen mit dem Ewigen", he:"מוֹעֲדִים קְבוּעִים עִם הַנִּצְחִי", ru:"Назначенные встречи с Вечным" },
   featCalendar:      { pt:"Hebraico + gregoriano", en:"Hebrew + Gregorian", es:"Hebreo + gregoriano", fr:"Hébreu + grégorien", de:"Hebräisch + gregorianisch", he:"עִבְרִי + גְּרֵגוֹרְיָאנִי", ru:"Еврейский + григорианский" },
   featConverter:     { pt:"Com tribos de Israel", en:"With tribes of Israel", es:"Con tribus de Israel", fr:"Avec les tribus d'Israël", de:"Mit Stämmen Israels", he:"עִם שִׁבְטֵי יִשְׂרָאֵל", ru:"С коленами Израиля" },
-  featParashah:      { pt:"Ciclo real 5786", en:"Real 5786 cycle", es:"Ciclo real 5786", fr:"Cycle réel 5786", de:"Echter Zyklus 5786", he:"מַחֲזוֹר אֲמִתִּי תשפ״ו", ru:"Настоящий цикл 5786" },
+  featParashah:      { pt:"Ciclo real 5787", en:"Real 5787 cycle", es:"Ciclo real 5787", fr:"Cycle réel 5787", de:"Echter Zyklus 5787", he:"מַחֲזוֹר אֲמִתִּי תשפ״ז", ru:"Настоящий цикл 5787" },
   featShabat:        { pt:"Horários por GPS", en:"GPS-based times", es:"Horarios por GPS", fr:"Horaires par GPS", de:"Zeiten per GPS", he:"זְמַנִּים לְפִי GPS", ru:"Время по GPS" },
   featFeasts:        { pt:"Moadim messiânicos", en:"Messianic Moadim", es:"Moadim mesiánicos", fr:"Moadim messianiques", de:"Messianische Moadim", he:"מוֹעֲדִים מְשִׁיחִיִּים", ru:"Мессианские Моадим" },
   featRosh:          { pt:"Fase lunar real", en:"Real moon phase", es:"Fase lunar real", fr:"Phase lunaire réelle", de:"Echte Mondphase", he:"שְׁלַב יָרֵחַ אֲמִתִּי", ru:"Настоящая фаза луны" },
@@ -2545,7 +2796,8 @@ function ParashaPage({ lang = "pt" }) {
 
   const BOOKS = ["Todos", "Bereshit", "Shemot", "Vayikra", "Bamidbar", "Devarim"];
 
-  const filtered = PARASHOT_5786.filter(p => {
+  const cycle    = useMemo(() => getParashotCycle(current), [current]);
+  const filtered = cycle.list.filter(p => {
     const q = search.toLowerCase();
     const matchSearch = !q || p.name.toLowerCase().includes(q) || p.ref.toLowerCase().includes(q)
       || p.theme.toLowerCase().includes(q) || (p.haftara || "").toLowerCase().includes(q)
@@ -2561,11 +2813,11 @@ function ParashaPage({ lang = "pt" }) {
     return diff >= -1 && diff <= 7;
   });
 
-  const isCurrent = (p) => p.name === current?.name;
+  const isCurrent = (p) => !!current && p.dataDiaspora === current.dataDiaspora;
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 16px 100px" }}>
-      <SectionTitle sub={t("parashaHeaderSub")}>Parashat HaShavua</SectionTitle>
+      <SectionTitle sub={t("parashaHeaderSub").replace("{y}", cycle.label).replace("{hy}", cycle.hy)}>Parashat HaShavua</SectionTitle>
 
       {/* ── HERO: porção atual ── */}
       {current && (
@@ -2859,7 +3111,7 @@ function ParashaPage({ lang = "pt" }) {
 
                   {/* Data hebraica */}
                   <div style={{ marginTop:10, color:S.textMuted, fontSize:11, textAlign:"right" }}>
-                    {p.hebrewDate} • 5786
+                    {p.hebrewDate}
                   </div>
                 </div>
               )}
@@ -4614,8 +4866,8 @@ function RoshChodeshPage({ lang = "pt" }) {
   const pct = (phase / 29.53) * 100;
 
   // All Rosh Chodesh this year with countdown
-  const withCountdown = ROSH_CHODESH_5786.map(rc => {
-    const diff = Math.ceil((new Date(rc.date) - now) / 86400000);
+  const withCountdown = ROSH_CHODESH_5787.map(rc => {
+    const diff = Math.ceil((parseLocalDate(rc.date) - now) / 86400000);
     return { ...rc, diff };
   });
 
